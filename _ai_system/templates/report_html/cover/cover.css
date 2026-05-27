@@ -1,0 +1,214 @@
+.cover-page {
+  --cover-ink: var(--cw-ink, #1f2933);
+  --cover-muted: var(--cw-muted, #616670);
+  --cover-line: var(--cw-line, #cfd0d3);
+  --cover-blue: var(--cw-blue, #006bd6);
+  --cover-dark: var(--cw-dark, #062554);
+  --cover-soft: var(--cw-soft, #eef4fb);
+  --cover-paper: #ffffff;
+  background:
+    linear-gradient(90deg, rgba(6, 37, 84, 0.075), rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid var(--cover-line);
+  border-top: 10px solid var(--cover-dark);
+  color: var(--cover-ink);
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  min-height: 94vh;
+  padding: 38px 44px 36px;
+  page-break-after: always;
+}
+
+.cover-topline {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  min-height: 42px;
+  padding-bottom: 16px;
+  position: relative;
+}
+
+.cover-topline::after {
+  background: linear-gradient(90deg, var(--cover-dark), var(--cover-blue), rgba(255,255,255,0));
+  bottom: 0;
+  content: "";
+  height: 2px;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.classification,
+.report-type {
+  border: 1px solid rgba(0, 107, 214, 0.24);
+  color: var(--cover-dark);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 7px 10px;
+}
+
+.classification {
+  background: var(--cover-dark);
+  border-color: var(--cover-dark);
+  color: #fff;
+}
+
+.cover-security-tag {
+  align-self: start;
+  background: #fff5f5;
+  border: 2px solid #dc2626;
+  color: #b91c1c;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: 18px 0 0;
+  padding: 8px 12px;
+  width: fit-content;
+}
+
+.report-type {
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.cover-hero {
+  align-self: center;
+  margin: 44px 0 36px;
+  max-width: 920px;
+}
+
+.cover-logo {
+  align-self: start;
+  justify-self: end;
+  margin-top: 22px;
+  max-width: 220px;
+}
+
+.cover-logo img {
+  display: block;
+  max-height: 58px;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+.cover-hero .kicker {
+  color: var(--cover-blue);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+
+.cover-hero h1 {
+  color: var(--cover-dark);
+  font-size: clamp(28px, 4.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.22;
+  margin: 0 0 22px;
+  max-width: 860px;
+  overflow-wrap: anywhere;
+}
+
+.cover-hero .subtitle {
+  border-left: 4px solid var(--cover-blue);
+  color: #3f4855;
+  font-size: 17px;
+  line-height: 1.72;
+  margin: 0;
+  max-width: 780px;
+  padding-left: 16px;
+}
+
+.cover-meta-table {
+  background: rgba(255, 255, 255, 0.9);
+  border-collapse: collapse;
+  border: 1px solid var(--cover-line);
+  border-top: 3px solid var(--cover-dark);
+  margin: 0 0 26px;
+  width: 100%;
+}
+
+.cover-meta-table th,
+.cover-meta-table td {
+  border-bottom: 1px solid var(--cover-line);
+  font-size: 13.5px;
+  padding: 12px 13px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cover-meta-table th {
+  background: var(--cover-soft);
+  color: var(--cover-dark);
+  font-weight: 800;
+  width: 120px;
+}
+
+.cover-approval {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: 24px 0 28px;
+}
+
+.cover-approval-1 {
+  grid-template-columns: minmax(180px, 320px);
+}
+
+.cover-approval-2 {
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+}
+
+.cover-approval div {
+  background: var(--cover-paper);
+  border: 1px solid var(--cover-line);
+  border-top: 3px solid var(--cover-blue);
+  min-height: 74px;
+  padding: 12px;
+}
+
+.cover-approval span {
+  color: var(--cover-muted);
+  display: block;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.cover-approval strong {
+  color: var(--cover-dark);
+  font-size: 15px;
+}
+
+.cover-purpose {
+  background: rgba(238, 244, 251, 0.72);
+  border-left: 4px solid var(--cover-blue);
+  color: #3f4855;
+  font-size: 14px;
+  margin: 32px 0 0;
+  padding: 12px 14px;
+}
+
+.cover-confidential-notice {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid #dc2626;
+  color: #7f1d1d;
+  font-size: 12px;
+  line-height: 1.65;
+  margin: 18px 0 0;
+  padding: 10px 12px;
+}
+
+@media print {
+  .cover-page {
+    min-height: 100vh;
+    padding: 30px 30px 26px;
+  }
+
+  .cover-hero {
+    margin: 34px 0 30px;
+  }
+}

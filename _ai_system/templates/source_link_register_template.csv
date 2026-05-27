@@ -1,0 +1,2 @@
+source_id,title,publisher,official_url,accessed_at,url_status,download_status,capture_status,local_original_path,use_level,failure_reason,notes
+example-source-id,Official document title,Official publisher,https://example.com/official-document,2026-05-22,not_checked,not_attempted,not_attempted,,lead_only,,Use exact official document URLs rather than generic homepages.

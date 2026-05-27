@@ -1,0 +1,57 @@
+# Kkumjangi Report Orchestra
+
+AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목차, 장별 작성, 표·그래프, 근거 검증, 조립까지 단계적으로 진행하도록 돕는 로컬 우선 보고서 생산 시스템입니다.
+
+실제 프로젝트 자료, 참고자료, 보고서 결과물, 검증 산출물은 사용자의 PC 안에 만들어집니다. 기본 설정에서는 원본 자료나 보고서 내용을 외부 서버로 업로드하지 않습니다.
+
+## 버전
+
+- 공개 버전: `1.0.0`
+- 배포일: `2026-05-27`
+- 채널: `public`
+- 전체 변경 이력: `CHANGELOG.md`
+
+이 공개 레포는 과거 개발용 커밋 기록 없이 시작하는 공개 배포본입니다. 내부 개발 단계의 `0.x` 변경 이력은 포함하지 않고, 공개 사용자는 `1.0.0`부터 버전을 확인하면 됩니다.
+
+## 설치
+
+저장소 링크를 받은 뒤 AI에게 이렇게 요청하면 됩니다.
+
+```text
+https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보고 설치 및 세팅해 주세요.
+```
+
+설치가 끝나면 설치 폴더의 `START_HERE.html`을 열어 사용법을 확인하면 됩니다.
+
+## 핵심 원칙
+
+- 로컬 우선: 사용자 프로젝트와 보고서는 `00_사용자_작업공간/` 아래에 생성됩니다.
+- 자료 보호: public issue, fork, pull request에는 사용자 자료, 보고서, API 키, 쿠키, 계정 정보, 비공개 파트너 자료를 올리지 마세요.
+- 짧은 진입점: 사용자는 `START_HERE.html`을 보고, AI는 `AGENTS.md`와 프로젝트별 `tasks/current_task.md`를 기준으로 필요한 규칙만 읽습니다.
+- 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
+
+자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
+
+## 라이선스와 공개 사용
+
+이 시스템 코어는 Apache License 2.0으로 배포됩니다. 사용, 복제, 클론, 포크, 수정, 재배포, 파생 작업은 Apache License 2.0 조건에 따라 허용됩니다. 단, 원 저작권 고지, `LICENSE`, `docs/NOTICE`, 필요한 변경 표시를 유지해야 합니다.
+
+쉬운 설명은 `docs/USAGE_AND_PERMISSIONS.md`, 보안/기여 안내는 `docs/SECURITY.md`와 `docs/CONTRIBUTING.md`를 확인하세요.
+
+## 설치 시 함께 준비되는 오픈소스
+
+설치 과정에서는 로컬 문서 처리와 보고서 렌더링을 위해 아래 구성요소를 설치하거나 내려받습니다.
+
+| 구성요소 | 역할 | 라이선스 |
+|---|---|---|
+| pypdf | PDF 텍스트/메타데이터 처리 | BSD-style |
+| Docling | PDF, PPTX, DOCX, XLSX, PNG, JPG 등 로컬 문서 정규화 | MIT |
+| DuckDB | 프로젝트 문서 대장, 변환 요약, 주장/챕터 자료 로컬 색인 | MIT |
+| Apache ECharts | 로컬 차트 렌더링 | Apache License 2.0 |
+| Pretendard | 한글 UI/보고서 폰트 | SIL Open Font License 1.1 |
+
+각 오픈소스의 고지는 `docs/THIRD_PARTY_NOTICES.md`에 정리되어 있습니다.
+
+## 피드백
+
+버그 신고와 개선 제안은 GitHub 저장소의 `Issues` 탭에서 `New issue`를 눌러 남길 수 있습니다. 민감자료를 올리지 않도록 이슈 템플릿이 준비되어 있습니다.

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{REPORT_TITLE}}</title>
+  <link rel="stylesheet" href="../../../_ai_system/templates/report_html/report.css">
+</head>
+<body>
+  <main class="report-page report-template">
+    <header class="report-cover">
+      <p class="report-label">{{REPORT_LABEL}}</p>
+      <h1>{{REPORT_TITLE}}</h1>
+      <p class="lead">{{REPORT_SUBTITLE}}</p>
+    </header>
+
+    <section id="method">
+      <h2>1. 검토 범위와 방법론</h2>
+      <p>{{METHOD_BODY}}</p>
+    </section>
+
+    <section id="body">
+      <h2>2. 본문 분석</h2>
+      <p>{{BODY_SECTION}}</p>
+    </section>
+
+    <section id="visuals">
+      <h2>3. 표와 그래프</h2>
+      <figure class="report-figure">
+        <img class="static-chart figure-image" src="{{STATIC_CHART_IMAGE}}" alt="{{STATIC_CHART_ALT}}">
+        <figcaption>
+          <span class="caption-source">자료: {{READER_SOURCE}}</span>
+          <span class="caption-data">근거 데이터: {{DATA_LABEL}}</span>
+        </figcaption>
+        <!-- data_file: data_sources/{{DATA_FILE}} -->
+      </figure>
+    </section>
+
+    <section id="appendix" class="appendix">
+      <h2>부록</h2>
+      <p>{{APPENDIX_BODY}}</p>
+    </section>
+
+    <section id="footnotes" class="footnotes">
+      <h2>주석</h2>
+      <ol>
+        <li>{{FOOTNOTE}}</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

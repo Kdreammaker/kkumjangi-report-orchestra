@@ -1,0 +1,43 @@
+name: 기능 제안
+description: 작업 흐름, 편의성, 품질 개선 아이디어를 제안해 주세요.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        제안해 주셔서 감사합니다. 외부 서비스 연결, 파일 업로드, 개인정보 처리 변화가 있다면 반드시 적어 주세요.
+  - type: textarea
+    id: problem
+    attributes:
+      label: 개선하고 싶은 문제
+      description: 어떤 사용자 작업이 불편하거나 품질이 낮아지나요?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안하는 방향
+      description: 꼭 구현 방식이 아니어도 됩니다. 사용자가 기대하는 경험을 적어 주세요.
+    validations:
+      required: true
+  - type: dropdown
+    id: impact
+    attributes:
+      label: 기대 효과
+      options:
+        - 사용 편의성 개선
+        - 보고서 품질 개선
+        - 토큰/시간 절약
+        - 설치/배포 안정성 개선
+        - 보안/개인정보 보호 개선
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: 개인정보와 로컬 자료 영향
+      description: 외부 서비스, 업로드, 원본 파일 처리, 클라우드 연동 영향이 있으면 적어 주세요.
+    validations:
+      required: false

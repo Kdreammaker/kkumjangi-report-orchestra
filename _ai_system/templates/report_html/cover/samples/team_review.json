@@ -1,0 +1,18 @@
+{
+  "cover_preset": "team_review",
+  "classification": "내부 검토",
+  "report_type": "Team Review Brief",
+  "kicker": "Technical & Operational Audit",
+  "report_title": "팀내 검토용 보고서",
+  "subtitle": "팀 내부 피드백, 실무 쟁점 확인, 추가 보강 필요 사항을 빠르게 검토하기 위한 초안 보고서",
+  "project_name": "example_team_review_project",
+  "report_no": "TEAM-YYYY-SEQ",
+  "date": "YYYY-MM-DD",
+  "version": "v0.1",
+  "prepared_by": "작성 담당자 또는 실무 TF",
+  "distribution": "팀 내부 검토자 한정",
+  "approval_author": "작성",
+  "approval_reviewer": "검토",
+  "security_tag": "[ 내 부 검 토 ]",
+  "purpose": "팀내 검토용 표지는 작성/검토 2단계만 표시해 초안의 검토 흐름과 배포 범위를 분명하게 합니다."
+}

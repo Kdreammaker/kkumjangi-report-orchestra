@@ -1,0 +1,15 @@
+path,package_status,reason
+AGENTS.md,include,root router
+START_HERE.html,include,human entry point
+_ai_system/governance/,include,system rules
+_ai_system/environment/,include,runtime guidance
+_ai_system/templates/,include,reusable templates
+_ai_system/tools/,include,durable tools only
+_ai_system/validation_fixtures/,optional,validator fixtures only if generic and intentionally packaged
+00_사용자_작업공간/,exclude,user workspace and project outputs
+_ai_system/runtime/,exclude,local runtime outputs
+_ai_system/project_state/latest_ai_snapshot/,exclude,local snapshot copies
+*.bak,exclude,backup files
+*.tmp,exclude,temporary files
+*.log,exclude,logs
+__pycache__/,exclude,Python runtime cache

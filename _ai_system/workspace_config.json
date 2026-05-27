@@ -1,0 +1,279 @@
+{
+  "system_name": "Report Integrity Orchestrator",
+  "workspace_display_name": "Report Factory Workspace",
+  "workspace_description": "A local report-production operating system that helps AI write stronger reports while making false completion, fake sources, missing files, and workspace drift visible.",
+  "preset_domain": "general_report",
+  "domain_presets": {
+    "general_report": {
+      "label": "General report",
+      "description": "Default evidence-backed business, policy, research, or strategy report workflow.",
+      "theme_tokens": {
+        "primary": "#1F6FEB",
+        "point": "#3485FF",
+        "dark": "#172033",
+        "ink": "#1F2933",
+        "muted": "#616670",
+        "line": "#CFD0D3",
+        "soft": "#EEF4FB",
+        "bg": "#F7F8FA",
+        "risk": "#B8567A",
+        "ok": "#167A5B"
+      },
+      "quality_profile": {
+        "minimum_visuals": 4,
+        "minimum_figures": 1,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "source-grounded conclusions",
+        "chapter-complete analysis",
+        "reader-useful visuals",
+        "honest residual risks"
+      ],
+      "design_profile": "neutral_editorial"
+    },
+    "business_strategy": {
+      "label": "Business strategy",
+      "description": "Decision memo or internal review report for executives and operating teams.",
+      "theme_tokens": {
+        "primary": "#0B63CE",
+        "point": "#16A3FF",
+        "dark": "#0F1E34",
+        "ink": "#1E2732",
+        "muted": "#5E6673",
+        "line": "#D3D7DE",
+        "soft": "#EEF6FF",
+        "bg": "#F7F9FC",
+        "risk": "#B9475F",
+        "ok": "#16815F"
+      },
+      "quality_profile": {
+        "minimum_visuals": 5,
+        "minimum_figures": 2,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "clear decision options",
+        "scenario and risk analysis",
+        "data-backed business implications",
+        "actionable recommendations"
+      ],
+      "design_profile": "executive_report"
+    },
+    "regulatory_review": {
+      "label": "Regulatory review",
+      "description": "Legal, policy, compliance, or approval-path analysis where uncertainty must remain explicit.",
+      "theme_tokens": {
+        "primary": "#355C9A",
+        "point": "#6B8FC8",
+        "dark": "#17223A",
+        "ink": "#1F2933",
+        "muted": "#5F6875",
+        "line": "#D4D6DB",
+        "soft": "#F0F4FA",
+        "bg": "#F8F8F6",
+        "risk": "#A43E4F",
+        "ok": "#1D7355"
+      },
+      "quality_profile": {
+        "minimum_visuals": 4,
+        "minimum_figures": 1,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "primary-law and official-source priority",
+        "separation of fact, interpretation, and estimate",
+        "counsel-review markers",
+        "no approval-probability overclaims"
+      ],
+      "design_profile": "formal_review"
+    },
+    "academic_research": {
+      "label": "Academic research",
+      "description": "Literature-heavy synthesis where methods, citations, and limitations are central.",
+      "theme_tokens": {
+        "primary": "#475569",
+        "point": "#2563EB",
+        "dark": "#111827",
+        "ink": "#1F2937",
+        "muted": "#64748B",
+        "line": "#D6DAE1",
+        "soft": "#F1F5F9",
+        "bg": "#FAFAFA",
+        "risk": "#9F4D5E",
+        "ok": "#28745C"
+      },
+      "quality_profile": {
+        "minimum_visuals": 3,
+        "minimum_figures": 1,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "method transparency",
+        "literature traceability",
+        "counterargument coverage",
+        "limitations and reproducibility"
+      ],
+      "design_profile": "research_paper"
+    },
+    "technical_design": {
+      "label": "Technical design",
+      "description": "Architecture, API, data model, security, testing, and operations design documents.",
+      "theme_tokens": {
+        "primary": "#2563EB",
+        "point": "#14B8A6",
+        "dark": "#111827",
+        "ink": "#1F2937",
+        "muted": "#64748B",
+        "line": "#D7DEE8",
+        "soft": "#EEF6FF",
+        "bg": "#F8FAFC",
+        "risk": "#B42318",
+        "ok": "#047857"
+      },
+      "quality_profile": {
+        "minimum_visuals": 4,
+        "minimum_figures": 2,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "architecture and interface clarity",
+        "data and security model completeness",
+        "deployment and operations risks",
+        "testability and implementation decisions"
+      ],
+      "design_profile": "technical_spec"
+    },
+    "service_planning": {
+      "label": "Service planning",
+      "description": "Service planning documents covering users, UX flow, operating policy, KPI, and rollout scope.",
+      "theme_tokens": {
+        "primary": "#0F766E",
+        "point": "#2DD4BF",
+        "dark": "#102A43",
+        "ink": "#243B53",
+        "muted": "#627D98",
+        "line": "#D9E2EC",
+        "soft": "#E6FFFA",
+        "bg": "#F8FAFC",
+        "risk": "#B54708",
+        "ok": "#087F5B"
+      },
+      "quality_profile": {
+        "minimum_visuals": 4,
+        "minimum_figures": 2,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "user problem and target segment clarity",
+        "journey and workflow coverage",
+        "operating policy and KPI definition",
+        "scope boundaries and launch risks"
+      ],
+      "design_profile": "service_blueprint"
+    },
+    "product_prd": {
+      "label": "Product PRD",
+      "description": "Product requirements documents for user stories, acceptance criteria, rollout, and product decisions.",
+      "theme_tokens": {
+        "primary": "#7C3AED",
+        "point": "#06B6D4",
+        "dark": "#1F1B2D",
+        "ink": "#2D2A38",
+        "muted": "#6B7280",
+        "line": "#DDD6FE",
+        "soft": "#F5F3FF",
+        "bg": "#FAFAFA",
+        "risk": "#BE123C",
+        "ok": "#15803D"
+      },
+      "quality_profile": {
+        "minimum_visuals": 3,
+        "minimum_figures": 1,
+        "visual_plan_required": true,
+        "docx_expected_by_default": false
+      },
+      "quality_emphasis": [
+        "problem, user, and outcome alignment",
+        "requirements and acceptance criteria",
+        "release scope and dependency clarity",
+        "decision log and open questions"
+      ],
+      "design_profile": "product_requirements"
+    }
+  },
+  "legacy_report_factory_projects": [],
+  "report_factory": {
+    "substantial_markers": [
+      "internal review",
+      "full",
+      "substantial",
+      "report",
+      "strategy",
+      "market",
+      "business",
+      "legal",
+      "policy",
+      "regulatory",
+      "risk",
+      "investment",
+      "내부 검토",
+      "보고서",
+      "전략",
+      "시장",
+      "사업성",
+      "법률",
+      "정책",
+      "규제",
+      "리스크",
+      "투자"
+    ]
+  },
+  "report_design": {
+    "default_css": "_ai_system/templates/report_html/report.css",
+    "theme_token_names": [
+      "primary",
+      "point",
+      "dark",
+      "ink",
+      "muted",
+      "line",
+      "soft",
+      "bg",
+      "risk",
+      "ok"
+    ],
+    "template_markers": [
+      "report-template",
+      "_ai_system/templates",
+      "report.css",
+      "report.css"
+    ],
+    "cover_component_markers": [
+      "data-cover-component=\"report-cover-v1\"",
+      "class=\"cover-page\"",
+      "class=\"report-cover\""
+    ]
+  },
+  "content_quality": {
+    "primary_goal": "help AI write decision-useful, source-grounded, well-structured reports",
+    "integrity_goal": "make false completion, fake sources, missing files, and workspace contamination visible",
+    "minimum_visuals": 4,
+    "minimum_figures": 1,
+    "visual_plan_required": true
+  },
+  "delivery": {
+    "local_outbox_enabled": true,
+    "default_outbox_dir": "reports/outbox",
+    "cloud_bridge_default": "disabled",
+    "cloud_upload_requires_explicit_user_approval": true,
+    "include_originals_by_default": false,
+    "public_safe_only_by_default": true
+  }
+}

@@ -1,0 +1,2 @@
+visual_id,chapter,visual_type,title,purpose,decision_use,expected_reader_takeaway,required,data_file,source_data,source_record,status,notes
+vis-001,ch03,flow_diagram,Settlement architecture flow,Show the operational flow and control points,Help the reader compare Track A/B implementation risk,Direct settlement has fewer handoffs but higher regulatory burden,yes,data_sources/settlement_flow.csv,data_sources/settlement_flow.csv,source_records/example.md,planned,Each required visual should support a chapter-level decision rather than fill a quota.

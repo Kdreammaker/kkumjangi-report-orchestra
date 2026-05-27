@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Report Design Reference</title>
+  <link rel="stylesheet" href="report.css">
+  <style>
+    .reference-note {
+      border-left: 4px solid var(--point-blue);
+      background: #f5f9ff;
+      padding: 12px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 13px;
+    }
+    .metric strong {
+      display: block;
+      color: var(--deep-blue);
+      font-size: 22px;
+      line-height: 1.2;
+    }
+    .bar-figure {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 16px;
+      margin: 18px 0;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 70px;
+      gap: 10px;
+      align-items: center;
+      margin: 9px 0;
+    }
+    .bar-track {
+      height: 16px;
+      background: #e9eef5;
+    }
+    .bar-fill {
+      height: 16px;
+      background: var(--blue);
+    }
+    @media print {
+      .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+<article class="report-page">
+  <header class="report-cover">
+    <p class="eyebrow">Design Reference</p>
+    <h1>전환 친화형 프리미엄 보고서 템플릿</h1>
+    <p class="subtitle">HTML의 시각 품질과 DOCX/PDF 변환 가능성을 함께 유지하기 위한 참고용 구조입니다.</p>
+  </header>
+
+  <section>
+    <h2>제0장 요약</h2>
+    <p>최종 보고서의 요약은 반드시 제0장으로 작성합니다. 이 장은 본문, 표, 그래프, Appendix, 핵심 리스크가 안정된 뒤 마지막에 작성합니다.</p>
+    <div class="reference-note">DOCX 전환을 고려해도 디자인을 낮추지 않습니다. 대신 의미 있는 제목, 단락, 표, 그림, 캡션, 각주 구조를 유지합니다.</div>
+  </section>
+
+  <section>
+    <h2>1. 핵심 지표 요약</h2>
+    <div class="metric-strip">
+      <div class="metric"><strong>8+</strong><span>source records</span></div>
+      <div class="metric"><strong>4+</strong><span>visual artifacts</span></div>
+      <div class="metric"><strong>1:1</strong><span>visual to data file</span></div>
+      <div class="metric"><strong>30k+</strong><span>visible chars target</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 표 예시</h2>
+    <table>
+      <thead>
+        <tr><th>검토 축</th><th>확인할 내용</th><th>산출물</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>원문성</td><td>공식 파일, 정확한 URL, 캡처, 접속일</td><td>source record</td></tr>
+        <tr><td>데이터</td><td>가설, 전제, 시나리오, 민감도</td><td>CSV/XLSX</td></tr>
+        <tr><td>전환</td><td>표, 그림, 각주, 스타일 구조</td><td>검증된 DOCX/PDF</td></tr>
+      </tbody>
+    </table>
+    <p class="caption">자료: 템플릿 작성 기준. 근거 데이터: 디자인 기준 표 데이터</p>
+    <!-- data_file: data_sources/design_reference_table.csv -->
+  </section>
+
+  <section>
+    <h2>3. 그래프 예시</h2>
+    <figure class="bar-figure">
+      <figcaption>시나리오별 품질 점수 예시</figcaption>
+      <div class="bar-row"><span>Scaffold</span><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><strong>42</strong></div>
+      <div class="bar-row"><span>Skeleton</span><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><strong>72</strong></div>
+      <div class="bar-row"><span>Full draft</span><div class="bar-track"><div class="bar-fill" style="width:86%"></div></div><strong>86</strong></div>
+      <p class="caption">자료: 템플릿 작성 기준. 근거 데이터: 디자인 기준 차트 데이터</p>
+      <!-- data_file: data_sources/design_reference_chart.csv -->
+    </figure>
+  </section>
+</article>
+</body>
+</html>

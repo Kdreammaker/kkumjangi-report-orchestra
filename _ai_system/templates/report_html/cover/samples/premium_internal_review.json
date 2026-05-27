@@ -1,0 +1,18 @@
+{
+  "classification": "대외비 / 내부 검토용",
+  "report_type": "Strategic Internal Review Report",
+  "kicker": "Executive Decision Review",
+  "report_title": "전략 검토 보고서",
+  "subtitle": "의사결정 대안, 핵심 근거, 책임 경계, 잔존 리스크, 실행 조건을 한 문서에서 검토하기 위한 내부 보고서",
+  "project_name": "example_premium_internal_review",
+  "report_no": "REPORT-YYYY-SEQ",
+  "date": "YYYY-MM-DD",
+  "version": "v0.1",
+  "prepared_by": "전략/사업개발 검토 TF",
+  "prepared_for": "경영진 및 내부 검토자",
+  "distribution": "승인된 내부 검토자 한정",
+  "approval_author": "작성",
+  "approval_reviewer": "검토",
+  "approval_approver": "승인",
+  "purpose": "과거 우수 표지의 문서형 위계와 메타 정보 밀도를 반영한 premium internal review 표지 샘플입니다."
+}

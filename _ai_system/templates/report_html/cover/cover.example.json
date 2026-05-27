@@ -1,0 +1,18 @@
+{
+  "classification": "대외비 / 내부 검토용",
+  "report_type": "Internal Review Report",
+  "kicker": "Strategic Internal Review",
+  "report_title": "전략 협업 검토 보고서",
+  "subtitle": "사업 구조, 실행 대안, 리스크, 의사결정 쟁점을 비교 검토하기 위한 내부 보고서",
+  "project_name": "example_strategy_review_project",
+  "report_no": "REPORT-2026-01",
+  "date": "2026-05-22",
+  "version": "v1.0",
+  "prepared_by": "사업개발/전략 검토 TF",
+  "prepared_for": "경영진 및 내부 검토자",
+  "distribution": "승인된 내부 검토자 한정",
+  "approval_author": "작성자",
+  "approval_reviewer": "검토자",
+  "approval_approver": "승인자",
+  "purpose": "본 표지는 문서형 레이아웃을 재사용 가능한 HTML/CSS/JSON 컴포넌트로 분리한 예시입니다."
+}

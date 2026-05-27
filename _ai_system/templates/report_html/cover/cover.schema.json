@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Report Cover Data",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "classification",
+    "report_type",
+    "kicker",
+    "report_title",
+    "subtitle",
+    "project_name",
+    "report_no",
+    "date",
+    "version",
+    "prepared_by",
+    "prepared_for",
+    "distribution",
+    "approval_author",
+    "approval_reviewer",
+    "approval_approver",
+    "purpose"
+  ],
+  "properties": {
+    "classification": { "type": "string", "minLength": 1 },
+    "report_type": { "type": "string", "minLength": 1 },
+    "kicker": { "type": "string", "minLength": 1 },
+    "report_title": { "type": "string", "minLength": 1 },
+    "subtitle": { "type": "string", "minLength": 1 },
+    "project_name": { "type": "string", "minLength": 1 },
+    "report_no": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "prepared_by": { "type": "string", "minLength": 1 },
+    "prepared_for": { "type": "string", "minLength": 1 },
+    "distribution": { "type": "string", "minLength": 1 },
+    "approval_author": { "type": "string", "minLength": 1 },
+    "approval_reviewer": { "type": "string", "minLength": 1 },
+    "approval_approver": { "type": "string", "minLength": 1 },
+    "purpose": { "type": "string", "minLength": 1 },
+    "logo_path": { "type": "string" },
+    "logo_alt": { "type": "string" },
+    "confidentiality_status": {
+      "type": "string",
+      "enum": ["대외비", "대외비 아님", "confidential", "not_confidential", ""]
+    },
+    "is_confidential": { "type": "boolean" },
+    "confidential_notice": { "type": "string" }
+  }
+}

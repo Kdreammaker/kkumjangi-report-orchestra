@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Reusable report cover presets derived from external consulting samples. Presets define document-control structure; report stage is validated separately.",
+  "presets": {
+    "public_release": {
+      "label": "대외 공개용",
+      "external_facing": true,
+      "defaults": {
+        "classification": "외부 공유용",
+        "confidentiality_status": "대외비 아님",
+        "report_type": "Public Research Report",
+        "kicker": "Global Market Insight",
+        "security_tag": "[ 일 반 공 개 ]",
+        "purpose": "대외 공개를 전제로 한 표지입니다. 승인란보다 발행처, 발행일, 배포 구분, 문의처를 명확히 표시합니다."
+      },
+      "palette": {
+        "cover_blue": "#2563EB",
+        "cover_dark": "#0F172A",
+        "cover_soft": "#EFF6FF",
+        "cover_line": "#CBD5E1",
+        "cover_alert": "#DC2626"
+      },
+      "required_fields": [
+        "cover_preset",
+        "classification",
+        "report_type",
+        "kicker",
+        "report_title",
+        "subtitle",
+        "publisher",
+        "report_no",
+        "date",
+        "version",
+        "distribution",
+        "contact",
+        "security_tag",
+        "purpose"
+      ],
+      "meta_rows": [
+        [
+          { "label": "발행처", "field": "publisher" },
+          { "label": "문서 번호", "field": "report_no" }
+        ],
+        [
+          { "label": "발행일", "field": "date" },
+          { "label": "버전", "field": "version" }
+        ],
+        [
+          { "label": "배포 구분", "field": "distribution" },
+          { "label": "문의처", "field": "contact" }
+        ]
+      ],
+      "approval_slots": [],
+      "forbidden_terms": ["극비", "대외비", "confidential", "internal only"]
+    },
+    "team_review": {
+      "label": "팀내 검토용",
+      "external_facing": false,
+      "defaults": {
+        "classification": "내부 검토용",
+        "confidentiality_status": "대외비",
+        "report_type": "Team Review Brief",
+        "kicker": "Technical & Operational Audit",
+        "security_tag": "[ 내 부 검 토 ]",
+        "purpose": "팀 내부 검토와 빠른 피드백을 위한 표지입니다. 작성/검토 2단계만 표시해 초안 성격을 명확히 합니다."
+      },
+      "palette": {
+        "cover_blue": "#0F766E",
+        "cover_dark": "#334155",
+        "cover_soft": "#ECFDF5",
+        "cover_line": "#CBD5E1",
+        "cover_alert": "#DC2626"
+      },
+      "required_fields": [
+        "cover_preset",
+        "classification",
+        "report_type",
+        "kicker",
+        "report_title",
+        "subtitle",
+        "project_name",
+        "report_no",
+        "date",
+        "version",
+        "prepared_by",
+        "distribution",
+        "approval_author",
+        "approval_reviewer",
+        "security_tag",
+        "purpose"
+      ],
+      "meta_rows": [
+        [
+          { "label": "프로젝트", "field": "project_name" },
+          { "label": "보고서 번호", "field": "report_no" }
+        ],
+        [
+          { "label": "작성일", "field": "date" },
+          { "label": "버전", "field": "version" }
+        ],
+        [
+          { "label": "작성 주체", "field": "prepared_by" },
+          { "label": "배포 범위", "field": "distribution" }
+        ]
+      ],
+      "approval_slots": [
+        { "label": "작성", "field": "approval_author" },
+        { "label": "검토", "field": "approval_reviewer" }
+      ],
+      "forbidden_terms": ["대외 공개", "일반 공개"]
+    },
+    "executive_decision": {
+      "label": "경영진 보고용",
+      "external_facing": false,
+      "defaults": {
+        "classification": "상부 보고용",
+        "confidentiality_status": "대외비",
+        "report_type": "Executive Decision Memo",
+        "kicker": "Executive Board Decision",
+        "security_tag": "★ 대 외 비 / 경 영 진 한 정 ★",
+        "purpose": "경영진 또는 의사결정자 보고를 위한 표지입니다. 작성, 검토, 승인 3단계와 보안 등급을 명확히 표시합니다."
+      },
+      "palette": {
+        "cover_blue": "#2563EB",
+        "cover_dark": "#0F172A",
+        "cover_soft": "#EEF4FF",
+        "cover_line": "#CBD5E1",
+        "cover_alert": "#DC2626"
+      },
+      "required_fields": [
+        "cover_preset",
+        "classification",
+        "report_type",
+        "kicker",
+        "report_title",
+        "subtitle",
+        "project_name",
+        "report_no",
+        "date",
+        "version",
+        "prepared_by",
+        "security_level",
+        "approval_author",
+        "approval_reviewer",
+        "approval_approver",
+        "security_tag",
+        "purpose"
+      ],
+      "meta_rows": [
+        [
+          { "label": "프로젝트", "field": "project_name" },
+          { "label": "보고서 번호", "field": "report_no" }
+        ],
+        [
+          { "label": "작성일", "field": "date" },
+          { "label": "버전", "field": "version" }
+        ],
+        [
+          { "label": "작성 주체", "field": "prepared_by" },
+          { "label": "보안 등급", "field": "security_level" }
+        ]
+      ],
+      "approval_slots": [
+        { "label": "작성", "field": "approval_author" },
+        { "label": "검토", "field": "approval_reviewer" },
+        { "label": "승인", "field": "approval_approver" }
+      ],
+      "forbidden_terms": ["일반 공개"]
+    },
+    "partner_proposal": {
+      "label": "파트너사 발송용",
+      "external_facing": true,
+      "defaults": {
+        "classification": "파트너사 공유용",
+        "confidentiality_status": "대외비",
+        "report_type": "Business Collaboration Proposal",
+        "kicker": "Joint Partnership Initiative",
+        "security_tag": "[ 일 반 보 안 / 업 무 제 휴 ]",
+        "purpose": "외부 파트너사 발송을 전제로 한 표지입니다. 내부 결재 흔적은 줄이고 수신 기관, 제안 주체, 제출 승인 여부를 명확히 표시합니다."
+      },
+      "palette": {
+        "cover_blue": "#3B82F6",
+        "cover_dark": "#1E3A8A",
+        "cover_soft": "#EFF6FF",
+        "cover_line": "#BFDBFE",
+        "cover_alert": "#DC2626"
+      },
+      "required_fields": [
+        "cover_preset",
+        "classification",
+        "report_type",
+        "kicker",
+        "report_title",
+        "subtitle",
+        "joint_project",
+        "proposal_no",
+        "proposal_date",
+        "recipient",
+        "organization",
+        "security_type",
+        "approval_submitter",
+        "security_tag",
+        "purpose"
+      ],
+      "meta_rows": [
+        [
+          { "label": "공동 프로젝트", "field": "joint_project" },
+          { "label": "제안서 번호", "field": "proposal_no" }
+        ],
+        [
+          { "label": "제안 일자", "field": "proposal_date" },
+          { "label": "수신 기관", "field": "recipient" }
+        ],
+        [
+          { "label": "제안 주체", "field": "organization" },
+          { "label": "보안 구분", "field": "security_type" }
+        ]
+      ],
+      "approval_slots": [
+        { "label": "제출 승인", "field": "approval_submitter" }
+      ],
+      "forbidden_terms": ["극비"]
+    }
+  }
+}

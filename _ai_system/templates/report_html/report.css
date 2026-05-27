@@ -1,0 +1,353 @@
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/pretendard/Pretendard-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/fonts/pretendard/Pretendard-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/pretendard/Pretendard-Bold.woff2") format("woff2");
+}
+
+:root {
+  --rf-primary: #1F6FEB;
+  --rf-point: #3485FF;
+  --rf-dark: #172033;
+  --rf-ink: #1f2933;
+  --rf-muted: #616670;
+  --rf-line: #CFD0D3;
+  --rf-soft: #EEF4FB;
+  --rf-bg: #F7F8FA;
+  --rf-risk: #B8567A;
+  --rf-ok: #167A5B;
+  --rf-page-width: 210mm;
+  --rf-page-margin-top: 24mm;
+  --rf-page-margin-x: 18mm;
+  --rf-page-margin-bottom: 28mm;
+  --rf-content-width: calc(var(--rf-page-width) - (var(--rf-page-margin-x) * 2));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Pretendard", "Malgun Gothic", "Noto Sans KR", Arial, sans-serif;
+  background: #eef2f7;
+  color: var(--rf-ink);
+  font-size: 16px;
+  line-height: 1.82;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.report-page {
+  max-width: var(--rf-page-width);
+  margin: 0 auto;
+  padding: var(--rf-page-margin-top) var(--rf-page-margin-x) var(--rf-page-margin-bottom);
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(23, 32, 51, 0.08);
+}
+
+.report-cover {
+  border-bottom: 3px solid var(--rf-dark);
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+}
+
+.report-label {
+  color: var(--rf-primary);
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--rf-dark);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  page-break-after: avoid;
+}
+
+h1 {
+  font-size: 30px;
+  letter-spacing: 0;
+  margin: 0 0 18px;
+}
+
+h2 {
+  border-bottom: 1px solid var(--rf-line);
+  font-size: 22px;
+  margin: 38px 0 16px;
+  padding-bottom: 8px;
+}
+
+h3 {
+  font-size: 18px;
+  margin: 22px 0 8px;
+}
+
+p {
+  margin: 12px 0;
+  max-width: var(--rf-content-width);
+}
+
+.lead {
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+  max-width: 880px;
+}
+
+.callout {
+  background: #fff;
+  border-left: 4px solid var(--rf-primary);
+  padding: 13px 15px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.risk-callout {
+  border-left-color: var(--rf-risk);
+}
+
+.report-table {
+  background: #fff;
+  border-collapse: collapse;
+  border-top: 2px solid var(--rf-dark);
+  margin: 12px 0 6px;
+  width: 100%;
+}
+
+.report-table th,
+.report-table td {
+  border-bottom: 1px solid var(--rf-line);
+  font-size: 14px;
+  padding: 9px 11px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.report-table th {
+  background: #EEEFF0;
+  color: var(--rf-dark);
+}
+
+figure {
+  margin: 26px 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.report-figure,
+.chart-panel {
+  background: #fff;
+  border: 1px solid #d8e0eb;
+  border-radius: 10px;
+  padding: 18px 18px 14px;
+  box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+  max-width: var(--rf-content-width);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.chart-panel img,
+.report-figure img,
+.figure-image,
+.static-chart,
+.chart-static,
+.report-figure svg,
+.chart-panel svg {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  width: 100%;
+}
+
+figcaption,
+.source-note {
+  color: #344054;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.source-note {
+  border-top: 1px solid #e3e8ef;
+  display: block;
+  font-weight: 600;
+  line-height: 1.58;
+  margin-top: 10px;
+  padding-top: 8px;
+}
+
+.caption-note,
+.caption-source,
+.caption-data {
+  display: block;
+}
+
+.caption-data {
+  color: var(--rf-muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.caption {
+  color: var(--rf-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin: 10px 0 0;
+  max-width: var(--rf-content-width);
+}
+
+table {
+  border-collapse: collapse;
+  border-top: 2px solid var(--rf-dark);
+  margin: 18px 0 8px;
+  max-width: var(--rf-content-width);
+  width: 100%;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+caption {
+  color: var(--rf-dark);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--rf-line);
+  font-size: 13.5px;
+  line-height: 1.55;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #edf3fa;
+  color: var(--rf-dark);
+  font-weight: 700;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fafcff;
+}
+
+ul,
+ol {
+  margin: 10px 0 14px 22px;
+  max-width: var(--rf-content-width);
+  padding-left: 18px;
+}
+
+li {
+  margin: 4px 0;
+}
+
+li::marker {
+  color: var(--rf-primary);
+  font-weight: 700;
+}
+
+.chart-bars {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.chart-row {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(100px, 170px) 1fr minmax(70px, auto);
+}
+
+.chart-bar {
+  background: var(--rf-soft);
+  border: 1px solid #d9e7f6;
+  height: 18px;
+  position: relative;
+}
+
+.chart-bar > span {
+  background: var(--rf-primary);
+  display: block;
+  height: 100%;
+}
+
+.footnotes {
+  border-top: 2px solid var(--rf-dark);
+  margin-top: 36px;
+  padding-top: 14px;
+}
+
+.appendix {
+  page-break-before: always;
+}
+
+.note-box {
+  background: #f8fbff;
+  border-left: 4px solid var(--rf-primary);
+  border-radius: 6px;
+  margin: 18px 0;
+  max-width: 920px;
+  padding: 14px 16px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+
+  body {
+    background: #fff;
+    font-size: 10.5pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .report-page {
+    max-width: none;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  h2,
+  h3,
+  table,
+  figure {
+    break-inside: avoid;
+  }
+
+  table,
+  .report-figure,
+  .chart-panel,
+  .caption {
+    max-width: 100%;
+  }
+}

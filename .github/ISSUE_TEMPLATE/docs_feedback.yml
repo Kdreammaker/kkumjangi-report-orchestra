@@ -1,0 +1,43 @@
+name: 문서 개선 요청
+description: README, INSTALL, START_HERE, OJT 문서의 혼선이나 개선점을 알려주세요.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        문서 피드백은 시스템 개선에 큰 도움이 됩니다. 공개 이슈이므로 개인 프로젝트 내용이나 비공개 자료는 적지 마세요.
+  - type: dropdown
+    id: doc_area
+    attributes:
+      label: 문서 영역
+      options:
+        - README
+        - INSTALL
+        - START_HERE.html
+        - AGENTS.md
+        - 대시보드 안내
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: confusion
+    attributes:
+      label: 헷갈렸던 부분
+      description: 어떤 문구, 순서, 버튼, 프롬프트가 헷갈렸나요?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 제안
+      description: 더 직관적인 표현이나 순서가 있다면 적어 주세요.
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy_check
+    attributes:
+      label: 공개 전 확인
+      options:
+        - label: 이 이슈에 사용자 자료, 보고서 원문, 계정 정보, API 키, 쿠키, 비공개 파트너 자료를 포함하지 않았습니다.
+          required: true

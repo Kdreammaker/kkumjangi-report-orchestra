@@ -1,0 +1,19 @@
+{
+  "cover_preset": "executive_decision",
+  "classification": "대외비 / 경영진 보고",
+  "report_type": "Executive Decision Memo",
+  "kicker": "Executive Board Decision",
+  "report_title": "경영진 보고용 전략 보고서",
+  "subtitle": "정책 변화, 시장 반응, 실행 대안, 리스크, 의사결정 포인트를 경영진 검토용으로 정리한 보고서",
+  "project_name": "example_executive_decision_project",
+  "report_no": "EXEC-YYYY-SEQ",
+  "date": "YYYY-MM-DD",
+  "version": "v1.0",
+  "prepared_by": "전략/정책 검토 TF",
+  "security_level": "대외비 / 승인된 경영진 및 내부 검토자 한정",
+  "approval_author": "작성",
+  "approval_reviewer": "검토",
+  "approval_approver": "승인",
+  "security_tag": "★ 대 외 비 / 경 영 진 한 정 ★",
+  "purpose": "경영진 보고용 표지는 작성, 검토, 승인 3단계와 보안 등급을 명확히 표시해 의사결정 문서의 통제 수준을 드러냅니다."
+}

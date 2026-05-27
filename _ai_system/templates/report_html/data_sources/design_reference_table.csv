@@ -1,0 +1,4 @@
+review_axis,check_item,artifact
+원문성,"공식 파일, 정확한 URL, 캡처, 접속일",source record
+데이터,"가설, 전제, 시나리오, 민감도",CSV/XLSX
+전환,"표, 그림, 각주, 스타일 구조",verified DOCX/PDF
