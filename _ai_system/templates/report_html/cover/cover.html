@@ -1,9 +1,11 @@
 <section class="cover-page" data-cover-component="report-cover-v1">
   <div class="cover-topline">
-    <span class="classification">{{classification}}</span>
+    <div class="cover-classification-group">
+      <span class="classification">{{classification}}</span>
+      {{security_tag_html}}
+    </div>
     <span class="report-type">{{report_type}}</span>
   </div>
-  {{security_tag_html}}
 
   {{logo_html}}
 

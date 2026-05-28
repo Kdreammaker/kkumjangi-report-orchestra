@@ -8,6 +8,7 @@ import re
 import zipfile
 from pathlib import Path
 
+from report_quality_schema import REQUIRED_WORKPACK_MARKERS, workpack_quality_issues
 from workspace_config import active_domain_preset, active_quality_profile, get_path, load_config
 
 
@@ -16,26 +17,6 @@ PROJECT_ROOT = Path("00_사용자_작업공간")
 GENERIC_URL_RE = re.compile(r"^https?://[^/]+/?(?:#.*)?$")
 DATA_SUFFIXES = {".csv", ".xlsx", ".xls", ".tsv"}
 PLAN_DATA_FILENAMES = {"visual_plan.csv"}
-REQUIRED_WORKPACK_MARKERS = [
-    "Reader Decision",
-    "Reader Takeaway",
-    "Core Question",
-    "Required Answer Boundary",
-    "Paragraph Plan",
-    "Evidence Inputs",
-    "Claim Register Links",
-    "Counterarguments",
-    "Required Visuals",
-    "Forbidden Claims",
-    "Completion Checklist",
-]
-WEAK_WORKPACK_PATTERNS = [
-    r"-\s*chapter_id:\s*$",
-    r"\|\s*\|\s*\|\s*\|",
-    r"\|\s*1\s*\|\s*\|\s*\|\s*\|",
-]
-
-
 class VisibleTextParser(html.parser.HTMLParser):
     def __init__(self) -> None:
         super().__init__()
@@ -251,22 +232,6 @@ def docx_metrics(project: Path) -> dict[str, object]:
         item["render_verified"] = bool(rendered_markers)
         details.append(item)
     return {"docx_files": len(docx_files), "details": details}
-
-
-def workpack_quality_issues(path: Path) -> list[str]:
-    text = read_text(path)
-    issues: list[str] = []
-    if len(text.strip()) < 900:
-        issues.append("too short to guide rich chapter writing")
-    missing = [marker for marker in REQUIRED_WORKPACK_MARKERS if marker.lower() not in text.lower()]
-    if missing:
-        issues.append("missing required workpack sections: " + ", ".join(missing[:6]))
-    for pattern in WEAK_WORKPACK_PATTERNS:
-        if re.search(pattern, text, flags=re.I | re.M):
-            issues.append("contains unfilled template placeholders")
-            break
-    return issues
-
 
 def chapter_factory_metrics(project: Path, report_html: dict[str, int | bool]) -> dict[str, object]:
     chapter_dir = project / "reports" / "chapters"

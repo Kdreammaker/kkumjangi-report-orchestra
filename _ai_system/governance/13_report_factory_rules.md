@@ -50,6 +50,10 @@ After reference intake or material source repair, run `_ai_system/tools/build_pr
 
 For chapter and chart stages, the context composer should follow the active chapter workpack into the named source records, claim rows, visual-plan rows, and local data/source artifacts. Do not use the assembled report as the chapter writer's main source of truth when the matching workpack and chapter fragment exist.
 
+For report improvement, prefer a chapter-only repair loop: identify the affected 대목차/중목차, read the matching workpack, chapter fragment, source/claim rows, visual-plan rows, and at most adjacent chapter summaries, then edit that source fragment or data artifact and reassemble. Read the full assembled report only for a final smoke review, cross-chapter contradiction review, or when the user explicitly asks for a broad audit.
+
+If validators are run during report production, run the narrow validator required by the active stage first. Re-running the same broad validator more than twice without changing the underlying production artifact is wasteful; report the blocker and move to the actual repair action.
+
 Two optional focused stages are available when they improve report quality:
 
 - `interview`: use the `decision_interviewer` skill for a short decision interview before PRD, TOC, skeleton, chapter workpacks, or Chapter 0. `/grill-me` is only a shortcut; trigger the same skill when the user asks in ordinary language to clarify direction first.

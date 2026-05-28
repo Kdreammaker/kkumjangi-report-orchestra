@@ -71,7 +71,7 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
     security_tag_html = (
-        f'<div class="cover-security-tag">{html.escape(security_tag, quote=False)}</div>'
+        f'<span class="cover-security-tag">{html.escape(security_tag, quote=False)}</span>'
         if security_tag
         else ""
     )
@@ -184,6 +184,9 @@ def render_cover(data: dict[str, object]) -> tuple[str, list[str]]:
         else:
             template = template.replace("{{" + key + "}}", escape_value(value))
     missing_tokens = sorted(set(re.findall(r"{{([a-zA-Z0-9_]+)}}", template)))
+    template = re.sub(r"<p class=\"kicker\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"subtitle\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"cover-purpose\">\s*</p>\s*", "", template)
     return template, missing_tokens
 
 
@@ -211,12 +214,13 @@ def validate(project_name: str, cover_data: str, write_preview: bool) -> dict[st
     ]
     rendered, missing_tokens = render_cover(data)
     is_confidential = confidential_from_cover_data(data)
+    classification_value = str(data.get("classification", "")).strip()
     approval_slots = preset.get("approval_slots")
     approval_optional = isinstance(approval_slots, list) and len(approval_slots) == 0
     visible_checks = {
         "has_report_no": bool(re.search(r"(?:보고서|문서|제안서)\s*번호|report no|REPORT-", rendered, flags=re.I)),
         "has_date": bool(re.search(r"\d{4}[-.년]\s*\d{1,2}|작성일|발행일", rendered)),
-        "has_classification": bool(re.search(r"대외비|내부|confidential|기밀", rendered, flags=re.I)),
+        "has_classification": bool(re.search(r"내부|상부|파트너|외부|공개|검토용|보고용|confidential", rendered, flags=re.I)),
         "has_approval": approval_optional or bool(re.search(r"class=\"cover-approval", rendered)),
     }
     errors: list[str] = []
@@ -224,6 +228,10 @@ def validate(project_name: str, cover_data: str, write_preview: bool) -> dict[st
         errors.append("missing cover data fields: " + ", ".join(missing_fields))
     if missing_tokens:
         errors.append("unfilled cover template tokens: " + ", ".join(missing_tokens))
+    if re.search(r"대외비|confidential|기밀", classification_value, flags=re.I):
+        errors.append(
+            "cover classification should contain only document class; put confidentiality in confidentiality_status/security_tag"
+        )
     for key, passed in visible_checks.items():
         if not passed:
             errors.append(f"cover visible check failed: {key}")

@@ -9,6 +9,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from report_quality_schema import REQUIRED_WORKPACK_MARKERS
+
 
 PROJECT_ROOT = Path("00_사용자_작업공간")
 
@@ -16,15 +18,7 @@ DECISION_TERMS = ["의사결정", "판단", "선택", "대안", "권고", "실�
 RISK_TERMS = ["리스크", "위험", "한계", "반론", "잔존", "불확실", "counter", "risk", "limitation"]
 EVIDENCE_TERMS = ["자료:", "근거", "출처", "각주", "참고문헌", "source", "evidence"]
 OVERCLAIM_TERMS = ["100% 보장", "완벽", "완전한 보호", "무조건", "절대", "압도적", "최고 수준"]
-WORKPACK_SECTIONS = [
-    "Reader Decision",
-    "Reader Takeaway",
-    "Core Question",
-    "Required Answer Boundary",
-    "Claim Register Links",
-    "Counterarguments",
-    "Required Visuals",
-]
+WORKPACK_SECTIONS = REQUIRED_WORKPACK_MARKERS
 SECTION_RE = re.compile(r"^\s{0,3}(?:#{1,6}\s*)?([A-Za-z][A-Za-z ]{3,40})\s*:?\s*$", re.M)
 CLAIM_ID_RE = re.compile(r"\b(?:claim|c)[-_]?\d{2,4}\b", re.I)
 VISUAL_ID_RE = re.compile(r"\b(?:vis|fig|table|chart)[-_]?\d{2,4}\b", re.I)

@@ -34,6 +34,15 @@ Internal gates still decide whether drafting, delivery, or closeout claims are a
 
 When a guarded chain fails, report it as blocked. Do not summarize a failed review-candidate, handoff, or closeout run as `완료`, `최종 완료`, `Green Pass`, or `검증 통과`. The status must name the failed gate, the first blocking check, and the remaining action.
 
+Do not run the same validator in a loop to create a sense of progress. If the same validator fails twice with the same blocker and no new actionable information, stop the loop and translate the blocker into one of:
+
+- a production repair the AI can do now,
+- a source/material request for the user,
+- a scope or approval question,
+- a known limitation to carry into the status report.
+
+Record the repeated failure and the chosen next action in the active worklog.
+
 ## Core Principle
 
 Do not ask, "Did the validation pass?" first.

@@ -1,9 +1,8 @@
 # Changelog
 
-## 1.0.0 - 2026-05-27
+## 1.0.1 - 2026-05-28
 
-- Initial public release of Kkumjangi Report Orchestra.
-- Includes Apache License 2.0, NOTICE, third-party notices, security guidance, contribution guidance, and GitHub issue templates.
-- Public README and INSTALL use the public repository URL and disclose that install/setup also prepares local open-source components such as `pypdf`, `docling`, `duckdb`, Apache ECharts, and Pretendard.
-- Includes local-only project workspace generation, server-backed project dashboard, reference intake/normalization/indexing helpers, report-factory governance, reusable report templates, and validation tools.
-- Public release packages exclude user workspaces, local runtime assets, backups, snapshots, and local machine identity files.
+- Updated OJT prompts so report writing produces an internal draft first, then review/cross-check findings drive approved enhancement.
+- Improved reusable cover and assembly output so confidentiality, classification, references, and data appendices are cleaner for reader-facing reports.
+- Added shared chapter-quality checks and a core-change guard to reduce accidental system edits during ordinary project work.
+- Removed stale private repository naming from public package outputs and strengthened public package boundary checks.

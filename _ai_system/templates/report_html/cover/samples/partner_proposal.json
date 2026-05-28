@@ -1,8 +1,9 @@
 {
   "cover_preset": "partner_proposal",
-  "classification": "일반 보안 / 업무 제휴",
-  "report_type": "Business Collaboration Proposal",
-  "kicker": "Joint Partnership Initiative",
+  "classification": "파트너사 공유용",
+  "confidentiality_status": "대외비",
+  "report_type": "파트너사 검토 자료",
+  "kicker": "Partnership Review",
   "report_title": "파트너사 발송용 사업 제안서",
   "subtitle": "공동 사업 기회, 역할 분담, 실행 구조, 검토 조건을 파트너사와 공유하기 위한 제안 문서",
   "joint_project": "공동 프로젝트명",
@@ -10,8 +11,8 @@
   "proposal_date": "YYYY-MM-DD",
   "recipient": "수신 기관 또는 파트너사",
   "organization": "제안 주체 또는 컨소시엄",
-  "security_type": "일반 보안 / 업무 제휴 검토용",
+  "security_type": "대외비 / 수신자 한정",
   "approval_submitter": "제출 승인",
-  "security_tag": "[ 일 반 보 안 / 업 무 제 휴 ]",
+  "security_tag": "대외비 / Confidential",
   "purpose": "파트너사 발송용 표지는 내부 결재 흔적을 최소화하고, 수신 기관, 제안 주체, 제출 승인 여부를 중심으로 구성합니다."
 }

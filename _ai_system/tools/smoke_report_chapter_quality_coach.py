@@ -98,12 +98,27 @@ def write_project(project: Path) -> None:
         "어떤 조건에서 어느 대안을 선택해야 하는가.\n\n"
         "## Required Answer Boundary\n"
         "비용, 일정, 승인 가능성, 평판 위험, 기술 난도, 추가 자료 수집을 함께 다룬다.\n\n"
+        "## Paragraph Plan\n"
+        "1. 대안 A/B의 선택 조건을 요약한다.\n"
+        "2. 비용, 일정, 승인 가능성, 평판 위험, 기술 난도를 같은 기준으로 비교한다.\n"
+        "3. 반론과 잔존 리스크를 별도 문단으로 분리한다.\n"
+        "4. 다음 회의 전 추가 확인 항목을 정리한다.\n\n"
+        "## Evidence Inputs\n"
+        "- 공식 원문\n"
+        "- 장별 비교 데이터\n\n"
         "## Claim Register Links\n"
         "C-201\n\n"
         "## Counterarguments\n"
         "시장 수요 부족, 규제기관의 사고 방지 우선순위, 원문 해석 차이를 다룬다.\n\n"
         "## Required Visuals\n"
-        "VIS-201\n\n",
+        "VIS-201\n\n"
+        "## Forbidden Claims\n"
+        "- 확정되지 않은 승인 가능성을 단정하지 않는다.\n"
+        "- 단일 점수만으로 권고를 확정하지 않는다.\n\n"
+        "## Completion Checklist\n"
+        "- [x] 핵심 질문과 판단 조건이 본문에 보인다.\n"
+        "- [x] 반론과 리스크가 별도 문단으로 보인다.\n"
+        "- [x] 출처와 근거 데이터가 figure caption에 연결된다.\n\n",
         encoding="utf-8",
         newline="\n",
     )

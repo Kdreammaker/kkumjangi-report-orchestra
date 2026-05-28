@@ -312,6 +312,37 @@ def check_project_profile(project_dir: Path) -> dict[str, object]:
     return result
 
 
+def check_dashboard_batch_path(root: Path, project_dir: Path) -> dict[str, object]:
+    path = project_dir / "project_dashboard" / "open_project_dashboard.bat"
+    result: dict[str, object] = {
+        "ok": False,
+        "exists": path.exists(),
+        "uses_current_workspace_path": False,
+        "uses_legacy_four_up_path": False,
+        "resolved_app_exists": False,
+        "errors": [],
+    }
+    if not path.exists():
+        result["errors"].append("missing_open_project_dashboard_bat")
+        return result
+    text = path.read_text(encoding="utf-8", errors="ignore")
+    current = r"..\..\..\_ai_system\tools\project_dashboard_app\app.py"
+    legacy = r"..\..\..\..\_ai_system\tools\project_dashboard_app\app.py"
+    result["uses_current_workspace_path"] = current in text
+    result["uses_legacy_four_up_path"] = legacy in text
+    resolved = (path.parent / ".." / ".." / ".." / "_ai_system" / "tools" / "project_dashboard_app" / "app.py").resolve()
+    result["resolved_app_path"] = resolved.as_posix()
+    result["resolved_app_exists"] = resolved.exists()
+    if not result["uses_current_workspace_path"]:
+        result["errors"].append("dashboard_batch_does_not_use_current_workspace_relative_path")
+    if result["uses_legacy_four_up_path"]:
+        result["errors"].append("dashboard_batch_uses_legacy_four_up_path")
+    if not result["resolved_app_exists"]:
+        result["errors"].append("dashboard_batch_resolved_app_missing")
+    result["ok"] = not result["errors"]
+    return result
+
+
 def python_process_ids() -> set[int]:
     pids: set[int] = set()
     try:
@@ -437,13 +468,16 @@ def main() -> int:
     project_dirs = sorted([p for p in projects_root.iterdir() if p.is_dir() and not is_smoke_project(p)]) if projects_root.exists() else []
     project_checks = []
     project_profiles = {}
+    project_dashboard_batches = {}
     for project in project_dirs:
         missing = [rel for rel in PROJECT_REQUIRED if not (project / rel).exists()]
         project_checks.append({"project": project.name, "missing": missing})
         project_profiles[project.name] = check_project_profile(project)
+        project_dashboard_batches[project.name] = check_dashboard_batch_path(root, project)
     results["projects_checked"] = len(project_dirs)
     results["project_required_missing"] = project_checks
     results["project_profiles"] = project_profiles
+    results["project_dashboard_batch_paths"] = project_dashboard_batches
 
     user_facing_html = [
         root / "START_HERE.html",
@@ -518,6 +552,7 @@ def main() -> int:
     )
     has_failure = has_failure or any(item["missing"] for item in project_checks)
     has_failure = has_failure or any(not item.get("ok") for item in project_profiles.values())
+    has_failure = has_failure or any(not item.get("ok") for item in project_dashboard_batches.values())
     has_failure = has_failure or bool(results["html_checked"]["errors"])
     has_failure = has_failure or not results["pypdf_available"]
     has_failure = has_failure or not results["docling_available"]

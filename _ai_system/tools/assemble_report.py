@@ -64,7 +64,7 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
     security_tag_html = (
-        f'<div class="cover-security-tag">{html.escape(security_tag, quote=False)}</div>' if is_confidential else ""
+        f'<span class="cover-security-tag">{html.escape(security_tag, quote=False)}</span>' if is_confidential else ""
     )
     notice = str(data.get("confidential_notice", "")).strip()
     if is_confidential and not notice:
@@ -173,6 +173,9 @@ def render_cover(data: dict[str, object]) -> str:
     missing = sorted(set(re.findall(r"{{([a-zA-Z0-9_]+)}}", template)))
     if missing:
         raise ValueError("cover data is missing required field(s): " + ", ".join(missing))
+    template = re.sub(r"<p class=\"kicker\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"subtitle\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"cover-purpose\">\s*</p>\s*", "", template)
     return template
 
 
@@ -203,23 +206,7 @@ def link_label(url: str) -> str:
     if not url:
         return ""
     safe_url = html.escape(url, quote=True)
-    visible = html.escape(url, quote=False)
-    return f'<a href="{safe_url}">{visible}</a>'
-
-
-def source_use_label(row: dict[str, str]) -> str:
-    use_level = (row.get("use_level") or "").strip().lower()
-    capture = (row.get("capture_status") or "").strip().lower()
-    url_status = (row.get("url_status") or "").strip()
-    if use_level == "quote_verified":
-        return "원문 인용 대조됨"
-    if use_level == "report_citable":
-        return "보고서 인용 가능"
-    if capture in {"captured", "ok", "captured_html"}:
-        return "링크 확인 및 캡처 있음"
-    if url_status:
-        return "링크 확인됨"
-    return "확인 필요"
+    return f'<a href="{safe_url}">원문 링크</a>'
 
 
 def visual_data_labels(project: Path) -> dict[str, str]:
@@ -254,26 +241,30 @@ def build_reference_appendices(project: Path) -> str:
                 f"<td>{html.escape(row.get('title', ''), quote=False)}</td>"
                 f"<td>{html.escape(row.get('publisher', ''), quote=False)}</td>"
                 f"<td>{link_label(row.get('url', ''))}</td>"
-                f"<td>{html.escape(row.get('accessed_at_kst', ''), quote=False)}</td>"
-                f"<td>{html.escape(source_use_label(row), quote=False)}</td>"
                 "</tr>"
             )
         sections.append(
             """
-<section id="appendix-references" class="appendix report-appendix">
-  <h1>부록 A. 참고자료</h1>
-  <p class="appendix-note">아래 목록은 보고서 작성에 사용된 공식 링크와 접근 상태를 독자가 추적할 수 있도록 정리한 것입니다. 링크 확인, 원문 보존, 인용 대조 상태는 서로 다른 의미입니다.</p>
+<section id="report-references" class="report-references">
+  <h1>참고자료</h1>
+  <p class="appendix-note">아래 목록은 독자가 원자료를 따라갈 수 있도록 정리한 reader-facing 참고자료입니다. 내부 source_id, 접근일, 사용 수준, 로컬 캡처 경로는 추적용 register에 보관합니다.</p>
   <table class="report-table appendix-table" aria-label="참고자료 목록">
-    <thead><tr><th>No.</th><th>자료명</th><th>발행기관</th><th>공식 링크</th><th>접근일</th><th>사용 수준</th></tr></thead>
+    <thead><tr><th>No.</th><th>자료명</th><th>발행기관</th><th>원문</th></tr></thead>
     <tbody>
 """
             + "\n".join(rows_html)
             + """
     </tbody>
   </table>
+  <p class="caption">자료: 출처 링크 등록표와 source records. 근거 데이터: 참고자료 목록.</p>
 </section>
 """
         )
+
+    appendices_dir = project / "reports" / "appendices"
+    if appendices_dir.exists():
+        for appendix in sorted(appendices_dir.glob("*.html")):
+            sections.append(read_text(appendix))
 
     labels = visual_data_labels(project)
     data_files = sorted(
@@ -295,7 +286,7 @@ def build_reference_appendices(project: Path) -> str:
         sections.append(
             """
 <section id="appendix-data-artifacts" class="appendix report-appendix">
-  <h1>부록 B. 분석 데이터 목록</h1>
+  <h1>부록. 분석 데이터 목록</h1>
   <p class="appendix-note">아래 파일은 표·그래프·다이어그램을 재현하거나 검토하기 위한 로컬 분석 데이터입니다. 원문 출처를 대체하지 않습니다.</p>
   <table class="report-table appendix-table" aria-label="분석 데이터 목록">
     <thead><tr><th>No.</th><th>데이터셋</th><th>파일명</th><th>크기(bytes)</th></tr></thead>
@@ -305,6 +296,7 @@ def build_reference_appendices(project: Path) -> str:
             + """
     </tbody>
   </table>
+  <p class="caption">자료: visual plan과 data_sources 등록 파일. 근거 데이터: 분석 데이터 목록.</p>
 </section>
 """
         )

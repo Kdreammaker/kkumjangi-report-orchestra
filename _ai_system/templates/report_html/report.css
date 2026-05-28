@@ -88,7 +88,12 @@ h3 {
 h1 {
   font-size: 30px;
   letter-spacing: 0;
-  margin: 0 0 18px;
+  margin: 54px 0 18px;
+}
+
+.cover-page + section > h1,
+.assembled-report > section:first-of-type > h1 {
+  margin-top: 0;
 }
 
 h2 {
@@ -303,7 +308,8 @@ li::marker {
   padding-top: 14px;
 }
 
-.appendix {
+.appendix,
+.report-references {
   page-break-before: always;
 }
 

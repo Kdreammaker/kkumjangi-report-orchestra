@@ -17,6 +17,7 @@ STEP_COMMANDS: dict[str, list[list[str]]] = {
         ["_ai_system/tools/validate_report_factory.py", "--project", "{project}"],
     ],
     "review-candidate": [
+        ["_ai_system/tools/validate_core_worktree_clean.py"],
         ["_ai_system/tools/report_gate_status.py", "--project", "{project}"],
         ["_ai_system/tools/report_preflight.py", "--project", "{project}", "--for-delivery", "--strict-research"],
         ["_ai_system/tools/validate_report_factory.py", "--project", "{project}", "--strict"],
@@ -25,6 +26,7 @@ STEP_COMMANDS: dict[str, list[list[str]]] = {
         ["_ai_system/tools/validate_report_artifact.py", "--project", "{project}", "--strict-delivery"],
     ],
     "closeout": [
+        ["_ai_system/tools/validate_core_worktree_clean.py"],
         ["_ai_system/tools/report_gate_status.py", "--project", "{project}"],
         ["_ai_system/tools/report_preflight.py", "--project", "{project}", "--for-delivery", "--strict-research"],
         ["_ai_system/tools/validate_report_factory.py", "--project", "{project}", "--strict"],
@@ -45,6 +47,7 @@ STEP_COMMANDS: dict[str, list[list[str]]] = {
         ["_ai_system/tools/build_delivery_outbox.py", "--project", "{project}", "--dry-run"],
     ],
     "handoff": [
+        ["_ai_system/tools/validate_core_worktree_clean.py"],
         ["_ai_system/tools/report_gate_status.py", "--project", "{project}"],
         ["_ai_system/tools/report_preflight.py", "--project", "{project}", "--for-delivery", "--strict-research"],
         ["_ai_system/tools/validate_report_factory.py", "--project", "{project}", "--strict"],
@@ -53,9 +56,6 @@ STEP_COMMANDS: dict[str, list[list[str]]] = {
         ["_ai_system/tools/validate_report_artifact.py", "--project", "{project}", "--strict-delivery"],
         ["_ai_system/tools/validate_closeout.py", "--project", "{project}"],
         ["_ai_system/tools/build_delivery_outbox.py", "--project", "{project}", "--dry-run", "--require-active-report"],
-    ],
-    "system-core": [
-        ["_ai_system/tools/validate_system_core_package.py"],
     ],
     "workspace": [
         ["_ai_system/tools/validate_workspace_setup.py", "--include-user-flow"],

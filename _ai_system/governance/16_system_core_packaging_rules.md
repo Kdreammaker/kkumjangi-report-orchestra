@@ -19,6 +19,8 @@ A clean system-core package should include:
 - `_ai_system/validation_fixtures/` when needed,
 - generic system documentation only when it contains no project-specific, client-specific, or historical worklog material.
 
+Private maintainer-only release files should live outside the public package area. In the private source repository, use the dedicated internal maintainer folder for public seed builders, package-boundary validators, release smoke tests, and packaging strategy notes.
+
 A clean system-core package should not include:
 
 - `00_사용자_작업공간/`,
@@ -26,6 +28,7 @@ A clean system-core package should not include:
 - user-provided source originals,
 - AI-service brain artifacts outside the workspace,
 - scratch inspection scripts,
+- private maintainer files in public release packages,
 - decoded report dumps,
 - temporary logs,
 - `.bak`, `.tmp`, `.log`, `__pycache__`, or local runtime outputs.
@@ -41,6 +44,8 @@ If the system core is pushed to GitHub:
 - `.gitignore` must correctly exclude `00_사용자_작업공간/` using the real UTF-8 path,
 - user-visible system changes should update `CHANGELOG.md`, the recent-improvements block in `README.md`, and `VERSION.json` when a release version should change,
 - packaging validation should run before push.
+
+Maintainer release builders and package-boundary validators are not ordinary user/OJT tools and should not be exposed as report-production helpers.
 
 Do not claim a GitHub repo is clean because `.gitignore` exists. Confirm the tracked file list.
 
@@ -72,3 +77,5 @@ Before saying a package is ready for a third party or GitHub:
 - confirm no scratch files are in active tool folders,
 - confirm `.gitignore` is readable and contains the correct Korean workspace path,
 - confirm README or START_HERE explains how a new user should begin.
+
+If a public release seed is built, verify that private maintainer folders are absent from the generated package and that public README/INSTALL do not link to private maintainer memos.

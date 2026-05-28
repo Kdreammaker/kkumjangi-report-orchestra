@@ -1,5 +1,7 @@
 00_사용자_작업공간/
 .local_state/
+_internal/
+_release_staging/
 _ai_system/project_state/latest_ai_snapshot/
 _ai_system/runtime/
 _ai_system/backups/

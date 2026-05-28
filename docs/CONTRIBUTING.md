@@ -11,7 +11,8 @@ Thank you for helping improve Report Integrity Orchestrator.
 ## Useful Bug Report Details
 
 - System version from `VERSION.json`.
-- Operating system and Python version.
+- Operating system, AI app, and model used when the issue happened.
+- Python version when the issue involves install/runtime behavior.
 - Whether the issue happened during install, project setup, reference intake, dashboard use, report writing, validation, or packaging.
 - The exact validator result when available.
 

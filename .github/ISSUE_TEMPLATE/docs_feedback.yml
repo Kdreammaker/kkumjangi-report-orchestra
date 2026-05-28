@@ -20,6 +20,13 @@ body:
         - 기타
     validations:
       required: true
+  - type: input
+    id: app_model
+    attributes:
+      label: 사용 앱/모델
+      description: 특정 AI나 앱에서 문구가 헷갈렸다면 적어 주세요. 예: Codex Desktop / Codex 5.5
+    validations:
+      required: false
   - type: textarea
     id: confusion
     attributes:

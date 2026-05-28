@@ -8,8 +8,8 @@
       "defaults": {
         "classification": "외부 공유용",
         "confidentiality_status": "대외비 아님",
-        "report_type": "Public Research Report",
-        "kicker": "Global Market Insight",
+        "report_type": "외부 공개 보고서",
+        "kicker": "Research Report",
         "security_tag": "[ 일 반 공 개 ]",
         "purpose": "대외 공개를 전제로 한 표지입니다. 승인란보다 발행처, 발행일, 배포 구분, 문의처를 명확히 표시합니다."
       },
@@ -59,10 +59,10 @@
       "defaults": {
         "classification": "내부 검토용",
         "confidentiality_status": "대외비",
-        "report_type": "Team Review Brief",
-        "kicker": "Technical & Operational Audit",
-        "security_tag": "[ 내 부 검 토 ]",
-        "purpose": "팀 내부 검토와 빠른 피드백을 위한 표지입니다. 작성/검토 2단계만 표시해 초안 성격을 명확히 합니다."
+        "report_type": "전략 보고서",
+        "kicker": "",
+        "security_tag": "대외비 / Confidential",
+        "purpose": "정책 변화와 신사업 후보를 내부적으로 검토하기 위한 문서입니다. 외부 공유 전에는 별도 승인과 검토가 필요합니다."
       },
       "palette": {
         "cover_blue": "#0F766E",
@@ -115,9 +115,9 @@
       "defaults": {
         "classification": "상부 보고용",
         "confidentiality_status": "대외비",
-        "report_type": "Executive Decision Memo",
-        "kicker": "Executive Board Decision",
-        "security_tag": "★ 대 외 비 / 경 영 진 한 정 ★",
+        "report_type": "상부 보고 보고서",
+        "kicker": "Executive Review",
+        "security_tag": "대외비 / Confidential",
         "purpose": "경영진 또는 의사결정자 보고를 위한 표지입니다. 작성, 검토, 승인 3단계와 보안 등급을 명확히 표시합니다."
       },
       "palette": {
@@ -173,9 +173,9 @@
       "defaults": {
         "classification": "파트너사 공유용",
         "confidentiality_status": "대외비",
-        "report_type": "Business Collaboration Proposal",
-        "kicker": "Joint Partnership Initiative",
-        "security_tag": "[ 일 반 보 안 / 업 무 제 휴 ]",
+        "report_type": "파트너사 검토 자료",
+        "kicker": "Partnership Review",
+        "security_tag": "대외비 / Confidential",
         "purpose": "외부 파트너사 발송을 전제로 한 표지입니다. 내부 결재 흔적은 줄이고 수신 기관, 제안 주체, 제출 승인 여부를 명확히 표시합니다."
       },
       "palette": {

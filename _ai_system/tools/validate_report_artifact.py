@@ -311,8 +311,8 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
 
     if substantial and not re.search(r"\b(Appendix|부록)\b", visible_text, flags=re.I):
         errors.append("substantial report has no appendix section")
-    if substantial and not re.search(r"id=[\"']appendix-references[\"']|참고자료\s*목록|부록\s*A\.\s*참고자료", raw, flags=re.I):
-        errors.append("substantial report lacks a final reference appendix/list with accessible source links")
+    if substantial and not re.search(r"id=[\"'](?:appendix-references|report-references)[\"']|<h1>\s*참고자료\s*</h1>|참고자료\s*목록|부록\s*A\.\s*참고자료", raw, flags=re.I):
+        errors.append("substantial report lacks a reader-facing reference section/list with accessible source links")
     if strict_delivery:
         chapter0_summary = bool(
             re.search(

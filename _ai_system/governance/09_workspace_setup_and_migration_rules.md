@@ -170,8 +170,9 @@ Before creating files, apply the short-request confirmation flow:
 11. Record the approved setup brief, approval wording, and initialization in a timestamped worklog inside the workspace.
 12. Update AI snapshots only for files the AI created or modified.
 13. Run workspace validation when possible and report the result separately from any research or report quality status.
+14. If `tasks/current_task.md` starts at `interview`, proceed to a short direction interview after setup unless the user asked to stop after folder creation. Do not treat this as report drafting or material intake.
 
-Use `_ai_system/tools/init_project_workspace.py` where possible instead of hand-creating the structure. When the tool receives a bare project title, it must route the project directly under `00_사용자_작업공간/` using `YYMMDD_프로젝트명앞20자`, removing Windows-forbidden filename characters. A project-like folder in the workspace root is a setup failure, not a harmless extra folder.
+Use `_ai_system/tools/init_project_workspace.py` where possible instead of hand-creating the structure. A user may provide a topic rather than a final project name. In the setup brief, propose the project display name, safe folder name, and likely report title before creation. When the tool receives a bare project title/name, it must route the project directly under `00_사용자_작업공간/` using `YYMMDD_프로젝트명앞20자`, removing Windows-forbidden filename characters. A project-like folder in the workspace root is a setup failure, not a harmless extra folder.
 
 `project_profile.json` is a project logistics file only. It may contain responsible people, approval line, practitioners, external contacts, organization, and CI/logo references. The first row in `responsible_people` is the project owner shown on the dashboard. It must not contain report-level default document classification, default confidentiality, or default external-sharing permission. Those are confirmed in the report PRD for each report. Project-level logo auto-selection is fixed to `brand_assets/project_logo.png`; do not auto-select arbitrary images from the folder.
 
@@ -205,8 +206,8 @@ New project initialization scope:
 
 - Included by default:
   - project folder and standard subfolders,
-  - human dashboard and reference library launchers,
-  - project profile editor, logistics JSON, and brand-assets folder,
+  - server dashboard launcher and dashboard app bridge,
+  - project logistics JSON and brand-assets folder,
   - task manifest and static task status panel,
   - drop zone and reference inventory,
   - claim/source/assumption/question ledgers,
@@ -376,7 +377,7 @@ The OJT document should explain the user workflow, not AI internals. It should s
 - where to place new files,
 - how to start a new project,
 - how to open the reference library,
-- how to request reports and revisions,
+- how to request report drafts, file-modification-free review/cross-check, approved enhancement, and revalidation as separate steps,
 - what not to edit manually unless necessary.
 
 OJT copy prompts must stay short. Use this routing split:

@@ -28,6 +28,8 @@ Local Python cannot directly invoke Codex/AI skills. A hook can only write a cle
 
 Do not run tools just to create a sense of progress. During ordinary report production, use the current `tasks/current_task.md` row to decide the next small set of tools. Developer smoke tests, package checks, and broad workspace checks are for install, release, repair, or closeout, not for every chapter.
 
+If the same validator fails twice with the same blocker and no underlying production artifact has changed, stop rerunning it. Record the blocker in the worklog and move to the repair action named by the active task or validator output.
+
 ## Operational Tools
 
 Default operational tools are the tools an AI may normally use during setup, report production, or closeout:
@@ -37,7 +39,6 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `build_delivery_outbox.py`
 - `build_project_context_db.py`
 - `build_source_status_panel.py`
-- `build_system_core_package.py`
 - `check_system_version.py`
 - `compose_report_context.py`
 - `configure_workspace.py`
@@ -64,7 +65,6 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `validate_report_artifact.py`
 - `validate_report_factory.py`
 - `validate_research_integrity.py`
-- `validate_system_core_package.py`
 - `validate_workspace_setup.py`
 - `verify_source_link_quotes.py`
 - `workspace_config.py`
@@ -92,3 +92,5 @@ If any routing/advisory output conflicts with the PRD, chapter workpack, or subs
 ## Smoke Tests
 
 Files named `smoke_*.py` are developer release tests for this system core. They are not part of ordinary user operation, OJT, or report production. Run them after changing system tools, skills, package boundaries, or release behavior; otherwise prefer the narrow validator named by the active task.
+
+Private maintainer release helpers should live outside this user-facing tools folder. In particular, public/private package builders, package-boundary validators, and release-only smoke tests should stay out of ordinary report-production tools so they are not mistaken for user operations.

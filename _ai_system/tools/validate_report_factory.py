@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 
+from report_quality_schema import REQUIRED_WORKPACK_MARKERS, workpack_quality_issues
 from workspace_config import list_value, load_config
 
 
@@ -15,26 +16,6 @@ PROJECT_ROOT = Path("00_사용자_작업공간")
 DATA_SUFFIXES = {".csv", ".xlsx", ".xls", ".tsv"}
 PLAN_DATA_FILENAMES = {"visual_plan.csv"}
 REQUIRED_VISUAL_COLUMNS = {"visual_id", "chapter", "visual_type", "purpose", "decision_use", "status"}
-REQUIRED_WORKPACK_MARKERS = [
-    "Reader Decision",
-    "Reader Takeaway",
-    "Core Question",
-    "Required Answer Boundary",
-    "Paragraph Plan",
-    "Evidence Inputs",
-    "Claim Register Links",
-    "Counterarguments",
-    "Required Visuals",
-    "Forbidden Claims",
-    "Completion Checklist",
-]
-WEAK_WORKPACK_PATTERNS = [
-    r"-\s*chapter_id:\s*$",
-    r"\|\s*\|\s*\|\s*\|",
-    r"\|\s*1\s*\|\s*\|\s*\|\s*\|",
-]
-
-
 def read_csv(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
@@ -75,22 +56,6 @@ def is_substantial_project(project: Path) -> bool:
     toc_text = " ".join(path.read_text(encoding="utf-8", errors="ignore") for path in (project / "drafts").glob("*.md"))
     combined = (prd_text + " " + toc_text).lower()
     return any(marker.lower() in combined for marker in markers)
-
-
-def workpack_quality_issues(path: Path) -> list[str]:
-    text = path.read_text(encoding="utf-8", errors="ignore")
-    issues: list[str] = []
-    if len(text.strip()) < 900:
-        issues.append("too short to guide rich chapter writing")
-    missing = [marker for marker in REQUIRED_WORKPACK_MARKERS if marker.lower() not in text.lower()]
-    if missing:
-        issues.append("missing required workpack sections: " + ", ".join(missing[:6]))
-    for pattern in WEAK_WORKPACK_PATTERNS:
-        if re.search(pattern, text, flags=re.I | re.M):
-            issues.append("contains unfilled template placeholders")
-            break
-    return issues
-
 
 def validate_project(project: Path, strict: bool, enforce_modern: bool) -> dict[str, object]:
     config = load_config()

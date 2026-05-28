@@ -60,12 +60,13 @@ This file is the detailed map for governance documents, report skills, templates
 | Local runtime validator | `_ai_system/tools/validate_local_runtime.py` | Check Python, pypdf, Docling, DuckDB, ECharts, and Pretendard. |
 | Workspace bootstrap | `_ai_system/tools/bootstrap_workspace.py` | Create initial `00_사용자_작업공간/` if absent. |
 | Workspace validator | `_ai_system/tools/validate_workspace_setup.py` | Validate root, runtime, projects, HTML, API/UI flow, snapshots, and local leftovers. |
+| Core worktree guard | `_ai_system/tools/validate_core_worktree_clean.py` | Detect accidental system-core edits during ordinary project/report workflows. |
 | Project initializer | `_ai_system/tools/init_project_workspace.py` | Create a new project foundation after user approval. |
 | Current task validator | `_ai_system/tools/validate_current_task.py` | Validate `tasks/current_task.md` and refresh `task_status.html`. |
 | Stage context composer | `_ai_system/tools/compose_report_context.py` | Produce stage-specific read lists and `context_packets/*.compact.md`. |
 | Workflow navigator | `_ai_system/tools/report_workflow_next.py` | Suggest next production action, blockers, and status panel. |
 | Gate status | `_ai_system/tools/report_gate_status.py` | Compute current report/project gate and blocked actions. |
-| Guarded step runner | `_ai_system/tools/run_guarded_step.py` | Run bundled gate chains for drafting, review-candidate, closeout, export, handoff, workspace, or system-core checks. |
+| Guarded step runner | `_ai_system/tools/run_guarded_step.py` | Run bundled gate chains for drafting, review-candidate, closeout, export, handoff, or workspace checks. Review/closeout/handoff include the core worktree guard. |
 | Reference intake batch | `_ai_system/tools/intake_reference_batch.py` | Register source files, preserve originals, normalize with Docling/PDF parsing where available. |
 | Project context DB builder | `_ai_system/tools/build_project_context_db.py` | Build DuckDB context index from references, normalized units, source records, claims, and workpacks. |
 | Project context query | `_ai_system/tools/query_project_context.py` | Query targeted snippets instead of reading full originals. |
@@ -88,8 +89,6 @@ This file is the detailed map for governance documents, report skills, templates
 | Closeout validator | `_ai_system/tools/validate_closeout.py` | Check declared deliverables, snapshots, and active report folders. |
 | Delivery outbox builder | `_ai_system/tools/build_delivery_outbox.py` | Build local handoff package without cloud upload. |
 | Cloud handoff planner | `_ai_system/tools/prepare_cloud_handoff.py` | Create approval-gated cloud upload plan; does not upload by itself. |
-| System-core package validator | `_ai_system/tools/validate_system_core_package.py` | Validate clean GitHub/ZIP/new-PC package boundaries. |
-| System-core package builder | `_ai_system/tools/build_system_core_package.py` | Build a clean system-core package directory. |
 | Workspace configurator | `_ai_system/tools/configure_workspace.py` | List/change domain preset safely. |
 
 ## Smoke Tests
@@ -98,7 +97,6 @@ Smoke scripts under `_ai_system/tools/smoke_*.py` are developer release tests, n
 
 - `_ai_system/tools/smoke_context_composer.py`
 - `_ai_system/tools/smoke_report_workflow_next.py`
-- `_ai_system/tools/smoke_project_init_routing.py`
 - `_ai_system/tools/smoke_report_skills_and_hooks.py`
 - `_ai_system/tools/smoke_reference_register_consistency.py`
 - `_ai_system/tools/smoke_report_chapter_quality_coach.py`
@@ -109,4 +107,3 @@ Smoke scripts under `_ai_system/tools/smoke_*.py` are developer release tests, n
 ## Notes On Legacy Mentions
 
 Legacy references are allowed when they support migration, validation, or explicit "do not generate this old artifact" rules. They should not appear in ordinary OJT prompts or new-project user-facing instructions.
-

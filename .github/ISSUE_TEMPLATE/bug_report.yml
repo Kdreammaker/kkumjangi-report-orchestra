@@ -22,6 +22,27 @@ body:
       description: VERSION.json 또는 설치 완료 메시지에 나온 버전을 적어 주세요.
     validations:
       required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: 예: Windows 11, macOS 15, Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: app
+    attributes:
+      label: 사용 앱
+      description: 예: Codex Desktop, Gemini Antigravity, Claude Code, ChatGPT, Cursor
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: 사용 모델
+      description: 예: Codex 5.5 보통, Gemini 3.5 Flash Low, Claude Sonnet 4.6
+    validations:
+      required: true
   - type: dropdown
     id: area
     attributes:
@@ -62,6 +83,13 @@ body:
     attributes:
       label: 검증기 출력 또는 정리된 로그
       description: 개인정보, 내부 경로, 인증정보, 비공개 원문은 제거해 주세요.
+    validations:
+      required: false
+  - type: textarea
+    id: extra_environment
+    attributes:
+      label: 추가 환경 정보
+      description: Python 버전, 설치 방식, public/private repo 여부, 작업 단계 등. 아는 범위만 적어 주세요.
     validations:
       required: false
   - type: checkboxes

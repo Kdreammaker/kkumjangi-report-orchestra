@@ -5,8 +5,8 @@
 ## 1. 저장소 받기
 
 ```powershell
-git clone https://github.com/Kdreammaker/doc-integrity-orchestrator.git
-cd doc-integrity-orchestrator
+git clone https://github.com/Kdreammaker/kkumjangi-report-orchestra.git
+cd kkumjangi-report-orchestra
 ```
 
 Git을 쓰지 않으면 GitHub에서 ZIP을 내려받아 압축을 풉니다.

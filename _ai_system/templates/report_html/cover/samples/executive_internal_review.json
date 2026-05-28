@@ -1,7 +1,8 @@
 {
-  "classification": "대외비 / 내부 검토용",
-  "report_type": "Internal Review Report",
-  "kicker": "Executive Decision Review",
+  "classification": "내부 검토용",
+  "confidentiality_status": "대외비",
+  "report_type": "내부 검토 보고서",
+  "kicker": "Internal Review",
   "report_title": "내부 검토 보고서",
   "subtitle": "의사결정 대안, 핵심 근거, 잔존 리스크, 실행 조건을 한 문서에서 검토하기 위한 보고서",
   "project_name": "example_internal_review_project",
@@ -14,5 +15,6 @@
   "approval_author": "작성",
   "approval_reviewer": "검토",
   "approval_approver": "승인",
+  "security_tag": "대외비 / Confidential",
   "purpose": "본 표지는 재사용 가능한 HTML/CSS/JSON 표지 컴포넌트의 executive internal review 샘플입니다."
 }

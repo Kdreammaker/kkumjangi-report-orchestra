@@ -23,6 +23,7 @@ The goal is to make the visual format reproducible across projects and compatibl
 - Keep report structure semantic: `header`, `section`, `h1`-`h3`, `p`, `table`, `figure`, `figcaption`, `ol`, `ul`, `aside`.
 - Use numbered footnotes/endnotes for body citations.
 - Use `자료:` and `근거 데이터:` in every material table/figure caption.
+- Keep reader-facing references as a separate `참고자료` section, not as a numbered appendix. Tracking-only fields such as access date, use level, source_id, capture path, and user-material processing state belong in registers, not in the reader-facing report.
 - Use static SVG/PNG or semantic table visuals in final report HTML. ECharts may be used as a local rendering helper, but the assembled report should not require JavaScript to show material charts.
 - If a chart's CSV/XLSX changes, regenerate the static SVG/PNG chart artifact before reassembly.
 - Avoid making material evidence depend only on complex CSS effects.
@@ -32,7 +33,7 @@ The goal is to make the visual format reproducible across projects and compatibl
 - Each material table and each material graph/figure/chart needs a corresponding CSV/XLSX under the project `data_sources/` folder unless it is a qualitative process diagram backed by a source record.
 - Substantial reports should keep chapter prose in `reports/chapters/ch*.html` fragments and use `_ai_system/tools/assemble_report.py` to concatenate cover + chapters into the final `reports/internal_review_report.html`.
 - The assembler must not rewrite chapter prose. Edit the relevant chapter fragment, then reassemble.
-- Create `reports/chapter_workpacks/ch*_workpack.md` before writing matching chapter fragments. The workpack should define the chapter question, decision use, evidence, claim rows, counterarguments, visuals, and forbidden overclaims.
+- Create `reports/chapter_workpacks/ch*_workpack.md` before writing matching chapter fragments. The workpack should define the chapter question, decision use, paragraph plan, evidence, claim rows, counterarguments, visuals, forbidden overclaims, and completion checklist.
 - Use `reports/cover.data.json` to populate the cover component instead of asking an AI to recreate cover markup from scratch.
 - If a visual is planned in `data_sources/visual_plan.csv`, the final report should implement that visual with a matching caption and data/source reference.
 - Treat chapter completeness and decision usefulness as the depth signal. Do not add volume only to satisfy a numeric length target.

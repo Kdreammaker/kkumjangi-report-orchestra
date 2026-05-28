@@ -14,20 +14,23 @@ Use this file as `reports/report_design.md` for substantial reports.
 - Page margin: HTML screen width should stay DOCX/PDF-friendly, not full browser width
 - Cover margin: use cover preset/modules; avoid excessive top whitespace for long Korean titles
 - Body max width: keep main text, tables, figures, and captions within the conversion-safe content width
+- Shared content width: cover and body should use the same conversion-safe width/margin tokens unless a preset explicitly documents a reason
 - Print rule: use A4 print CSS as a compatibility aid, but verify exported DOCX/PDF separately
+- Avoid: viewport-height covers, double margin layers, and background-heavy cover effects that become unstable in DOCX/PDF conversion
 
 ## Typography
 
 - Body font:
 - Heading font:
 - Body size:
-- H1/H2/H3 sizes:
+- H1/H2/H3 sizes and weights:
 - Line height:
+- Heading hierarchy rule: H1 is report/chapter title, H2 is 대목차/major section, H3 is 중목차, H4 or bold lead-in is 소목차 only when needed
 
 ## Cover
 
 - Cover preset: public_release / team_review / executive_decision / partner_proposal
-- Cover modules: classification badge / confidentiality notice / author / review-approval / recipient / logo
+- Cover modules: classification and confidentiality badges on the same top line / confidentiality notice / author / review-approval / recipient / logo
 - Logo priority: report-specific override -> project brand_assets -> common CI -> blank
 - Logo path:
 - Logo placement:
@@ -37,6 +40,7 @@ Use this file as `reports/report_design.md` for substantial reports.
 
 - Document classification comes from PRD:
 - Confidentiality status comes from PRD:
+- Do not duplicate classification and report type. Example: use `내부 검토용` plus `대외비 / Confidential` on the same top line and a non-redundant report type such as `전략 보고서`, not `내부 검토용` plus `내부 검토 보고서`.
 - Confidentiality notice placement: cover only unless the user asks for all-page footer
 - Confidentiality notice wording:
 

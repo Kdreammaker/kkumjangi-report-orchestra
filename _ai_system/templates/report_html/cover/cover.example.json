@@ -1,6 +1,7 @@
 {
-  "classification": "대외비 / 내부 검토용",
-  "report_type": "Internal Review Report",
+  "classification": "내부 검토용",
+  "confidentiality_status": "대외비",
+  "report_type": "내부 검토 보고서",
   "kicker": "Strategic Internal Review",
   "report_title": "전략 협업 검토 보고서",
   "subtitle": "사업 구조, 실행 대안, 리스크, 의사결정 쟁점을 비교 검토하기 위한 내부 보고서",
@@ -14,5 +15,6 @@
   "approval_author": "작성자",
   "approval_reviewer": "검토자",
   "approval_approver": "승인자",
+  "security_tag": "대외비 / Confidential",
   "purpose": "본 표지는 문서형 레이아웃을 재사용 가능한 HTML/CSS/JSON 컴포넌트로 분리한 예시입니다."
 }

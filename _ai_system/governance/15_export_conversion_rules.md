@@ -46,6 +46,9 @@ Prefer:
 - conversion-friendly tables,
 - reusable cover component,
 - local CSS with print rules.
+- report-width and margin tokens shared by cover and body,
+- stable heading hierarchy (`h1`, `h2`, `h3`) that matches the PRD/design file,
+- cover metadata modules that avoid duplicate document classification/confidentiality labels.
 
 Avoid:
 
@@ -53,6 +56,8 @@ Avoid:
 - interactive charts as the only material visual,
 - CSS-only evidence graphics,
 - absolute local paths in reader-facing text.
+- viewport-height cover sizing that consumes a second margin layer during DOCX/PDF conversion,
+- background-heavy cover effects that become large images or unstable blocks in word processors.
 
 ## Export Check Evidence
 
