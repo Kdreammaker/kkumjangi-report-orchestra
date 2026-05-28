@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Report Factory 작업공간 사용설명서</title>
+  <title>KKUMJANGI REPORT ORCHESTRA 사용설명서</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -187,6 +187,28 @@
       padding: 12px 14px;
       color: var(--dark);
       font-weight: 700;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .flow-step {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-height: 88px;
+    }
+    .flow-step strong {
+      display: block;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .flow-step.loop {
+      border-color: #99c7bd;
+      background: #f4fbf8;
     }
     .prompt-card {
       background: #fff;
@@ -374,6 +396,7 @@
 <nav class="side-toc" aria-label="순서별 가이드 목차">
   <strong>사용 순서</strong>
   <a href="#quick">바로 시작</a>
+  <a href="#fit">적합한 문서</a>
   <a href="#new-project">새 프로젝트</a>
   <a href="#report">보고서 작성</a>
   <a href="#resume">중단 후 이어가기</a>
@@ -387,30 +410,30 @@
 <main>
   <header>
     <p class="label">Workspace OJT</p>
-    <h1>Report Factory 작업공간 사용설명서</h1>
-    <p class="lead">이 문서는 사용자가 AI에게 무엇을 요청하면 되는지만 빠르게 알려주는 교육자료입니다. 내부 도구 이름을 외울 필요는 없습니다. 새 프로젝트는 주제와 한 줄 목적만 넣고, 기존 프로젝트는 이어서 작업한다고 말하면 됩니다.</p>
+    <h1>KKUMJANGI REPORT ORCHESTRA 사용설명서</h1>
+    <p class="lead">이 문서는 사용자가 AI에게 무엇을 요청하면 되는지만 빠르게 알려주는 사용설명서입니다. 개발 용어나 내부 도구 이름을 외울 필요는 없습니다. 새 프로젝트는 주제와 한 줄 목적만 넣고, 기존 프로젝트는 이어서 작업한다고 말하면 됩니다.</p>
     <div class="hero-grid">
       <div class="hero-card">
         <strong>기억할 것 세 가지</strong>
         <ul>
           <li>새 주제는 먼저 프로젝트 세팅안을 받고 승인합니다.</li>
-          <li>보고서는 목차, 장별 작성, 표·그래프, 최종 요약 순서로 만듭니다.</li>
+          <li>보고서는 목차, 장별 작성, 표·그래프, 최종 요약 순서로 만들고, 초안 뒤에 검수와 고도화를 거칩니다.</li>
           <li>GitHub는 시스템을 받는 통로이고, 실제 자료와 보고서는 이 로컬 드라이브에 남습니다.</li>
         </ul>
       </div>
       <div class="hero-card">
         <strong>처음에는 이것만 입력하세요</strong>
         <p>새 프로젝트를 만들 때는 주제와 한 줄 목적만 준비하면 됩니다. 프로젝트명, 폴더명, 보고서명은 AI가 세팅안에서 제안합니다.</p>
-        <p class="note">현재 시스템 버전: 0.4.31 / 배포일: 2026-05-28</p>
+        <p class="note">현재 시스템 버전: 1.0.2 / 배포일: 2026-05-29</p>
         <span class="status-pill">주제 입력</span>
         <span class="status-pill">한 줄 목적 입력</span>
       </div>
     </div>
     <div class="quick-strip" aria-label="핵심 운영 원칙">
       <div class="quick-item">1. 새 프로젝트 세팅안 받기</div>
-      <div class="quick-item">2. 승인 후 보고서 작성 요청</div>
-      <div class="quick-item">3. 자료는 프로젝트 자료 폴더에 넣기</div>
-      <div class="quick-item">4. 검수와 교차검증은 별도 요청</div>
+      <div class="quick-item">2. 승인 후 초안 작성 요청</div>
+      <div class="quick-item">3. 검수 후 필요한 부분만 고도화</div>
+      <div class="quick-item">4. 만족하면 PDF/DOCX 또는 공유 패키지</div>
     </div>
     <div class="prompt-vars" aria-label="복사용 프롬프트 자동 치환 입력">
       <label for="projectNameInput">주제
@@ -425,6 +448,14 @@
 
   <section id="quick" class="panel">
     <h2>0. 바로 시작</h2>
+    <p>처음에는 아래 흐름만 기억하면 됩니다. 초안이 마음에 들지 않으면 전체 또는 일부 장을 검수한 뒤, 그 결과를 바탕으로 고도화를 요청합니다. 만족스러우면 PDF/DOCX 변환 검증이나 공유 패키지로 넘어갑니다.</p>
+    <div class="flow" aria-label="보고서 작업 흐름">
+      <div class="flow-step"><strong>새 프로젝트</strong>주제와 목적을 넣고 세팅안을 승인합니다.</div>
+      <div class="flow-step"><strong>방향·목차</strong>AI가 질문, PRD, 목차를 잡고 필요한 지점에서 승인을 받습니다.</div>
+      <div class="flow-step"><strong>초안 작성</strong>자료와 근거를 바탕으로 장별 원본을 만들고 합본을 조립합니다.</div>
+      <div class="flow-step loop"><strong>검수 ↔ 고도화</strong>문제 목록을 먼저 받고, 승인한 보완만 장별 원본에 반영합니다.</div>
+      <div class="flow-step"><strong>변환·공유</strong>만족하면 PDF/DOCX 검증 또는 로컬 공유 패키지를 요청합니다.</div>
+    </div>
     <div class="step-grid">
       <div class="step-card">
         <span class="num">1</span>
@@ -447,7 +478,24 @@
         <p>초안이 나오면 파일 수정 없이 문제와 보완 필요 사항을 먼저 확인합니다.</p>
       </div>
     </div>
-    <p class="note">설치가 끝난 직후라면 같은 환경 점검을 다시 요청할 필요가 없습니다. 바로 새 프로젝트나 보고서 작업을 요청하세요. 프로젝트가 생성되면 <strong>프로젝트_대시보드_실행.vbs</strong> 하나로 프로젝트 정보, 보고서 관리, 문서 대장, 수정 이력을 관리하고 보고서 파일을 열 수 있습니다.</p>
+    <p class="note">설치가 끝난 직후라면 같은 환경 점검을 다시 요청할 필요가 없습니다. 바로 새 프로젝트나 보고서 작업을 요청하세요. 프로젝트가 생성되면 관리 화면 실행 파일도 함께 만들어지며, 프로젝트 정보, 보고서 관리, 문서 대장, 수정 이력을 브라우저 화면에서 확인할 수 있습니다.</p>
+  </section>
+
+  <section id="fit" class="panel">
+    <h2>0-1. 이런 문서에 잘 맞습니다</h2>
+    <p>이 시스템은 자료와 근거가 많고, 목차·장별 작성·검수·고도화가 필요한 문서에 특히 잘 맞습니다.</p>
+    <table>
+      <thead><tr><th>문서 유형</th><th>처음 테스트하기 좋은 주제</th></tr></thead>
+      <tbody>
+        <tr><td>시장조사 및 산업 트렌드 분석</td><td>국내 커피 프랜차이즈 시장 변화와 신규 진입 전략</td></tr>
+        <tr><td>기업/경쟁사 비교분석</td><td>주요 협업툴 3종 비교와 도입 검토</td></tr>
+        <tr><td>전략 보고서</td><td>중소 제조기업의 AI 도입 기회와 리스크</td></tr>
+        <tr><td>정책/규제 리스크 검토</td><td>개인정보보호 규제 변화가 SaaS 서비스에 미치는 영향</td></tr>
+        <tr><td>서비스 기획/PRD</td><td>B2B 구독형 리포팅 서비스 MVP 기획</td></tr>
+        <tr><td>기술 도입 검토</td><td>사내 문서 검색에 로컬 AI 색인을 도입하는 방안</td></tr>
+      </tbody>
+    </table>
+    <p class="note">짧은 메모나 감성 카피보다, 근거와 논리 구조를 따라가야 하는 시장조사, 기업 비교분석, 전략 보고서에 더 적합합니다.</p>
   </section>
 
   <section id="new-project" class="panel">

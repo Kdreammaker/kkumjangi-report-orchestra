@@ -1,6 +1,6 @@
 {
-  "version": "1.0.1",
-  "release_date": "2026-05-28",
+  "version": "1.0.2",
+  "release_date": "2026-05-29",
   "channel": "public",
-  "summary": "Public update with review-first report flow, cover/reference rendering improvements, and core guard refinements."
+  "summary": "Public onboarding update with clearer first-use guidance, suitable document examples, and review-first report workflow."
 }

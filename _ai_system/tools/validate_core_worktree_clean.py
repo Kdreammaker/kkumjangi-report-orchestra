@@ -9,6 +9,7 @@ from pathlib import Path
 
 CORE_PREFIXES = (
     "_ai_system/",
+    "_internal/",
     "AGENTS.md",
     "README.md",
     "INSTALL.md",

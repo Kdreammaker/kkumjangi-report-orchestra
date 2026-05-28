@@ -1,25 +1,34 @@
-# Report Integrity Orchestrator
+# Kkumjangi Report Orchestra
 
-AI가 고품질 보고서를 안정적으로 작성하도록 돕는 로컬 보고서 생산 시스템입니다.
+AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목차, 장별 작성, 표·그래프, 근거 검증, 조립, 검수, 고도화까지 단계적으로 진행하도록 돕는 로컬 우선 보고서 생산 시스템입니다.
 
-## 설치
+## 🚀 설치
 
 저장소 링크를 받은 뒤 AI에게 이렇게만 요청하면 됩니다.
 
 ```text
-[Kdreammaker/kkumjangi-report-orchestra](https://github.com/Kdreammaker/kkumjangi-report-orchestra) 보고 설치 및 세팅해 주세요.
+[Kdreammaker/kkumjangi-report-orchestra](https://github.com/Kdreammaker/kkumjangi-report-orchestra) 의 INSTALL.md를 보고 설치 및 세팅해 주세요.
 ```
 
-AI가 세부 절차가 필요하면 `INSTALL.md`와 `AGENTS.md`를 읽고 진행합니다.
+설치 과정에서 Python, 로컬 문서 처리 패키지, Apache ECharts, Pretendard 같은 필요한 구성요소도 함께 확인/설치/검증합니다.
 
-## 설치 후 사용
+## 📑 이런 문서에 적합합니다
 
-설치가 끝나면 `START_HERE.html`을 열어 사용법을 봅니다.
+- 시장조사 및 산업 트렌드 분석
+- 기업/경쟁사 비교분석
+- 전략 보고서
+- 정책/규제 리스크 검토
+- 서비스 기획/PRD
+- 기술 도입 검토
 
-## 무엇을 하는 시스템인가요?
+## ✨ 무엇이 좋아지나요?
 
-큰 보고서를 바로 쓰지 않고 다음 생산라인으로 진행합니다.
+- 초안, 검수, 교차검증, 승인된 고도화를 분리합니다.
+- 참고자료, 출처 링크, 주장, 표·그래프 데이터를 따로 관리합니다.
+- 긴 보고서를 장별 원본으로 나누고, 조립본은 읽기용 결과물로 다룹니다.
+- 프로젝트가 생성되면 프로젝트 관리 화면도 함께 제공됩니다.
+- 기본 설정에서는 사용자 원본 자료와 보고서가 로컬 드라이브 안에 남습니다.
 
-`PRD -> 상세 목차 -> 주요 골조 -> 챕터 작업팩 -> 챕터 HTML -> 시각자료/CSV -> Chapter 0 -> 조립 -> 검수/교차검증 -> 승인된 고도화/재조립 -> 검증`
+## 🧭 시작
 
-핵심 목표는 검증기 통과가 아니라, AI가 더 좋은 내용을 쓰도록 작업을 작게 나누고 필요한 근거만 주입하는 것입니다.
+설치가 끝나면 `START_HERE.html`을 열고 사용합니다.

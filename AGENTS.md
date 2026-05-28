@@ -62,7 +62,7 @@ For the full document/tool/skill map, open `_ai_system/REFERENCE_INDEX.md` only 
 - Cloud upload and external handoff are disabled by default. Build a local outbox first and ask for explicit approval before sending anything to a cloud platform.
 - System-core work must happen in the intended Git workspace with `origin` pointing to `Kdreammaker/kkumjangi-report-orchestra`. Do not confuse the system core workspace with a fresh-install test workspace.
 - System-core packages must exclude `00_사용자_작업공간/`, user originals, active reports, runtime files, local state, and scratch files.
-- Ordinary project/report work must not modify system-core files. If `_ai_system/`, root docs, or release metadata change during a project workflow, stop ordinary closeout and treat it as a separate core update.
+- Ordinary project/report work must not modify system-core files. If `_ai_system/`, `_internal/`, root docs, or release metadata change during a project workflow, stop ordinary closeout and treat it as a separate private core update.
 - Every user-visible release/change to install flow, report production, validation, OJT, or public docs must update `CHANGELOG.md`, `README.md` recent improvements, and `VERSION.json`.
 
 ## Common Commands

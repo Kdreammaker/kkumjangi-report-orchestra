@@ -492,7 +492,7 @@ This file is the per-project working instruction map for AI assistants. It is a 
 - If the same validator fails twice without new actionable information, stop the validation loop. Report the blocker, the next production action, and whether user input is needed.
 - When improving a report, edit the relevant chapter fragment or data/visual artifact first and reassemble. Do not use the assembled HTML as the rewriting workspace.
 - Prefer the quality loop `draft -> review/cross-check without edits -> user-approved improvement -> reassemble -> review`. Do not skip directly from first draft to final/closeout language.
-- Ordinary project work must not modify system-core files such as `_ai_system/`, `AGENTS.md`, `README.md`, `INSTALL.md`, `CHANGELOG.md`, or `VERSION.json`. If these change, stop ordinary closeout and report that a core update is required.
+- Ordinary project work must not modify system-core files such as `_ai_system/`, `_internal/`, `AGENTS.md`, `README.md`, `INSTALL.md`, `CHANGELOG.md`, or `VERSION.json`. If these change, stop ordinary closeout and report that a private core update is required.
 
 ## Stage Checklist
 

@@ -283,7 +283,7 @@ def prompt_for(action: str, project_name: str, next_chapter: str) -> str:
         "assemble_report": f"{task_prefix}compose_report_context.py --stage assemble --write-packet 결과를 읽은 뒤 {project_name}의 assemble_report.py를 실행해 표지와 챕터 조각을 합쳐 주세요. 조립 단계에서는 본문을 새로 쓰거나 요약하지 말고, 조립 결과와 active_report 선언 여부만 보고해 주세요.",
         "repair_factory_gaps": f"{project_name}의 strict Report Factory 검증 실패를 먼저 고쳐 주세요. 특히 상세 목차의 대목차/중목차/소목차가 reports/chapters/chNN.html 원본 장 파일에 그대로 반영되어 있는지 확인하고, 합본 HTML을 직접 고치지 말고 해당 장 파일을 보강한 뒤 assemble_report.py로 다시 조립해 주세요.",
         "write_chapter0_then_reassemble": f"{task_prefix}compose_report_context.py --stage chapter --chapter ch00_summary --write-packet 결과를 읽은 뒤 {project_name}의 본문·시각자료·리스크가 안정되었는지 확인하고, 마지막으로 ch00_summary / 제0장 요약 조각을 작성한 뒤 assemble_report.py로 다시 조립해 주세요.",
-        "run_review_candidate_gates": f"{task_prefix}{project_name}의 review-candidate 검증을 실행하기 전에 파일 수정 없는 보고서 검수/교차검증 결과가 작업로그에 반영되어 있는지 확인해 주세요. workspace validation과 report content validation을 분리해서 보고하고, 실패하면 다음 생산 작업으로 번역해 주세요. 일반 프로젝트 작업 중 _ai_system/ 또는 루트 문서 등 시스템 코어 변경이 감지되면 closeout 대신 core 변경 여부를 별도로 보고하세요.",
+        "run_review_candidate_gates": f"{task_prefix}{project_name}의 review-candidate 검증을 실행하기 전에 파일 수정 없는 보고서 검수/교차검증 결과가 작업로그에 반영되어 있는지 확인해 주세요. workspace validation과 report content validation을 분리해서 보고하고, 실패하면 다음 생산 작업으로 번역해 주세요. 일반 프로젝트 작업 중 _ai_system/ 또는 _internal/ 등 시스템 코어 변경이 감지되면 closeout 대신 core 변경 여부를 별도로 보고하세요.",
     }
     return prompts.get(action, f"{task_prefix}compose_report_context.py 결과만 읽고 {project_name}의 다음 보고서 생산 단계를 점검해 주세요.")
 
