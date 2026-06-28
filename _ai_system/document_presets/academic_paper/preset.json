@@ -1,0 +1,23 @@
+{
+  "preset_id": "academic_paper",
+  "label_ko": "논문형 / 학술 문서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Paper-style academic document with abstract, research questions, methods, literature review, limitations, and reference style guidance.",
+  "quality_emphasis": [
+    "research question and contribution clarity",
+    "methodology and evidence transparency",
+    "literature review and citation discipline",
+    "limitations and reference-style consistency"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

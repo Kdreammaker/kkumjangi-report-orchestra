@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validation Fixture Product Manual Sample</title>
+  <!-- Reusable template reference: _ai_system/templates/report_html/report.css -->
+  <style>
+    :root {
+      --ink: #20262d;
+      --muted: #5d6872;
+      --line: #ccd6df;
+      --soft: #f5f7f9;
+      --accent: #476d8a;
+      --caution: #8b6541;
+      --ok: #3f765f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8fa;
+      color: var(--ink);
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      line-height: 1.58;
+    }
+    .report-page {
+      width: min(960px, calc(100% - 32px));
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 40px;
+    }
+    .cover-page {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+    }
+    .fixture-banner {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: 31px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .subhead {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0;
+    }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    aside {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--caution);
+      background: #fffaf5;
+      padding: 14px;
+      margin: 20px 0;
+    }
+    ol.procedure {
+      padding-left: 22px;
+    }
+    ol.procedure li {
+      margin: 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      margin: 12px 0 22px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th { background: var(--soft); }
+    caption, figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    caption {
+      caption-side: bottom;
+      padding-top: 8px;
+    }
+    figure {
+      margin: 14px 0 24px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+    }
+    .long-token, code {
+      overflow-wrap: anywhere;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .references {
+      border-top: 1px solid var(--line);
+      margin-top: 30px;
+      padding-top: 16px;
+    }
+    @media (max-width: 720px) {
+      .report-page { width: calc(100% - 20px); padding: 26px; }
+      .cover-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page assembled-report" data-assembled-report="true" data-preset-id="product_manual">
+    <section class="cover-page report-cover" data-cover-component="report-cover-v1">
+      <span class="fixture-banner">Validation Fixture - Synthetic Product Manual</span>
+      <h1>Fixture Product Manual Guide</h1>
+      <p class="subhead">제품 매뉴얼 프리셋의 절차, 설정표, 문제 해결표, 정적 flow figure, 긴 토큰 wrapping 검증용 HTML fixture</p>
+      <div class="cover-grid" aria-label="document control metadata">
+        <div><strong>보고서 번호:</strong> FIX-PM-2026-06</div>
+        <div><strong>보안 등급:</strong> Internal validation fixture</div>
+        <div><strong>작성일:</strong> 2026.06.03</div>
+        <div><strong>데이터 기준일:</strong> 2026.06.03</div>
+        <div><strong>문서 분류 코드:</strong> product_manual sample</div>
+        <div><strong>제품 범위:</strong> Fixture product only</div>
+      </div>
+    </section>
+
+    <aside aria-label="fixture boundary">
+      <strong>면책 및 사용 제한:</strong> 본 문서는 validation fixture입니다. 실제 제품, 설치 명령, 고객 환경, 보안 설정, 지원 계약, 운영 절차를 포함하지 않습니다. 모든 설정명, 오류명, 경로형 토큰은 synthetic fixture 값이며 제품 데모가 아닙니다.<sup id="fnref-1">1</sup>
+    </aside>
+
+    <section>
+      <h1>제0장 요약</h1>
+      <p>이 샘플은 `product_manual` 프리셋이 before-you-begin, numbered procedure, caution note, configuration table, troubleshooting table, static flow, appendix를 문서형 HTML로 표현하는지 확인합니다.</p>
+    </section>
+
+    <section>
+      <h2>1. Before You Begin and Procedure</h2>
+      <aside aria-label="caution">
+        <strong>주의:</strong> 아래 절차는 실제 설치 절차가 아닙니다. fixture 구조와 순서, expected result, recovery note 표시를 검증하기 위한 합성 문장입니다.
+      </aside>
+      <ol class="procedure">
+        <li>Fixture workspace mode를 확인합니다. 예상 결과: sample status banner가 보입니다.</li>
+        <li>Fixture export profile을 선택합니다. 예상 결과: static HTML 변환 기준이 표시됩니다.</li>
+        <li>검증 결과를 기록합니다. 회복 메모: 실패 시 실제 제품 작업이 아니라 fixture markup을 점검합니다.</li>
+      </ol>
+
+      <h3>Fixture Configuration Table</h3>
+      <!-- data_sources/product_manual_fixture_configuration.csv -->
+      <table>
+        <caption>자료: synthetic manual configuration fixture. 근거 데이터: product_manual_fixture_configuration dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>설정명</th>
+            <th>허용 값</th>
+            <th>기본값</th>
+            <th>필수 여부</th>
+            <th>메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code class="long-token">fixture_workspace_mode</code></td><td>local_only</td><td>local_only</td><td>required</td><td>검증용 합성 설정</td></tr>
+          <tr><td><code class="long-token">fixture_export_profile</code></td><td>static_html</td><td>static_html</td><td>optional</td><td>DOCX/PDF layout check용 합성 설정</td></tr>
+          <tr><td><code class="long-token">fixture_support_channel_very_long_identifier_2026_06_03_example_invalid</code></td><td>example.invalid</td><td>not_configured</td><td>optional</td><td>긴 토큰 wrapping 검증용 예약 도메인</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Troubleshooting and Static Decision Flow</h2>
+
+      <h3>Fixture Troubleshooting Table</h3>
+      <!-- data_sources/product_manual_fixture_troubleshooting.csv -->
+      <table>
+        <caption>자료: synthetic troubleshooting fixture. 근거 데이터: product_manual_fixture_troubleshooting dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>증상</th>
+            <th>가능 원인</th>
+            <th>확인 단계</th>
+            <th>조치</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fixture status banner missing</td><td>cover block 누락</td><td>report header 확인</td><td>validation fixture banner 복원</td></tr>
+          <tr><td>Long token overlaps table</td><td>wrapping class 제거</td><td>long-token sample cell 확인</td><td>code와 table cell에 scoped wrapping 적용</td></tr>
+          <tr><td>Figure caption missing</td><td>figcaption 누락</td><td>figure block 확인</td><td>fixture data basis를 가진 figcaption 추가</td></tr>
+        </tbody>
+      </table>
+
+      <!-- data_sources/product_manual_fixture_flow.csv -->
+      <figure class="flow static-diagram">
+        <svg viewBox="0 0 700 270" role="img" aria-labelledby="pm-flow-title pm-flow-desc">
+          <title id="pm-flow-title">Fixture Setup Decision Flow</title>
+          <desc id="pm-flow-desc">Synthetic manual flow with prerequisite, configuration, and verification decisions.</desc>
+          <rect x="0" y="0" width="700" height="270" fill="#ffffff"/>
+          <rect x="55" y="44" width="170" height="54" rx="6" fill="#f5f7f9" stroke="#476d8a"/>
+          <rect x="265" y="44" width="170" height="54" rx="6" fill="#f5f7f9" stroke="#476d8a"/>
+          <rect x="475" y="44" width="170" height="54" rx="6" fill="#f5f7f9" stroke="#476d8a"/>
+          <line x1="225" y1="71" x2="265" y2="71" stroke="#5d6872" stroke-width="2"/>
+          <line x1="435" y1="71" x2="475" y2="71" stroke="#5d6872" stroke-width="2"/>
+          <text x="82" y="76" font-size="13" fill="#20262d">Check prerequisites</text>
+          <text x="300" y="76" font-size="13" fill="#20262d">Apply settings</text>
+          <text x="516" y="76" font-size="13" fill="#20262d">Verify output</text>
+          <path d="M140 98 L140 150 L560 150 L560 98" fill="none" stroke="#8b6541" stroke-width="2"/>
+          <text x="260" y="178" font-size="13" fill="#8b6541">No path: return to fixture checklist</text>
+          <text x="245" y="214" font-size="12" fill="#5d6872">All branches are validation-only and do not describe a real product flow.</text>
+        </svg>
+        <figcaption>자료: synthetic setup flow fixture. 근거 데이터: product_manual_fixture_flow dataset, 기준일 2026.06.03. 대체 설명: prerequisites, settings, verification 단계와 실패 시 fixture checklist로 돌아가는 경로를 보여주는 정적 flow figure입니다.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>3. Long Token Wrapping Check</h2>
+      <p>다음 값은 실제 URL이나 경로가 아니라 줄바꿈 안정성만 확인하는 예약 도메인 토큰입니다: <code class="long-token">fixture-manual-reference-token-2026-06-03-not-a-real-file-path-or-customer-environment.example.invalid/configuration/status/check/result</code></p>
+    </section>
+
+    <section>
+      <h2>4. 한계 및 결론</h2>
+      <p>이 샘플의 결론은 프리셋 구조가 validator에서 점검 가능한 형태로 표현된다는 fixture-level 확인입니다. 실제 보고서 품질, 제품 동작, 보안성, 출처 진위, 설치 성공, 고객 지원 준비 상태를 증명하지 않습니다.</p>
+    </section>
+
+    <section class="references" id="report-references">
+      <h2>부록 A. 참고자료 목록</h2>
+      <ol>
+        <li>Validation fixture datasets generated for product_manual preset artifact testing. 접근일: 2026.06.03.</li>
+        <li>Preset validation checklist: product_manual module, fixture scope only. 접근일: 2026.06.03.</li>
+      </ol>
+      <p id="fn-1"><sup>1</sup> Footnote marker included to verify substantial-report note handling. It is not a real product, security, or support disclosure.</p>
+    </section>
+  </main>
+</body>
+</html>

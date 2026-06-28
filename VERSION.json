@@ -1,6 +1,6 @@
 {
-  "version": "1.0.2",
-  "release_date": "2026-05-29",
+  "version": "1.0.1",
+  "release_date": "2026-06-28",
   "channel": "public",
-  "summary": "Public onboarding update with clearer first-use guidance, suitable document examples, and review-first report workflow."
+  "summary": "Public onboarding, document preset, and guidance-only style profile update with clearer first-use guidance, modular preset assets, language guidance boundaries, and review-first report workflow."
 }

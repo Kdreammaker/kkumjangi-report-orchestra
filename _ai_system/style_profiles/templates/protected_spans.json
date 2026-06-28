@@ -1,0 +1,42 @@
+{
+  "artifact_type": "protected_spans",
+  "schema_version": 1,
+  "automation_status": "guidance_only",
+  "project": "",
+  "report_or_chapter": "",
+  "style_profile": "",
+  "reviewed_at_kst": "",
+  "protected_spans": [
+    {
+      "span_id": "PS-001",
+      "location": "",
+      "span_type": "number_or_metric",
+      "protection_source": "source-backed claim",
+      "exact_text_or_summary": "",
+      "rewrite_boundary": "do_not_rewrite",
+      "related_source_id": "",
+      "related_claim_id": "",
+      "approval_owner": "",
+      "notes": ""
+    }
+  ],
+  "allowed_values": {
+    "span_type": [
+      "direct_quote",
+      "quoted_translation",
+      "number_or_metric",
+      "law_or_regulation",
+      "proper_noun",
+      "source_backed_claim",
+      "approved_public_wording",
+      "contract_or_confidentiality_wording",
+      "disclaimer_or_disclosure",
+      "citation_or_locator"
+    ],
+    "rewrite_boundary": ["do_not_rewrite", "surrounding_connective_only", "source_checked_correction_required", "owner_approval_required"]
+  },
+  "notes": [
+    "Use short exact text only when needed to identify the span. Avoid copying long source passages.",
+    "If a style risk is embedded in a protected span, leave the span unchanged and route to source check, rollback, or human review."
+  ]
+}

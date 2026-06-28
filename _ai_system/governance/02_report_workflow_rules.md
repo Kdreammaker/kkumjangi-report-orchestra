@@ -2,7 +2,13 @@
 
 ## Report Language and Format
 
-- Write final reports in Korean unless the user explicitly asks for another language.
+- Decide `output_language` during the new-project, direction-confirmation, or PRD stage together with document purpose, target reader, distribution boundary, and evidence standard.
+- If the user's launch instruction, source material, and target output are clearly Korean, use `output_language=ko` without asking again.
+- If the launch instruction is English or the user clearly asks for an English report, English version, or English readers, use `output_language=en` without asking again.
+- If the instruction language and desired output language may differ, or if external sharing, investors, partners, legal/regulatory, securities, jurisdiction, or distribution-market risk is present, ask before drafting and record the decision in the PRD or current task.
+- Do not proceed to substantive drafting when `output_language` is `undecided`. Resolve it first through inference when safe, or through a short user question when risk requires confirmation.
+- Do not create separate English document presets such as `*_en`. Use the selected document preset and style profile, then layer language, region, notation, caption, citation, and disclaimer guidance on top.
+- Language guidance does not translate, humanize, rewrite, verify source truth, create jurisdiction-specific legal/securities disclaimers, or replace approval review.
 - For substantial reports, create or update the report PRD before creating a detailed TOC or drafting.
 - Before a final delivery format is explicitly chosen, draft reports as `.html`.
 - Report HTML must be written with future `.docx` and `.pdf` conversion in mind.
@@ -16,6 +22,93 @@
 - Follow `_ai_system/governance/15_export_conversion_rules.md` before creating or claiming DOCX/PDF readiness.
 - Follow `_ai_system/DESIGN_DOCUMENT.md` for report design, document hierarchy, color, table, chart, data-file, and writing-style rules.
 
+## Document Preset And Style Profile Standard
+
+- Use `_ai_system/document_presets/INDEX.json` when the requested document type is unclear or when the PRD/interview stage must choose a `document_type_preset`.
+- Use `_ai_system/document_presets/CODEMAP.md` only when the compact index is not enough to choose the selected preset files. After selecting a preset, read only the selected module's current-stage files.
+- Use the selected preset's `default_artifact_workflow_mode` and `read_for_workflow` entries in `_ai_system/document_presets/INDEX.json` before deciding whether to run full report stages or a compressed/specialized artifact sequence.
+- Read the selected preset's `stage_overlays.md` when setting `artifact_workflow_mode`, planning stage compression, or reviewing whether the artifact drifted into the wrong document genre. Do not ask the user to paste document-specific OJT prompts for this.
+- When `output_language` is `en` or `mixed`, read the selected preset's `language_guidance.md` when it exists. This is a guidance layer over the same preset, not a separate English preset or an automatic translation step.
+- Confirm the document type preset during the interview or PRD stage before detailed TOC, source planning, or drafting. A preset changes emphasis for PRD questions, TOC review, visuals, layout, and quality review; it does not bypass source integrity, review, approval, or versioning boundaries.
+- Use `_ai_system/style_profiles/INDEX.json` when the user asks for a specific reader tone, when the document purpose implies a tone choice, or when the PRD needs a `style_profile`.
+- Use `_ai_system/style_profiles/CODEMAP.md` only when the compact index is not enough to choose the selected style profile files. After selecting a profile, read only the selected module's current-stage files.
+- When `output_language` is `en` or `mixed`, read the selected style profile's `language_guidance.md` when it exists so sentence length, directness, caveats, and conclusion placement fit the reader language without changing protected spans.
+- Confirm `style_profile`, `target_reader_tone`, and `protected_spans_policy` in the PRD before applying broad tone changes.
+- A style profile is a protected writing aid, not an automatic polish/rewrite tool. It must preserve direct quotes, numbers, statute names, proper nouns, citation locations, and source-backed claims unless a deliberate source or claim correction is recorded.
+- Style profile guidance never replaces source verification, claim-readiness gates, citation checks, legal review, chart/data support, or closeout validation.
+- Treat style profile and register overlay as separate decisions. The style profile sets the reader/purpose-based writing standard; a register overlay sets the Korean delivery mode layered on top of that profile, such as written report, oral briefing, public written copy, educational explanation, or adult user instruction.
+- Register, honorific, and user-instructional overlays are guidance-only assets for AI review during style pass. They do not translate, humanize, rewrite automatically, change workflow stage, validate evidence, or override protected spans.
+- During decision interview or PRD work, confirm or safely infer `output_language`, target reader, `document_type_preset`, `artifact_workflow_mode`, `style_profile`, `register_overlay` need, `honorific_policy` need, and `user_instructional_overlay` need before substantive drafting.
+- Use `_ai_system/style_profiles/register_overlays/README.md` only when a Korean register/honorific/user-instructional layer may be needed. Read `korean_register_overlay.md`, `honorific_policy.md`, or `user_instructional_overlay.md` only for the selected or plausible overlay. Do not open every overlay file by default.
+- 압존법 is not a default Korean style rule. Consider it only for special Korean spoken or dialogue-like situations where the speaker, listener, and referenced person are in a known same-organization hierarchy and the text is not public, legal, approval-sensitive, quote-sensitive, or partner/customer-facing. If hierarchy or approval impact is unclear, hold the span for human review.
+- When Korean tone/style review is requested, read `_ai_system/style_profiles/korean_tone_workflow_design_v1.md` plus the selected profile files. Use the style-pass sequence: style-risk findings, protected-span map, limited rewrite diff only when allowed, fidelity review, naturalness review, then rollback or human review if needed.
+- Store style-pass artifacts under the active project, normally `reports/style_pass/`, using `_ai_system/style_profiles/templates/style_risk_findings.json`, `protected_spans.json`, `style_rewrite_diff.md`, `style_fidelity_review.md`, and `style_naturalness_review.md` as guidance-only templates.
+- Style-pass findings must label risks as `style-only`, `evidence-related`, `approval-sensitive`, `genre-drift`, or `reader-fit`. When a register or honorific layer is selected, connect the review trace to the same artifact set: mark register/honorific risks in `style_risk_findings`, keep protected honorific/title/name/quote spans in `protected_spans`, record limited changes or held changes in `style_rewrite_diff`, and confirm fidelity/naturalness in the two review files. Do not use style pass to run automatic whole-document rewrite, AI-detection evasion, protected-span rewriting, jurisdiction-specific legal/securities disclaimer generation, or score-based pass gates.
+- Expression review must check TPO, not just typo or translationese. For education artifacts, look for learner level, activity wording, examples, instructor/learner separation, and whether report-like analysis leaked into handouts. For manuals, look for procedural clarity, warnings, prerequisites, and troubleshooting. For press releases, look for public wording, approved quotes, boilerplate, contact, and embargo/release status. For executive/internal reports, look for scanability, conclusion placement, caveat discipline, and concise decision language. Record mismatches as `genre-drift` or `reader-fit` and fix only source fragments/captions that can be changed without harming protected spans.
+- Investor brief, sector analysis, and company analysis should use document presets such as `investor_brief` or `equity_research` for structure, evidence expectations, visuals, and review checklist. Tone and manner for those documents should come from the selected style profile plus the common Korean style workflow, without duplicating a preset-specific rewrite engine.
+
+## Artifact Workflow Mode
+
+User-facing OJT prompts must stay generic. The AI decides document-type specialization inside the PRD/TASK flow, not by asking the user to paste longer specialized prompts. Use the selected preset's `stage_overlays.md` as the main workflow overlay for this decision.
+
+During interview or PRD work, set `artifact_workflow_mode`:
+
+- `brief`: short artifact such as press release, announcement, memo, compact handout, or one-page brief. Keep source integrity, approval boundary, review, style pass, versioning, and delivery checks, but do not force major skeleton, Chapter 0, or chapter workpacks unless the PRD needs them.
+- `standard`: structured artifact such as proposal, product manual, education handout, PRD, investor brief, or partner-facing brief. Use PRD, outline/TOC, section-level source and claim mapping where needed, section drafting, file-edit-free review, style pass, assembly/versioning.
+- `substantial`: long evidence-backed report or analysis. Use the full production order with detailed TOC, skeleton, chapter workpacks, chapter fragments, visual/data pass, Chapter 0, pre-assembly style pass, assembly, validation, and versioning.
+- `specialized`: selected preset requires mandatory blocks or boundaries that differ from the ordinary sequence. Read only the selected preset module and record which standard stages are skipped, compressed, or replaced.
+
+Mode selection principle:
+
+- Start from the preset's `default_artifact_workflow_mode`.
+- Upgrade to `substantial` when the user asks for deep analysis, broad evidence, detailed source/claim mapping, many visuals, or high-risk decision support.
+- Downgrade or keep compressed only when the requested artifact is naturally short or section-based, such as a press release, compact handout, product task guide, or concise proposal.
+- If the chosen mode differs from the preset default, record the reason in the PRD, `tasks/current_task.md`, or worklog.
+- Python helpers may check that preset workflow assets exist and that the selected mode is recorded. They must not decide whether the writing is strategically persuasive, pedagogically effective, legally sufficient, or investment-grade.
+
+Examples of specialized handling:
+
+- `press_release`: prioritize dateline, release status, approved quotes, boilerplate, media contact, embargo/approval boundary, and public wording discipline. Do not force Chapter 0 or long report workpacks.
+- `education_curriculum`: prioritize learner level, learning objectives, time blocks, activities, handout structure, exercises, and evaluation/assignment notes. Use a lesson/section plan rather than a report chapter plan when appropriate.
+- `product_manual`: prioritize target user, prerequisites, environment, step-by-step procedures, warnings, troubleshooting, FAQ, and version/platform scope.
+- `business_proposal`: prioritize buyer problem, scope, assumptions, exclusions, implementation plan, responsibilities, commercial boundary, and proposal/quote/SOW/contract separation.
+- `investor_brief` and `equity_research`: prioritize approved metrics, basis date, source/citation discipline, forward-looking statement boundary, not-offer/not-investment-advice boundary, and no unauthorized rating/target-price generation.
+
+If stages are skipped or compressed, mark them as `skipped` in `tasks/current_task.md` with a reason and keep the review/style/version gates that apply to the artifact.
+
+## Content Depth And Execution Control
+
+Set `content_depth` during interview or PRD work:
+
+- `standard`: the default baseline for the selected preset, reader, and workflow mode.
+- `concise`: keeps the same decision structure but targets roughly 30-60% of standard volume by reducing examples, repeated explanation, and secondary detail. Do not remove required claims, citations, warnings, approval boundaries, or review traces.
+- `expanded`: targets roughly 180-250% of standard volume only when evidence, reader need, and artifact purpose justify more examples, alternatives, caveats, appendix detail, or teaching/procedure support. Do not pad prose to hit a number.
+
+Set `execution_control_mode` when the user indicates how much stopping they want:
+
+- `checkpointed`: stop at explicit approval gates such as setup brief, TOC approval, sensitive language/distribution decisions, external sharing, or high-risk legal/regulatory/securities boundaries.
+- `delegated`: proceed to the requested target point when the task path is clear, then report assumptions made, skipped or compressed stages, unresolved issues, failed validators, items needing user confirmation, and residual risk. Delegated mode is useful for “초안까지 진행”, “검수 후보까지 진행”, or “가능한 데까지 진행” requests.
+
+Delegated mode is not autonomous quality control. It must not skip source truth, output-language resolution, confidentiality/distribution decisions, protected-span preservation, external sharing approval, legal/securities approval, version preservation, or the requirement to label drafts honestly.
+
+## Follow-Up Artifact And Project Lineage
+
+- A follow-up request can start from any existing artifact: report, handout, proposal, manual, brief, press release, curriculum, or another saved document. Do not hard-code a report-to-handout path.
+- When the user asks to make a new artifact from an existing one, treat it as a derived artifact or derived project and record:
+  - `source_project_id`,
+  - `source_artifact_path`,
+  - `source_artifact_version` if known,
+  - `source_artifact_type`,
+  - the new artifact goal,
+  - the new target reader and use context,
+  - the expected output type,
+  - `reuse_scope`,
+  - `new_verification_scope`.
+- Existing source artifacts are context and reusable structure. They do not automatically make the new artifact's claims, captions, or teaching examples newly verified.
+- If the derived artifact has a different reader, purpose, document type, or distribution boundary, create or update the PRD before drafting and rerun the relevant preset/style decisions.
+- Avoid source anchoring. The previous artifact can provide verified context, structure candidates, and reusable source lists, but the derived artifact must choose its own preset, style profile, content depth, layout blocks, examples, visuals, and review standard. Do not copy a report-like structure into a handout, proposal, manual, press release, or brief when the selected preset says another structure fits better.
+- The derived project must still use `tasks/current_task.md`; do not create a separate `task.md` as the main task authority.
+
 ## HTML Report Standard
 
 - Default report working format is `.html` unless the user explicitly asks for another format.
@@ -28,6 +121,7 @@
 - Keep CSS either embedded in a `<style>` block or stored as a local companion stylesheet if a converter supports it.
 - For substantial reports, prefer the reusable template assets in `_ai_system/templates/report_html/` or follow their class and structure conventions. One-off styling may be acceptable for a brief, but lowers reproducibility for repeatable reports.
 - Substantial reports should use the reusable cover component in `_ai_system/templates/report_html/cover/`. Populate `reports/cover.data.json`; do not ask the AI to recreate a cover design from scratch for each report.
+- Cover layout should be selected as a module package. Start from the reusable cover component and choose only the required modules for the artifact: classification badge, report type, title/subtitle, metadata table, approval cells, purpose note, confidentiality tag/notice, contact/release status, or version marker. Education handouts, product manuals, press releases, and compact briefs may use lighter covers than substantial reports. Do not render confidentiality warning modules when the PRD/cover data says `대외비 아님` or `not_confidential`.
 - Use local image paths and keep chart images in the relevant `figures/` folder.
 - Use page-friendly styling:
   - A4-oriented width,
@@ -35,8 +129,8 @@
   - no fixed-position overlays,
   - no text over images unless tested for PDF readability,
   - tables that can split or be simplified for print.
-- Every table or figure in HTML must cite original sources in rendered Korean form and name the underlying dataset or qualitative evidence as `근거 데이터`.
-- For delivery-stage work, each material table, chart, figure, graph, or process diagram must have its own `자료:` and `근거 데이터:` note. `근거 데이터:` should be a Korean dataset/evidence label in the visible report; exact `data_sources/` or source-record paths belong in HTML comments, data indexes, or appendix artifact tables.
+- Every table or figure in HTML must cite original sources in the report's confirmed display language and name the underlying dataset or qualitative evidence. Korean reports use `자료:` and `근거 데이터:`. English reports may use `Source:`, `Underlying data:`, or `Data basis:` only when `html[lang="en"]` or an explicit output-language marker is present.
+- For delivery-stage work, each material table, chart, figure, graph, or process diagram must have its own source and data-basis note in the confirmed display language. Exact `data_sources/` or source-record paths belong in HTML comments, data indexes, or appendix artifact tables, not as the visible reader-facing label.
 - A material table and a material graph are separate artifacts. If both appear, create separate corresponding data files unless they intentionally share the same named dataset and the caption explains the shared dataset section.
 - HTML must not hard-code material quantitative values without a companion `.csv` or `.xlsx` file. If a value appears in a chart, scenario, timeline, market-size estimate, or quantitative table, the local dataset must exist before delivery.
 - Do not expose internal source ids such as `[source: ...]` in rendered report body text. Use numbered footnotes or endnotes for readers and preserve source ids in HTML comments, source records, and claim registers.
@@ -46,6 +140,36 @@
 - If final DOCX/PDF is later requested, render and visually inspect the output before treating it as final.
 - A generated `.docx` or `.pdf` is not delivery-ready until its structure and rendered output have been checked. File creation alone proves only that a conversion artifact exists.
 - DOCX/PDF readiness should not flatten the report design into a plain document. Use the reusable report template/style system and conversion-friendly components so the HTML remains polished and the converted document remains usable.
+
+## Language, Style Pass, And Assembly Placement
+
+Use this placement to avoid repeated rewriting and excessive context use:
+
+1. Decide or confirm `output_language` during interview/PRD before substantive drafting. Language determines the preset language guidance, style-profile language guidance, citation labels, caption labels, access-date wording, and disclaimer boundary.
+2. Select `style_profile` during interview/PRD as a reader-fit writing target. This can guide drafting, but it is not the editing pass.
+3. Decide whether a register overlay, honorific policy review, or user-instructional overlay is needed. These sit on top of the selected style profile and are normally relevant only for Korean delivery mode, oral briefing, public wording, education explanation, or adult procedural guidance.
+4. Draft body chapter fragments from chapter workpacks and evidence records. Do not perform whole-report polish while chapter structure, claims, and visuals are still moving.
+5. Add visual/data artifacts after body chapter direction is stable.
+6. Write Chapter 0 only after body chapters, visuals, risks, and appendix direction are stable.
+7. Run the style pass after body chapters, Chapter 0, and visual captions are stable, but before assembly. The style pass works on chapter fragments and relevant captions, not on the assembled HTML as the source of truth.
+8. Assemble the report only after the style pass has either applied limited approved changes or recorded a no-change/held-change result with fidelity and naturalness review. The assembly manifest should record the current `reports/style_pass/` artifact hashes so workflow routing can detect a stale pre-style assembly.
+9. Review the assembled report as a reading copy. If review finds content problems, fix the relevant chapter/data/visual source and rerun style pass only for affected fragments before reassembly.
+10. Preserve the assembled artifact as a versioned copy before reporting it as a new draft, review candidate, or approved baseline.
+
+The style pass is a late production step, not a standing drafting loop. It should leave artifacts under `reports/style_pass/`: `style_risk_findings`, `protected_spans`, `style_rewrite_diff`, `style_fidelity_review`, and `style_naturalness_review`. If no rewrite is appropriate, record a no-change or held-change decision in the same artifact set. When register, honorific, or user-instructional guidance applies, record its review trail inside those same artifacts rather than creating an automatic rewrite lane.
+
+The style pass may improve expression, but it is not an automatic Korean rewrite engine. It should identify what the AI changed, what it deliberately held, and what needs human review. If the artifact still reads like the wrong genre after style pass, keep it as a review issue instead of declaring the document complete.
+
+## Artifact Versioning Standard
+
+- Do not rely on one mutable `internal_review_report.html` or `assembled_handout.html` as the only record after review or enhancement.
+- Use `v0.x` for drafts and enhancement rounds before user sharing/submission/baseline approval.
+- Use `v1.0` only when the user indicates the artifact should be a sharing, submission, or baseline candidate. Natural-language phrases such as "계속 진행" or "초안까지" are not approval.
+- Use `v1.x` for revisions that keep the same purpose, reader, artifact type, and main structure.
+- Use `v2.0` when purpose, reader, artifact type, core conclusion, or structure materially changes.
+- Include `YYMMDDHHMM` in saved artifact file names and version folders.
+- Preserve versioned artifacts under `reports/versions/`, keep the current pointer under `reports/current/version_pointer.json`, and update `reports/version_history.md`, `reports/report_registry.csv`, and dashboard change logs.
+- Python tools may preserve files and update ledgers, but the AI must explain the version choice and approval status in the worklog.
 
 ## Detailed TOC First Standard
 
@@ -64,8 +188,8 @@
 - If the report scope changes, update the TOC or create a revised TOC before continuing.
 - Source collection should then proceed section-by-section against the TOC.
 - For broad or substantial reports, create or update a source collection plan before large-scale collection. The plan should identify source type, official/original target, collection method, OCR/translation needs, and status by report section.
-- For external sources, collection means preserving the original file, exact official URL, or capture. Do not treat AI summaries, memory, or internal-slide summaries as collected external evidence.
-- Do not make report workflow depend on AI file download success. Record exact official links in `references/source_link_register.csv`; if the report needs a file the AI cannot obtain, add it to `references/user_requested_materials.md` and continue only within the verified link/quote boundary.
+- For external sources, collection means preserving a user-provided original file, registering an exact official URL, or using an explicitly requested capture. Do not treat AI summaries, memory, or internal-slide summaries as collected external evidence.
+- Do not make report workflow depend on AI file downloads. Record exact official links in `references/source_link_register.csv`; if the report needs a file, add it to `references/user_requested_materials.md` and continue only within the verified link/quote boundary.
 - Foreign benchmark cases named in the report require case-specific original evidence. Internal slides or domestic policy documents can justify why the benchmark should be investigated, but cannot verify that benchmark's facts without the foreign/company/regulator source.
 - Exceptions:
   - tiny one-off answers,
@@ -147,6 +271,8 @@ For substantial reports, the chapter files are the prose source of truth:
   - `주:` and `자료:` below tables and figures.
 - Use `자료:` only for original source institutions, authors, reports, statutes, datasets, or publications.
 - Use `근거 데이터:` for local `.csv` or `.xlsx` files created in the workspace.
+- Rendered English reports may use `Source:`, `Underlying data:`, `Data basis:`, and `Accessed YYYY-MM-DD` when the PRD confirms `output_language=en` or `citation_display_language=en` and the HTML carries `lang="en"` or an equivalent explicit language marker.
+- Do not allow English caption labels in a Korean report merely because they appear in the HTML. If the PRD or HTML does not explicitly mark English output, use Korean labels and Korean access-date display.
 - In the visible report, describe local datasets with a Korean label instead of a raw relative path. Preserve the exact path in HTML comments, the data index, or appendix artifact table.
 - For Korean reports, show web access dates as `접근일: YYYY.MM.DD`; do not use English `accessed YYYY-MM-DD` in reader-facing references unless the report itself is in English.
 - Direct quotes should use quotation marks or block quote styling and cite the exact location. Paraphrases should cite the source without quotation marks. Inferences should be written as analysis, not as if the source itself stated the conclusion.
@@ -173,6 +299,7 @@ For substantial reports, the chapter files are the prose source of truth:
 - Do not use AI-written evidence text, dummy PDFs, placeholder PDFs, shell PDFs, or generic homepage URLs as originals. `report_citable` source records must point to an exact official URL or user-provided/preserved original, plus a verifiable quote, page, article, section, URL, or capture location.
 - Do not add validator keywords, source ids, claim ids, or benchmark terms to exact quotes, publisher fields, or metadata to satisfy a gate. This is evidence contamination and should fail the research integrity gate.
 - Comparison copies and failed-run files belong under a named `archive/` folder. Active `reports/` should contain deliverables and registers, not `.bak` files.
+- Project work should not create ad-hoc Python helpers in the workspace root or system-core folders. If a temporary helper is unavoidable, record its purpose, path, cleanup, and impact in the worklog. Leaving unexpected `.py` files in the root or active project should be treated as a hygiene issue, not as report progress.
 
 ## Section-by-Section Drafting Standard
 

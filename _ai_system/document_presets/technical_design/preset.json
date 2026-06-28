@@ -1,0 +1,23 @@
+{
+  "preset_id": "technical_design",
+  "label_ko": "기술 설계/도입 검토",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "technical_design",
+  "description": "Architecture, API, data model, security, testing, and operations design documents.",
+  "quality_emphasis": [
+    "architecture and interface clarity",
+    "data and security model completeness",
+    "deployment and operations risks",
+    "testability and implementation decisions"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

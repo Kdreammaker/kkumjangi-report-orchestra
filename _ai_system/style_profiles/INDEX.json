@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-03",
+  "source": "_ai_system/style_profiles",
+  "common_korean_tone_workflow": {
+    "workflow_id": "korean_tone_workflow_v1",
+    "path": "korean_tone_workflow_design_v1.md",
+    "status": "supported",
+    "automation_status": "guidance_only",
+    "use_when": "Korean tone/style review, reader-fit adjustment, or limited style pass is requested after document preset, style profile, output language, reader, classification, and distribution boundary are known.",
+    "risk_types": ["style-only", "evidence-related", "approval-sensitive", "genre-drift", "reader-fit"],
+    "artifact_templates": [
+      "templates/style_risk_findings.json",
+      "templates/protected_spans.json",
+      "templates/style_rewrite_diff.md",
+      "templates/style_fidelity_review.md",
+      "templates/style_naturalness_review.md"
+    ],
+    "boundary": "No automatic rewrite, AI-detection evasion, protected-span rewriting, jurisdiction-specific disclaimer generation, or score-based pass gate."
+  },
+  "preset_profile_boundary": {
+    "document_presets": "Document presets own genre, structure, section expectations, visuals, evidence emphasis, and validation checklist.",
+    "style_profiles": "Style profiles own reader-fit tone, certainty, sentence shape, protected-span handling, limited rewrite, fidelity review, rollback, and human-review routing.",
+    "investor_sector_company_analysis": "Use investor_brief or equity_research document presets for structure and evidence expectations; use the common Korean tone workflow plus the selected style profile for guidance-only style pass.",
+    "procedural_user_guidance": "Use product_manual or service_planning document presets for procedure structure. Select a style profile only from reader/tone cues: child_education for children/beginners/low-prior-knowledge readers, partner_business for partner/customer responsibility and scope clarity, or ask when the reader/tone is unclear."
+  },
+  "profile_count": 5,
+  "routing_cue_schema": {
+    "direct_names": "Names users may call the profile directly, kept separate from executable aliases until router logic is updated.",
+    "description_examples": "Natural-language requests that should strongly suggest this profile when document preset and risk boundaries also fit.",
+    "positive_cues": "Signals that increase confidence for this profile.",
+    "negative_cues": "Signals that should suppress this profile or require another route.",
+    "ambiguous_cues": "Terms that may overlap with another profile or document preset and should not be auto-routed alone.",
+    "ask_when_ambiguous": "Short questions to ask before selecting the profile when cues conflict.",
+    "recommended_document_preset_combinations": "Machine-readable preset pairings for future query routing; these do not replace document preset selection."
+  },
+  "profiles": [
+    {
+      "profile_id": "internal_executive_summary",
+      "aliases": ["경영진 요약", "내부 요약", "의사결정 요약", "상부 보고", "임원 보고"],
+      "recommended_document_presets": ["business_strategy", "general_report", "regulatory_review", "investor_brief", "equity_research"],
+      "routing_cues": {
+        "direct_names": ["경영진 요약", "임원 보고", "의사결정 메모", "내부 의사결정 요약", "임원에게 짧게"],
+        "description_examples": [
+          "임원에게 짧게",
+          "경영진이 빠르게 판단할 수 있는 요약",
+          "핵심 결론과 의사결정 포인트만 먼저 보고 싶다",
+          "대표나 임원이 짧은 시간 안에 리스크와 선택지를 판단해야 한다"
+        ],
+        "positive_cues": [
+          "internal decision owner",
+          "executive summary",
+          "decision-first",
+          "key takeaway",
+          "trade-off",
+          "residual risk",
+          "next action",
+          "경영진",
+          "임원",
+          "의사결정",
+          "빠르게 판단",
+          "핵심 요약",
+          "리스크와 선택지",
+          "실행 판단"
+        ],
+        "negative_cues": [
+          "press release",
+          "public announcement",
+          "children",
+          "class activity",
+          "methods section",
+          "literature review",
+          "external partner negotiation",
+          "보도자료",
+          "언론 배포",
+          "어린이 활동",
+          "선행연구",
+          "방법론",
+          "파트너 책임 범위"
+        ],
+        "ambiguous_cues": [
+          {
+            "cue": "요약",
+            "reason": "요약은 모든 문서에 있을 수 있으므로 독자가 경영진/의사결정권자인지 확인해야 한다.",
+            "ask": "요약 독자가 내부 의사결정권자인가요, 아니면 외부 공개/파트너/학습자용인가요?"
+          },
+          {
+            "cue": "투자자용 요약",
+            "reason": "구조는 investor_brief/equity_research preset 문제일 수 있고, 투자 판단 문구는 스타일로 자동 처리하면 안 된다.",
+            "ask": "투자자에게 배포되는 외부 문서인가요, 내부 투자/전략 판단용 요약인가요?"
+          }
+        ],
+        "ask_when_ambiguous": [
+          "독자는 내부 경영진/의사결정권자인가요?",
+          "외부 배포 또는 승인된 공개문으로 쓰일 예정인가요?",
+          "투자·법률·규제 판단 문구가 있으면 별도 검토가 필요한가요?"
+        ],
+        "recommended_document_preset_combinations": [
+          {
+            "document_preset": "business_strategy",
+            "use_when": "Internal strategic decision memo or management option review.",
+            "caution": "Do not make uncertain evidence sound more certain."
+          },
+          {
+            "document_preset": "investor_brief",
+            "use_when": "Internal investor-facing brief planning or executive readout.",
+            "caution": "External distribution and securities-style wording require preset/governance checks."
+          },
+          {
+            "document_preset": "equity_research",
+            "use_when": "Internal sector/company analysis readout for senior decision makers.",
+            "caution": "No investment advice, rating, or target-price wording should be invented by style guidance."
+          }
+        ]
+      },
+      "read_first": [
+        "internal_executive_summary/profile.json",
+        "internal_executive_summary/tone_rules.md",
+        "internal_executive_summary/rewrite_protocol.md"
+      ],
+      "language_guidance": ["internal_executive_summary/language_guidance.md"],
+      "status": "supported",
+      "automation_status": "guidance_only"
+    },
+    {
+      "profile_id": "partner_business",
+      "aliases": ["파트너 문서", "고객 제안", "협업 제안", "비즈니스 제안", "외부 파트너"],
+      "recommended_document_presets": ["business_proposal", "service_planning", "technical_design", "product_manual"],
+      "routing_cues": {
+        "direct_names": ["파트너 문서", "고객 제안", "협업 제안서", "외부 파트너 안내"],
+        "description_examples": [
+          "파트너에게 제안 범위와 책임을 명확히 전달",
+          "고객사와 역할, 범위, 일정, 제외 사항을 오해 없이 공유하고 싶다",
+          "협업 조건과 후속 액션을 신뢰감 있게 설명해야 한다"
+        ],
+        "positive_cues": [
+          "partner-facing",
+          "customer-facing",
+          "proposal scope",
+          "responsibility",
+          "R&R",
+          "implementation boundary",
+          "deliverables",
+          "commercial terms",
+          "파트너",
+          "고객사",
+          "제안 범위",
+          "책임",
+          "역할 분담",
+          "수행 범위",
+          "제외 사항",
+          "후속 액션"
+        ],
+        "negative_cues": [
+          "press release",
+          "journalists",
+          "children",
+          "classroom",
+          "academic methodology",
+          "internal-only executive decision",
+          "언론 배포",
+          "공식 발표문",
+          "어린이",
+          "활동 중심 수업",
+          "선행연구",
+          "내부 의사결정 전용"
+        ],
+        "ambiguous_cues": [
+          {
+            "cue": "고객 안내",
+            "reason": "고객 안내는 product_manual 구조만 필요할 수도 있고, 책임/범위가 있으면 partner_business 톤이 필요할 수 있다.",
+            "ask": "이 안내가 계약·책임·제안 범위를 다루나요, 아니면 일반 사용 절차만 설명하나요?"
+          },
+          {
+            "cue": "절차 안내",
+            "reason": "절차는 document preset 문제일 수 있다. 파트너 책임/조건을 명확히 하는 절차이면 partner_business, 초보자 학습 절차이면 child_education이 더 맞다.",
+            "ask": "절차의 독자가 파트너/고객 의사결정자인가요, 일반 초보 사용자인가요?"
+          }
+        ],
+        "ask_when_ambiguous": [
+          "독자가 외부 파트너, 고객사, 조달/검토 담당자인가요?",
+          "문서가 제안 범위, 책임, 일정, 제외 사항, 조건을 다루나요?",
+          "공개 보도문이나 일반 사용자 매뉴얼 구조가 더 중요한 문서인가요?"
+        ],
+        "recommended_document_preset_combinations": [
+          {
+            "document_preset": "business_proposal",
+            "use_when": "Partner/customer proposal with scope, deliverables, responsibilities, and next steps.",
+            "caution": "Do not soften contract-like obligations or exclusions."
+          },
+          {
+            "document_preset": "service_planning",
+            "use_when": "Partner service rollout or operating model discussion.",
+            "caution": "Keep assumptions, ownership, and dependency wording visible."
+          },
+          {
+            "document_preset": "product_manual",
+            "use_when": "Customer-facing product instructions that also include responsibility, support, or business-context boundaries.",
+            "caution": "If the reader is simply a beginner/general user, ask before using this profile."
+          }
+        ]
+      },
+      "read_first": [
+        "partner_business/profile.json",
+        "partner_business/tone_rules.md",
+        "partner_business/rewrite_protocol.md"
+      ],
+      "language_guidance": ["partner_business/language_guidance.md"],
+      "status": "supported",
+      "automation_status": "guidance_only"
+    },
+    {
+      "profile_id": "child_education",
+      "aliases": ["어린이 교육", "초보 학습자", "낮은 선행지식", "쉬운 교안", "학습자용 설명"],
+      "recommended_document_presets": ["education_curriculum", "product_manual", "general_report"],
+      "routing_cues": {
+        "direct_names": ["어린이 교육", "초보자 설명", "쉬운 학습자용 문서", "낮은 선행지식 독자"],
+        "description_examples": [
+          "아이들이 이해할 수 있도록 쉬운 예시와 활동 중심",
+          "처음 접하는 사람이 쉬운 예시와 활동을 통해 배울 수 있게 설명",
+          "선행지식이 낮은 학습자가 개념을 단계별로 이해할 수 있게 설명"
+        ],
+        "positive_cues": [
+          "children",
+          "beginner learner",
+          "low prior knowledge",
+          "step-by-step",
+          "simple example",
+          "activity-based",
+          "hands-on",
+          "아이들",
+          "어린이",
+          "초보자",
+          "낮은 선행지식",
+          "쉬운 예시",
+          "활동 중심",
+          "단계별",
+          "따라할 수 있는"
+        ],
+        "negative_cues": [
+          "executive decision",
+          "press release",
+          "public official statement",
+          "partner responsibility",
+          "contract scope",
+          "academic method",
+          "literature review",
+          "경영진 판단",
+          "언론 배포",
+          "공식 발표문",
+          "파트너 책임",
+          "계약 범위",
+          "선행연구",
+          "방법론"
+        ],
+        "ambiguous_cues": [
+          {
+            "cue": "일반 사용자",
+            "reason": "일반 사용자는 초보 학습자일 수도 있지만, 단순히 product_manual preset의 독자일 수도 있다.",
+            "ask": "일반 사용자를 초보자로 보고 쉬운 예시/활동 중심으로 낮출까요, 아니면 일반 매뉴얼 구조만 필요할까요?"
+          },
+          {
+            "cue": "일반 사용자가 따라할 수 있는 절차 안내",
+            "reason": "성인 일반 사용자용 절차 안내는 보통 product_manual preset과 user_instructional overlay 문제이며, 어린이/초보 학습자 cue가 추가로 있을 때만 child_education을 고려한다.",
+            "ask": "대상이 어린이/초보 학습자인가요, 아니면 성인 일반 사용자를 위한 매뉴얼/FAQ/사용 가이드인가요?"
+          },
+          {
+            "cue": "쉬운 설명",
+            "reason": "쉬운 설명은 경영진 요약, 파트너 제안, 공개문에서도 필요할 수 있으므로 독자와 용도를 확인해야 한다.",
+            "ask": "쉬운 설명의 대상이 어린이/초보 학습자인가요, 아니면 다른 전문 독자에게 간결하게 설명하는 목적인가요?"
+          }
+        ],
+        "ask_when_ambiguous": [
+          "독자가 어린이, 초보자, 또는 선행지식이 낮은 일반 사용자인가요?",
+          "활동, 예시, 단계별 따라하기가 핵심인가요?",
+          "책임·계약·공개문·학술 근거 같은 보호 문구가 중심이면 다른 profile/preset 검토가 필요한가요?"
+        ],
+        "recommended_document_preset_combinations": [
+          {
+            "document_preset": "education_curriculum",
+            "use_when": "Lesson, activity sheet, curriculum, or beginner learning material.",
+            "caution": "Simplification must not distort factual or source-backed claims."
+          },
+          {
+            "document_preset": "product_manual",
+            "use_when": "Step-by-step procedure for children, beginners, or low-prior-knowledge general users.",
+            "caution": "If the procedure includes contractual responsibility or external customer terms, ask before routing."
+          },
+          {
+            "document_preset": "general_report",
+            "use_when": "General explanatory material for non-specialist readers.",
+            "caution": "Do not remove caveats, numbers, or source limits to make it easier."
+          }
+        ]
+      },
+      "read_first": [
+        "child_education/profile.json",
+        "child_education/tone_rules.md",
+        "child_education/rewrite_protocol.md"
+      ],
+      "status": "supported",
+      "automation_status": "guidance_only"
+    },
+    {
+      "profile_id": "press_public",
+      "aliases": ["보도자료", "외부 공개문", "공식 발표", "언론 배포", "public release"],
+      "recommended_document_presets": ["press_release", "investor_brief", "business_proposal"],
+      "routing_cues": {
+        "direct_names": ["보도자료", "공식 발표문", "언론 배포문", "외부 공개문", "public release"],
+        "description_examples": [
+          "언론에 배포할 수 있는 공식 발표문",
+          "외부 공개용으로 승인된 사실만 담은 발표문",
+          "기자와 일반 독자가 읽는 배포 문안을 준비해야 한다"
+        ],
+        "positive_cues": [
+          "press release",
+          "media-facing",
+          "official announcement",
+          "public statement",
+          "approved public wording",
+          "boilerplate",
+          "embargo",
+          "보도자료",
+          "언론",
+          "공식 발표",
+          "외부 공개",
+          "배포",
+          "승인 문구",
+          "회사 소개 문구"
+        ],
+        "negative_cues": [
+          "internal-only",
+          "executive decision",
+          "children activity",
+          "academic methodology",
+          "partner negotiation scope",
+          "unapproved draft",
+          "general user procedure",
+          "user instructions",
+          "product manual",
+          "step-by-step guide",
+          "내부 전용",
+          "경영진 판단",
+          "어린이 활동",
+          "선행연구",
+          "방법론",
+          "파트너 협상",
+          "미승인 초안",
+          "일반 사용자",
+          "사용자 안내",
+          "절차 안내",
+          "매뉴얼",
+          "따라할 수"
+        ],
+        "ambiguous_cues": [
+          {
+            "cue": "외부용",
+            "reason": "외부용은 파트너 제안, 사용자 안내, 보도자료 모두 가능하다. 언론/공개 배포인지 확인해야 한다.",
+            "ask": "이 문서는 언론/일반 공개 배포용인가요, 특정 파트너/고객에게 전달하는 문서인가요?"
+          },
+          {
+            "cue": "공식",
+            "reason": "공식이라는 말만으로는 법률/계약/투자 승인 검토를 대체할 수 없다.",
+            "ask": "승인된 공개 사실, 보일러플레이트, 연락처, 엠바고 문구가 이미 확정되어 있나요?"
+          }
+        ],
+        "ask_when_ambiguous": [
+          "언론, 공개 웹사이트, 일반 대중에게 배포되는 문서인가요?",
+          "승인된 공개 문구, 연락처, 보일러플레이트, 엠바고 조건이 있나요?",
+          "투자·법률·계약 판단이 필요한 문구는 별도 검토가 필요한가요?"
+        ],
+        "recommended_document_preset_combinations": [
+          {
+            "document_preset": "press_release",
+            "use_when": "Formal media/public announcement with approved facts, lead, quote, and boilerplate discipline.",
+            "caution": "Do not convert internal drafts into public-ready copy without approval."
+          },
+          {
+            "document_preset": "investor_brief",
+            "use_when": "Approved public investor-facing announcement support, when governance allows.",
+            "caution": "Securities-style and jurisdiction-sensitive wording must not be solved by style guidance."
+          },
+          {
+            "document_preset": "business_proposal",
+            "use_when": "Only when a partner-facing document also has an approved public statement component.",
+            "caution": "If it is a negotiation/proposal document, partner_business is usually safer."
+          }
+        ]
+      },
+      "read_first": [
+        "press_public/profile.json",
+        "press_public/tone_rules.md",
+        "press_public/rewrite_protocol.md"
+      ],
+      "language_guidance": ["press_public/language_guidance.md"],
+      "status": "supported",
+      "automation_status": "guidance_only"
+    },
+    {
+      "profile_id": "academic_formal",
+      "aliases": ["학술 문체", "논문형", "연구 문서", "formal academic", "문헌 연구"],
+      "recommended_document_presets": ["academic_paper", "academic_research", "regulatory_review", "general_report"],
+      "routing_cues": {
+        "direct_names": ["학술 문체", "논문형 문서", "연구 문서", "academic formal", "문헌 연구", "논문처럼"],
+        "description_examples": [
+          "논문처럼",
+          "선행연구와 방법론을 갖춘 엄밀한 문서",
+          "연구 질문, 방법, 한계, 인용을 분명히 갖춘 형식적 문서",
+          "정의와 근거를 조심스럽게 쌓는 학술적 보고서"
+        ],
+        "positive_cues": [
+          "literature review",
+          "methodology",
+          "research question",
+          "citation-sensitive",
+          "definition",
+          "evidence limitation",
+          "formal academic",
+          "선행연구",
+          "방법론",
+          "연구 질문",
+          "인용",
+          "근거 한계",
+          "정의",
+          "엄밀한",
+          "학술적"
+        ],
+        "negative_cues": [
+          "press release",
+          "media distribution",
+          "executive quick decision",
+          "children activity",
+          "partner scope responsibility",
+          "sales proposal",
+          "보도자료",
+          "언론 배포",
+          "빠른 의사결정",
+          "아이들 활동",
+          "파트너 책임",
+          "영업 제안"
+        ],
+        "ambiguous_cues": [
+          {
+            "cue": "엄밀한 보고서",
+            "reason": "엄밀성은 규제 검토, 전략 보고서, 투자 분석에도 필요하다. 선행연구/방법론/인용 구조가 있는지 확인해야 한다.",
+            "ask": "엄밀성이 선행연구·방법론·인용 중심의 학술 문체를 뜻하나요, 아니면 일반 보고서의 근거 수준을 뜻하나요?"
+          },
+          {
+            "cue": "전문가용",
+            "reason": "전문가용은 학술, 규제, 파트너 기술문서, 경영진 요약이 모두 될 수 있다.",
+            "ask": "전문 독자가 연구 검토자인가요, 규제/사업/기술 의사결정자인가요?"
+          }
+        ],
+        "ask_when_ambiguous": [
+          "선행연구, 방법론, 연구 질문, 인용 형식이 핵심인가요?",
+          "독자가 연구자/심사자/정책 연구자처럼 방법과 근거 한계를 보는 사람인가요?",
+          "빠른 의사결정, 대중 공개, 파트너 제안이 더 중요한 목적은 아닌가요?"
+        ],
+        "recommended_document_preset_combinations": [
+          {
+            "document_preset": "academic_paper",
+            "use_when": "Paper-like research document with literature review, method, findings, and limitations.",
+            "caution": "Style profile does not verify source truth or citation correctness."
+          },
+          {
+            "document_preset": "academic_research",
+            "use_when": "Formal research report where definitions, methods, and evidence limits matter.",
+            "caution": "Do not invent method detail or citation support during style review."
+          },
+          {
+            "document_preset": "regulatory_review",
+            "use_when": "Method-sensitive policy/regulatory analysis for expert readers.",
+            "caution": "Legal/regulatory correctness is not solved by academic tone."
+          }
+        ]
+      },
+      "read_first": [
+        "academic_formal/profile.json",
+        "academic_formal/tone_rules.md",
+        "academic_formal/rewrite_protocol.md"
+      ],
+      "status": "supported",
+      "automation_status": "guidance_only"
+    }
+  ]
+}

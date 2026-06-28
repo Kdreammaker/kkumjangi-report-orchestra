@@ -1,0 +1,4 @@
+phase,label,decision_gate,status
+A,Discovery alignment,Sample outline,Fixture only
+B,Pilot configuration,Acceptance notes,Fixture only
+C,Handoff review,Real-work approval decision,Review boundary visible

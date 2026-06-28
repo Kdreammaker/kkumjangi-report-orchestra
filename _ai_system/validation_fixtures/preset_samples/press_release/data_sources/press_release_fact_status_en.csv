@@ -1,0 +1,4 @@
+item,sample_value,approval_status
+Headline,Fictional Launch Notice for Fixture Validation,Fixture-approved only
+Quote,This is a synthetic quote for layout validation,Synthetic quote no real spokesperson
+Contact,fixture-contact@example.invalid,Reserved invalid domain for validation use

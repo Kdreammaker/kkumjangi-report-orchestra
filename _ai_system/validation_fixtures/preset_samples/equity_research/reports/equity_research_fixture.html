@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validation Fixture Equity Research Sample</title>
+  <!-- Reusable template reference: _ai_system/templates/report_html/report.css -->
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5d6772;
+      --line: #cad3dc;
+      --soft: #f3f6f8;
+      --accent: #37658a;
+      --risk: #9a4d37;
+      --ok: #3f7f5f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f6f8fa;
+      color: var(--ink);
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      line-height: 1.58;
+    }
+    .report-page {
+      width: min(980px, calc(100% - 32px));
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 42px;
+    }
+    .cover-page {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+    }
+    .fixture-banner {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .cover-grid, .disclaimer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 18px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 30px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .subhead {
+      color: var(--muted);
+      margin: 0;
+      font-size: 17px;
+    }
+    .disclaimer {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--risk);
+      background: #fffaf8;
+      padding: 15px;
+      margin: 22px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      margin: 12px 0 22px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th { background: var(--soft); }
+    caption, figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    caption {
+      caption-side: bottom;
+      padding-top: 8px;
+    }
+    figure {
+      margin: 14px 0 24px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+    }
+    .pill {
+      display: inline-block;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .box {
+      border: 1px solid var(--line);
+      padding: 14px;
+      background: #fcfdfe;
+    }
+    .references {
+      border-top: 1px solid var(--line);
+      margin-top: 30px;
+      padding-top: 16px;
+    }
+    @media (max-width: 760px) {
+      .report-page { padding: 26px; width: calc(100% - 20px); }
+      .cover-grid, .disclaimer-grid, .two-col { grid-template-columns: 1fr; }
+      h1 { font-size: 27px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page assembled-report" data-assembled-report="true" data-preset-id="equity_research">
+    <section class="cover-page report-cover" data-cover-component="report-cover-v1">
+      <span class="fixture-banner">Validation Fixture - Not Real Market Data</span>
+      <h1>Fixture Equity Research Note</h1>
+      <p class="subhead">섹터/기업 분석 프리셋의 구조, 표, static chart, 면책, 기준일 표시 검증용 HTML fixture</p>
+      <div class="cover-grid" aria-label="document control metadata">
+        <div><strong>보고서 번호:</strong> FIX-ER-2026-06</div>
+        <div><strong>보안 등급:</strong> Internal validation fixture</div>
+        <div><strong>작성일:</strong> 2026.06.03</div>
+        <div><strong>데이터 기준일:</strong> 2026.06.03</div>
+        <div><strong>문서 분류 코드:</strong> equity_research sample</div>
+        <div><strong>결론 상태:</strong> Non-advisory fixture conclusion only</div>
+      </div>
+    </section>
+
+    <section class="disclaimer" aria-label="disclaimer">
+      <strong>면책 및 사용 제한:</strong> 본 문서는 validation fixture입니다. 실제 발행사, 상장증권, 가격, 재무제표, 컨센서스, 투자등급, 목표가, 매수/매도/보유 의견을 포함하지 않습니다. 모든 지표는 synthetic index이며 투자 조언 또는 리서치 배포물이 아닙니다.<sup id="fnref-1">1</sup>
+      <div class="disclaimer-grid">
+        <div><strong>데이터 상태:</strong> fixture-only synthetic dataset</div>
+        <div><strong>자료 기준:</strong> 2026.06.03 생성 fixture</div>
+      </div>
+    </section>
+
+    <section>
+      <h1>제0장 요약</h1>
+      <p>이 샘플은 `equity_research` 프리셋이 research-note 계층, 데이터 기준일, disclaimer box, 재무/peer/sensitivity 표, static chart, 참고자료 섹션으로 이어질 수 있는지 확인합니다. 결론은 “구조 검증 가능”으로 한정되며 실제 시장 판단을 제시하지 않습니다.</p>
+    </section>
+
+    <section>
+      <h2>1. 투자 맥락이 아닌 분석 구조</h2>
+      <p><span class="pill">Non-advisory</span> 아래 내용은 투자 판단을 돕기 위한 실데이터 분석이 아니라, 데이터와 가정, 해석, 한계를 분리해 배치하는 구조 검증입니다.</p>
+
+      <h3>Fixture Financial Index Table</h3>
+      <!-- data_sources/equity_research_fixture_financials.csv -->
+      <table>
+        <caption>자료: synthetic fixture financial index. 근거 데이터: equity_research_fixture_financials dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>기간</th>
+            <th>매출 지수</th>
+            <th>마진 지수</th>
+            <th>데이터 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>FY2024A</td><td>100</td><td>18</td><td>Fixture baseline, audited status not applicable</td></tr>
+          <tr><td>FY2025E</td><td>108</td><td>19</td><td>Fixture estimate, no real consensus</td></tr>
+          <tr><td>FY2026E</td><td>116</td><td>20</td><td>Fixture estimate, no real guidance</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Peer Comparison Table</h3>
+      <!-- data_sources/equity_research_fixture_peers.csv -->
+      <table>
+        <caption>자료: synthetic fixture peer set. 근거 데이터: equity_research_fixture_peers dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>비교군</th>
+            <th>역할</th>
+            <th>매출 지수</th>
+            <th>마진 지수</th>
+            <th>밸류에이션 지수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fixture Peer A</td><td>synthetic leader</td><td>112</td><td>21</td><td>14</td></tr>
+          <tr><td>Fixture Peer B</td><td>synthetic comparator</td><td>106</td><td>18</td><td>11</td></tr>
+          <tr><td>Fixture Peer C</td><td>synthetic laggard</td><td>98</td><td>16</td><td>9</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Sensitivity Table</h3>
+      <!-- data_sources/equity_research_fixture_sensitivity.csv -->
+      <table>
+        <caption>자료: synthetic sensitivity fixture. 근거 데이터: equity_research_fixture_sensitivity dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>시나리오</th>
+            <th>마진 변화</th>
+            <th>밸류에이션 지수</th>
+            <th>해석 한계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Downside fixture</td><td>-2</td><td>8</td><td>Layout test only</td></tr>
+          <tr><td>Base fixture</td><td>0</td><td>11</td><td>Layout test only</td></tr>
+          <tr><td>Upside fixture</td><td>2</td><td>14</td><td>Layout test only</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Catalyst, Risk, and Static Visual</h2>
+      <p>촉매와 위험은 같은 표나 문단에 섞지 않고 별도 축으로 둡니다. 아래 chart는 interactive HTML이 아니라 변환 친화적인 static SVG입니다.</p>
+
+      <!-- data_sources/equity_research_fixture_catalyst_chart.csv -->
+      <figure class="chart static-chart">
+        <svg viewBox="0 0 720 280" role="img" aria-labelledby="fixture-chart-title fixture-chart-desc">
+          <title id="fixture-chart-title">Fixture Catalyst and Risk Index</title>
+          <desc id="fixture-chart-desc">Validation fixture static line chart comparing synthetic catalyst readiness and risk pressure by quarter.</desc>
+          <rect x="0" y="0" width="720" height="280" fill="#ffffff"/>
+          <line x1="70" y1="220" x2="660" y2="220" stroke="#6d7884" stroke-width="1"/>
+          <line x1="70" y1="40" x2="70" y2="220" stroke="#6d7884" stroke-width="1"/>
+          <text x="70" y="245" font-size="12" fill="#5d6772">Q1</text>
+          <text x="260" y="245" font-size="12" fill="#5d6772">Q2</text>
+          <text x="450" y="245" font-size="12" fill="#5d6772">Q3</text>
+          <text x="635" y="245" font-size="12" fill="#5d6772">Q4</text>
+          <polyline points="70,166 260,142 450,128 640,112" fill="none" stroke="#3f7f5f" stroke-width="4"/>
+          <polyline points="70,134 260,145 450,154 640,160" fill="none" stroke="#9a4d37" stroke-width="4"/>
+          <circle cx="70" cy="166" r="5" fill="#3f7f5f"/>
+          <circle cx="260" cy="142" r="5" fill="#3f7f5f"/>
+          <circle cx="450" cy="128" r="5" fill="#3f7f5f"/>
+          <circle cx="640" cy="112" r="5" fill="#3f7f5f"/>
+          <circle cx="70" cy="134" r="5" fill="#9a4d37"/>
+          <circle cx="260" cy="145" r="5" fill="#9a4d37"/>
+          <circle cx="450" cy="154" r="5" fill="#9a4d37"/>
+          <circle cx="640" cy="160" r="5" fill="#9a4d37"/>
+          <text x="94" y="55" font-size="13" fill="#3f7f5f">Catalyst readiness fixture index</text>
+          <text x="94" y="76" font-size="13" fill="#9a4d37">Risk pressure fixture index</text>
+        </svg>
+        <figcaption>자료: synthetic catalyst/risk fixture series. 근거 데이터: equity_research_fixture_catalyst_chart dataset, 기준일 2026.06.03. 대체 설명: quarter별 synthetic catalyst readiness는 상승하고 risk pressure는 완만히 낮아지는 구조 검증용 그래프입니다.</figcaption>
+      </figure>
+
+      <div class="two-col">
+        <div class="box">
+          <h3>Catalysts</h3>
+          <p>Fixture catalyst는 출시, 수요, 비용 개선처럼 보이는 실제 이벤트가 아니라 research-note 섹션 분리를 검증하기 위한 합성 항목입니다.</p>
+        </div>
+        <div class="box">
+          <h3>Risks and Downside</h3>
+          <p>Fixture risk는 데이터 stale, 가정 민감도, 공개 가능성 한계를 표시하는 문서 구조 검증용 항목입니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. 한계 및 결론</h2>
+      <p>이 샘플의 결론은 프리셋이 문서 산출물 구조로 표현될 수 있다는 fixture-level 확인에 한정됩니다. 데이터 출처, 재무 진위, 법적 적합성, 투자 적합성, 배포 가능성은 증명하지 않습니다.</p>
+    </section>
+
+    <section class="references" id="report-references">
+      <h2>부록 A. 참고자료 목록</h2>
+      <ol>
+        <li>Validation fixture datasets generated for preset artifact testing. 접근일: 2026.06.03.</li>
+        <li>Preset validation checklist: equity_research module, fixture scope only. 접근일: 2026.06.03.</li>
+      </ol>
+      <p id="fn-1"><sup>1</sup> Footnote marker included to verify substantial-report note handling. It is not a real regulatory disclosure.</p>
+    </section>
+  </main>
+</body>
+</html>

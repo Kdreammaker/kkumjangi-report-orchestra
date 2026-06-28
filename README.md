@@ -6,8 +6,8 @@ AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목�
 
 ## 📌 버전
 
-- 공개 버전: `1.0.2`
-- 배포일: `2026-05-29`
+- 공개 버전: `1.0.1`
+- 배포일: `2026-06-28`
 - 채널: `public`
 - 전체 변경 이력: `CHANGELOG.md`
 
@@ -33,6 +33,13 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 | 정책/규제 리스크 검토 | 개인정보보호 규제 변화가 SaaS 서비스에 미치는 영향 |
 | 서비스 기획/PRD | B2B 구독형 리포팅 서비스 MVP 기획 |
 | 기술 도입 검토 | 사내 문서 검색에 로컬 AI 색인을 도입하는 방안 |
+| 투자자 브리프/IR 설명자료 | 투자자용 factbook과 예상 Q&A 정리 |
+| 섹터/기업 분석 보고서 | 특정 산업의 실적, 밸류에이션, 리스크 분석 |
+| 사업 제안서 | 파트너사 발송용 협업 제안 문서 |
+| 제품 설명서/매뉴얼 | 제품 설치, 설정, FAQ, 문제 해결 가이드 |
+| 강의자료/교안 | 차시별 학습목표와 활동·과제·평가 설계 |
+| 논문형/학술 문서 | 연구질문, 방법론, 선행연구, 한계 정리 |
+| 보도자료 | 외부 공개용 발표문, 인용문, 문의처, 승인 상태 정리 |
 
 ## ✨ 무엇이 좋아지나요?
 
@@ -41,6 +48,8 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 - 짧은 진입점: 사용자는 `START_HERE.html`을 보고, AI는 `AGENTS.md`와 프로젝트별 `tasks/current_task.md`를 기준으로 필요한 규칙만 읽습니다.
 - 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
 - 품질 루프: 첫 초안을 최종본으로 보지 않고, 검수/교차검증 결과를 바탕으로 승인된 고도화를 진행합니다.
+- 프리셋/문체 경계: 문서 유형 프리셋은 구조·근거·시각자료 기준을, style profile은 독자 적합 문체와 보호 span 검토를 안내합니다. 자동 번역, 자동 rewrite, 자동 humanizer, 자동 naturalness scoring은 켜져 있지 않습니다.
+- 보류 항목: 실제 DOCX 변환 PoC, Word heading style mapping, 1x1 table callout, PAGE/NUMPAGES, SEQ 캡션, landscape section 변환, KPI 카드·타임라인·배포 배지 fixture 고도화는 별도 후속 과제입니다.
 
 자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
 

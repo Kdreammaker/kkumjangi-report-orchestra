@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import html
 import json
 import re
@@ -21,6 +22,22 @@ REQUIRED_COLUMNS = [
     "do_not_read_by_default",
     "completion_criteria",
     "next_stage",
+]
+REPORT_REGISTRY_FIELDS = [
+    "report_id",
+    "report_title",
+    "document_classification",
+    "confidentiality_status",
+    "version",
+    "stage",
+    "owner",
+    "practitioners",
+    "reviewers",
+    "latest_file",
+    "prd_path",
+    "updated_at_kst",
+    "next_action",
+    "notes",
 ]
 
 
@@ -54,6 +71,62 @@ def parse_task_table(text: str) -> list[dict[str, str]]:
                 cells.extend([""] * (len(header) - len(cells)))
             rows.append(dict(zip(header, cells, strict=False)))
     return rows
+
+
+def parse_current_stage(text: str) -> str:
+    in_stage = False
+    for raw in text.splitlines():
+        line = raw.strip()
+        if line == "## Current Stage":
+            in_stage = True
+            continue
+        if in_stage and line.startswith("## "):
+            break
+        if in_stage and line.startswith("- `active_stage`:"):
+            return line.split(":", 1)[1].strip().strip("`").strip()
+    return ""
+
+
+def read_report_registry(project: Path) -> list[dict[str, str]]:
+    path = project / "reports" / "report_registry.csv"
+    if not path.exists():
+        return []
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        rows = []
+        for row in csv.DictReader(handle):
+            rows.append({field: str(row.get(field, "") or "").strip() for field in REPORT_REGISTRY_FIELDS})
+        return rows
+
+
+def has_assembled_artifact(project: Path) -> bool:
+    reports = project / "reports"
+    if not reports.exists():
+        return False
+    for path in reports.glob("*.html"):
+        name = path.name.lower()
+        if any(skip in name for skip in ["workflow_status", "quality_status", "source_status", "cover_preview"]):
+            continue
+        return True
+    return False
+
+
+def unexpected_python_helpers(project: Path) -> list[str]:
+    allowed_parts = {
+        "_ai_system",
+        "_internal",
+        ".git",
+        ".github",
+    }
+    hits: list[str] = []
+    for path in project.rglob("*.py"):
+        rel = path.relative_to(project).as_posix()
+        first = rel.split("/", 1)[0]
+        if first in allowed_parts:
+            continue
+        if "/archive/" in f"/{rel}/":
+            continue
+        hits.append(rel)
+    return sorted(hits)
 
 
 def render_status_html(project_name: str, rows: list[dict[str, str]], errors: list[str]) -> str:
@@ -141,6 +214,7 @@ def validate(project_name: str, write_status: bool = False) -> dict[str, object]
         return {"project": project_name, "passed": False, "errors": ["missing tasks/current_task.md"]}
     text = path.read_text(encoding="utf-8", errors="ignore")
     rows = parse_task_table(text)
+    declared_active_stage = parse_current_stage(text)
     legacy_agent_first_markers = [
         "Read `AGENTS.md` Fast Router only",
         "AGENTS.md Fast Router; 09 rules",
@@ -158,10 +232,19 @@ def validate(project_name: str, write_status: bool = False) -> dict[str, object]
     active_rows = [row for row in rows if row.get("status") == "active"]
     if len(active_rows) != 1:
         errors.append(f"expected exactly one active row, found {len(active_rows)}")
+    elif declared_active_stage and declared_active_stage != active_rows[0].get("stage_id", ""):
+        errors.append(
+            f"Current Stage active_stage={declared_active_stage} disagrees with active table row={active_rows[0].get('stage_id', '')}"
+        )
+    seen_unfinished = False
     for index, row in enumerate(rows, 1):
         status = row.get("status", "")
         if status not in ALLOWED_STATUS:
             errors.append(f"row {index} has invalid status: {status}")
+        if status in {"pending", "active", "blocked"}:
+            seen_unfinished = True
+        elif status in {"done", "skipped"} and seen_unfinished:
+            errors.append(f"row {index} ({row.get('stage_id', '')}) is {status} after an unfinished earlier stage")
         for column in ["stage_id", "ai_task", "read_before_work", "required_rules", "completion_criteria", "next_stage"]:
             if not row.get(column, "").strip():
                 errors.append(f"row {index} missing {column}")
@@ -169,6 +252,16 @@ def validate(project_name: str, write_status: bool = False) -> dict[str, object]
             warnings.append(
                 f"row {index} active non-setup task lists AGENTS.md in Read Before Work; prefer tasks/current_task.md plus task-specific rules"
             )
+    row_by_stage = {row.get("stage_id", ""): row for row in rows}
+    if row_by_stage.get("style", {}).get("status") == "skipped" and row_by_stage.get("assembly", {}).get("status") in {"done", "active"}:
+        warnings.append("style stage is skipped while assembly is active/done; prefer a no-change style pass artifact over skipping")
+    if (project / "tasks" / "task.md").exists():
+        warnings.append("tasks/task.md exists; tasks/current_task.md must remain the task authority")
+    if has_assembled_artifact(project) and not read_report_registry(project):
+        warnings.append("assembled artifact exists but reports/report_registry.csv has no rows")
+    helper_hits = unexpected_python_helpers(project)
+    if helper_hits:
+        warnings.append("unexpected project-local Python helper files: " + ", ".join(helper_hits[:8]))
     if not status_path.exists():
         warnings.append("missing tasks/task_status.html; run with --write-status to create it")
     if write_status:

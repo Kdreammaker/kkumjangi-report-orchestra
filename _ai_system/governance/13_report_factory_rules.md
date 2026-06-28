@@ -6,7 +6,7 @@ The primary goal of this workspace is to help AI assistants produce high-quality
 
 Validation, snapshots, source gates, and closeout checks are supporting controls. They exist to make the report production system more reliable. They are not the product goal.
 
-Use this rule when running a substantial report from end to end, designing a new report workflow, or reviewing whether the current workflow helps the AI write better.
+Use this rule when running a substantial report from end to end, designing a new document workflow, or reviewing whether the current workflow helps the AI write better.
 
 ## Report Factory Layers
 
@@ -46,11 +46,23 @@ After a stage is completed or intentionally blocked, update `tasks/current_task.
 
 This refreshes the static `tasks/task_status.html` panel for the project dashboard. The panel is an indicator, not a quality or truth validator.
 
+After an assembled artifact is created or materially revised, preserve a versioned copy and update dashboard-facing ledgers before reporting a new draft/review-candidate path:
+
+`python _ai_system/tools/finalize_artifact_version.py --project <project_name> --artifact <project-relative-path> --version v0.1 --status draft --note "..."`
+
+This tool preserves files and updates `report_registry.csv`, `version_history.md`, `version_pointer.json`, and dashboard change logs. It does not decide content quality, source truth, or whether a user has approved the artifact.
+
 After reference intake or material source repair, run `_ai_system/tools/build_project_context_db.py --project <project_name>` so the context composer and AI can use the local DuckDB index. This index is a rebuildable helper over the reference inventory, Docling normalized units, source records, claims, and workpacks. It does not replace original evidence or source verification.
 
 For chapter and chart stages, the context composer should follow the active chapter workpack into the named source records, claim rows, visual-plan rows, and local data/source artifacts. Do not use the assembled report as the chapter writer's main source of truth when the matching workpack and chapter fragment exist.
 
-For report improvement, prefer a chapter-only repair loop: identify the affected 대목차/중목차, read the matching workpack, chapter fragment, source/claim rows, visual-plan rows, and at most adjacent chapter summaries, then edit that source fragment or data artifact and reassemble. Read the full assembled report only for a final smoke review, cross-chapter contradiction review, or when the user explicitly asks for a broad audit.
+For report or document improvement, prefer a bounded source-artifact repair loop: identify the affected 대목차/중목차 or content block, read the matching workpack, source fragment, source/claim rows, visual-plan rows, and at most adjacent summaries, then edit that source fragment or data artifact and reassemble. Read the full assembled artifact only for a final smoke review, cross-section contradiction review, or when the user explicitly asks for a broad audit.
+
+When a user asks for a new artifact based on an existing artifact, start by recording lineage in the new PRD/worklog rather than assuming a fixed report-to-handout conversion path. A source artifact can be any saved document. Reused claims and data remain inherited context until the new artifact's source/claim registers or worklog say what was reverified.
+
+The full factory sequence is the default for `artifact_workflow_mode=substantial`. For `brief`, `standard`, or `specialized` artifacts, keep the source/claim/review/style/version boundaries that apply, but allow PRD-recorded stage compression. Use the selected preset's `stage_overlays.md` as the stage overlay before compressing or replacing stages. A press release should not be forced through Chapter 0 and long chapter workpacks; a curriculum handout may use lesson sections and activity blocks; a product manual may use procedure/troubleshooting sections; a business proposal may use scope/assumption/commercial-boundary sections. If a stage is skipped, record the rationale in `tasks/current_task.md` or the worklog rather than silently bypassing it.
+
+Specialized preset overlays change workflow shape, not responsibility boundaries. They can replace chapter workpacks with lesson sections, task blocks, proposal sections, factbook sections, or public-release blocks. They cannot remove language confirmation, source integrity, protected-span style review, approval status, version preservation, or delivery-readiness checks when those checks are relevant to the artifact.
 
 If validators are run during report production, run the narrow validator required by the active stage first. Re-running the same broad validator more than twice without changing the underlying production artifact is wasteful; report the blocker and move to the actual repair action.
 
@@ -61,11 +73,17 @@ Two optional focused stages are available when they improve report quality:
 
 ## Required Production Flow
 
-For broad or substantial internal review reports, use this production flow:
+For broad or substantial internal review reports and other `artifact_workflow_mode=substantial` artifacts, use this production flow:
 
 1. Report PRD.
+   - Confirm or safely infer `output_language` in the interview/PRD stage. Do not draft while it is `undecided`.
+   - Ask before drafting when the language choice affects external sharing, investors, partners, legal/regulatory, securities, jurisdiction, or distribution-market risk.
+   - Confirm the document type preset and style profile in the interview/PRD stage when the document purpose or reader tone is not obvious.
+   - Use language guidance as a layer over the chosen preset/profile. Do not create `*_en` preset copies, and do not add automatic translation, automatic rewrite, or autogenerated legal/securities disclaimer behavior.
+   - The style profile is a protected writing aid. It must preserve direct quotes, numbers, statute names, proper nouns, citation locators, and source-backed claims.
 2. Report design file, normally `reports/report_design.md`.
    - The PRD decides purpose, reader, document classification, confidentiality, evidence bar, and distribution boundary.
+   - The PRD also records `document_type_preset`, `output_language`, `language_variant`, `citation_display_language`, `caption_label_profile`, `style_profile`, `target_reader_tone`, and `protected_spans_policy`.
    - The design file decides A4 margins, typography, palette, cover preset, logo priority, table/chart style, and confidentiality warning placement.
    - Do not use project-level defaults for document classification or confidentiality. Confirm them in the PRD for each report.
 3. Detailed TOC.
@@ -109,6 +127,7 @@ Use these source-of-truth artifacts:
 | Stage | Source of truth |
 |---|---|
 | Scope | `report_prd/*.md` |
+| Document type, language, and style profile | `report_prd/*.md`, `_ai_system/document_presets/INDEX.json`, selected `language_guidance.md`, and `_ai_system/style_profiles/INDEX.json` |
 | Report-specific design | `reports/report_design.md` |
 | Structure | `drafts/*toc*.md` |
 | Argument plan | `drafts/*skeleton*.md` or `reports/major_skeleton.md` |
@@ -122,6 +141,7 @@ Use these source-of-truth artifacts:
 | Visual review | `reports/visual_review.md`, optionally supported by `reports/visual_pass_manifest.json` |
 | Cover values | `reports/cover.data.json` |
 | Final HTML | rendered reading copy assembled by `_ai_system/tools/assemble_report.py` |
+| Versioned artifacts | `reports/versions/`, `reports/current/version_pointer.json`, `reports/version_history.md`, and `reports/report_registry.csv` |
 | Export evidence | `reports/export_checks/` or equivalent render proof |
 
 Cover values must use the reusable preset component. Choose `public_release`, `team_review`, `executive_decision`, or `partner_proposal` in `cover_preset` according to document purpose. Use the report-specific logo first, then `project_profile.json` / `brand_assets/`, then common CI, then blank. Do not recreate cover markup inside a report chapter. A cover preset is a document/audience format, not a report-stage promotion or external-sharing approval.
@@ -129,6 +149,8 @@ Cover values must use the reusable preset component. Choose `public_release`, `t
 If `confidentiality_status` is `대외비`, the cover must include the reusable confidential tag and a sentence-form confidentiality notice. For now the notice is cover-only unless the user asks for a footer across all pages.
 
 Do not make the assembled HTML the drafting source of truth for substantial reports. Edit the relevant chapter fragment, then reassemble. The assembled HTML is an indicator/rendered copy that proves which chapter fragments were concatenated; it is not the master writing surface.
+
+Do not leave versioning only inside `cover.data.json`. Cover version text is reader-facing metadata; durable version control belongs in `reports/versions/`, `reports/current/version_pointer.json`, `reports/version_history.md`, and `reports/report_registry.csv`.
 
 ## TOC Coverage Gate
 
@@ -197,6 +219,7 @@ Local hooks do not decide whether analysis is deep, persuasive, or business-read
 - A reference consistency hook may detect that `reference_inventory.csv`, `source_link_register.csv`, `source_master_index.md`, and `source_records/*.md` disagree. It should block review/closeout until the AI repairs the ledgers; it still does not prove source truth.
 - A closeout hook may run mechanical validators. It should report mechanical pass separately from content-quality readiness.
 - A quality-score hook may cap a report when strict blockers exist. It still cannot declare that strategy, legal interpretation, or writing depth is excellent; that remains AI/human review work.
+- A style profile can guide tone and reader fit, but it is not a hook, validator, or automatic rewriting authority. It cannot override protected spans or substitute for AI judgment, source verification, claim-readiness review, artifact validation, or closeout gates.
 
 Use these states distinctly:
 

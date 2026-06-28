@@ -62,9 +62,9 @@ def write_smoke_project(project: Path) -> None:
     )
     write_text(
         project / "references" / "source_link_register.csv",
-        "source_id,file_name,title,url,publisher,accessed_at_kst,url_status,download_status,capture_status,use_level,original_path,capture_path,notes\n"
-        "src_blocked,blocked.pdf,Blocked source,https://example.com/blocked,Example,2026-05-24 18:00 KST,failed,failed,failed,collection_blocked,,,blocked in smoke\n"
-        "src_ready,ready.pdf,Ready source,https://example.com/ready,Example,2026-05-24 18:00 KST,200,not_attempted,captured,quote_verified,,evidence/web_captures/src_ready.txt,ready in smoke\n",
+        "source_id,file_name,title,official_url,url,publisher,accessed_at_kst,url_status,source_locator,use_level,claim_support_type,needs_user_file,user_file_request_id,notes\n"
+        "src_blocked,blocked.pdf,Blocked source,https://example.com/blocked,https://example.com/blocked,Example,2026-05-24 18:00 KST,failed,,collection_blocked,none,yes,req-001,blocked in smoke\n"
+        "src_ready,ready.pdf,Ready source,https://example.com/ready,https://example.com/ready,Example,2026-05-24 18:00 KST,200,section 1,quote_verified,direct_quote,no,,ready in smoke\n",
     )
     write_text(
         project / "references" / "source_records" / "src_ready.md",
@@ -84,6 +84,7 @@ def main() -> int:
         written = payload.get("source_status_written") if isinstance(payload.get("source_status_written"), dict) else {}
         json_path = project / str(written.get("json", ""))
         html_path = project / str(written.get("html", ""))
+        html_text = html_path.read_text(encoding="utf-8") if html_path.exists() else ""
         summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
         states = summary.get("states") if isinstance(summary.get("states"), dict) else {}
         results.append(
@@ -95,7 +96,10 @@ def main() -> int:
                 and html_path.exists()
                 and states.get("blocked") == 1
                 and states.get("quote_verified") == 1
-                and states.get("no_link_row") == 1,
+                and states.get("no_link_row") == 1
+                and "링크/파일 요청 필요" in html_text
+                and "정확 링크, 출처 위치, 사용자 제공 필요 자료" in html_text
+                and "캡처/대조 필요" not in html_text,
                 "payload": payload,
             }
         )

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validation Fixture Equity Research English Sample</title>
+  <meta name="output_language" content="en">
+  <!-- Reusable template reference: _ai_system/templates/report_html/report.css -->
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5d6772;
+      --line: #cad3dc;
+      --soft: #f3f6f8;
+      --accent: #37658a;
+      --risk: #9a4d37;
+      --ok: #3f7f5f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f6f8fa;
+      color: var(--ink);
+      font-family: Arial, sans-serif;
+      line-height: 1.58;
+    }
+    .report-page {
+      width: min(980px, calc(100% - 32px));
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 42px;
+    }
+    .cover-page {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+    }
+    .fixture-banner {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .cover-grid, .disclaimer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 18px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 30px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .subhead {
+      color: var(--muted);
+      margin: 0;
+      font-size: 17px;
+    }
+    .disclaimer {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--risk);
+      background: #fffaf8;
+      padding: 15px;
+      margin: 22px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      margin: 12px 0 22px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th { background: var(--soft); }
+    caption, figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    caption {
+      caption-side: bottom;
+      padding-top: 8px;
+    }
+    figure {
+      margin: 14px 0 24px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+    }
+    .pill {
+      display: inline-block;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      background: var(--soft);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .box {
+      border: 1px solid var(--line);
+      padding: 14px;
+      background: #fcfdfe;
+    }
+    .references {
+      border-top: 1px solid var(--line);
+      margin-top: 30px;
+      padding-top: 16px;
+    }
+    @media (max-width: 760px) {
+      .report-page { padding: 26px; width: calc(100% - 20px); }
+      .cover-grid, .disclaimer-grid, .two-col { grid-template-columns: 1fr; }
+      h1 { font-size: 27px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page assembled-report" data-assembled-report="true" data-preset-id="equity_research" data-output-language="en">
+    <section class="cover-page report-cover" data-cover-component="report-cover-v1">
+      <span class="fixture-banner">Validation Fixture - Not Real Market Data</span>
+      <h1>Fixture Equity Research Note</h1>
+      <p class="subhead">English fixture for research-note structure, data vintage, static chart, captions, and review boundaries.</p>
+      <div class="cover-grid" aria-label="document control metadata">
+        <div><strong>Report number:</strong> FIX-ER-EN-2026-06</div>
+        <div><strong>Classification:</strong> Internal Only validation fixture</div>
+        <div><strong>Prepared date:</strong> 2026-06-03</div>
+        <div><strong>Data as of:</strong> 2026-06-03</div>
+        <div><strong>Document code:</strong> equity_research sample</div>
+        <div><strong>Conclusion status:</strong> Non-advisory fixture conclusion only</div>
+      </div>
+    </section>
+
+    <section class="disclaimer" aria-label="disclaimer">
+      <strong>Review and securities boundary:</strong> This validation fixture is not an offer, not investment advice, not approved research distribution, not a securities prospectus, and not a personalized recommendation. It includes no buy/sell/hold call, no rating, no target price, and no fair-value conclusion unless explicitly approved. Forward-looking scenarios are synthetic examples only. Jurisdiction and distribution-market suitability are uncertain and require review before any real use.<sup id="fnref-1">1</sup>
+      <div class="disclaimer-grid">
+        <div><strong>Currency and unit:</strong> synthetic index units, not issuer currency</div>
+        <div><strong>Source date:</strong> synthetic fixture dataset generated 2026-06-03</div>
+      </div>
+    </section>
+
+    <section>
+      <h1>Chapter 0. Executive Summary</h1>
+      <p>This sample verifies that the existing <code>equity_research</code> preset can carry English research-style labels, data vintages, source dates, and non-advisory boundaries through artifact validation. The conclusion is limited to fixture structure and does not provide a market view.</p>
+    </section>
+
+    <section>
+      <h2>1. Analysis Structure, Not Investment Advice</h2>
+      <p><span class="pill">Non-advisory</span> The content separates data, estimates, interpretation, and limits. It does not authorize ratings, target prices, trading calls, or distribution-market use.</p>
+
+      <h3>Fixture Financial Index Table</h3>
+      <!-- data_sources/equity_research_fixture_financials.csv -->
+      <table>
+        <caption>Source: synthetic fixture financial index. Underlying data: equity_research_fixture_financials dataset, Data as of 2026-06-03, unit: synthetic index, currency: not applicable, source date 2026-06-03, Accessed 2026-06-03.</caption>
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Revenue index</th>
+            <th>Margin index</th>
+            <th>Data status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>FY2024A</td><td>100</td><td>18</td><td>Fixture baseline, audited status not applicable</td></tr>
+          <tr><td>FY2025E</td><td>108</td><td>19</td><td>Fixture estimate, no real consensus</td></tr>
+          <tr><td>FY2026E</td><td>116</td><td>20</td><td>Fixture estimate, no real guidance</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Peer Comparison Table</h3>
+      <!-- data_sources/equity_research_fixture_peers.csv -->
+      <table>
+        <caption>Source: synthetic fixture peer set. Data basis: equity_research_fixture_peers dataset, Data as of 2026-06-03, unit: synthetic index, currency: not applicable, source date 2026-06-03, Accessed 2026-06-03.</caption>
+        <thead>
+          <tr>
+            <th>Peer group</th>
+            <th>Role</th>
+            <th>Revenue index</th>
+            <th>Margin index</th>
+            <th>Valuation index</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fixture Peer A</td><td>synthetic leader</td><td>112</td><td>21</td><td>14</td></tr>
+          <tr><td>Fixture Peer B</td><td>synthetic comparator</td><td>106</td><td>18</td><td>11</td></tr>
+          <tr><td>Fixture Peer C</td><td>synthetic laggard</td><td>98</td><td>16</td><td>9</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Sensitivity Table</h3>
+      <!-- data_sources/equity_research_fixture_sensitivity.csv -->
+      <table>
+        <caption>Source: synthetic sensitivity fixture. Underlying data: equity_research_fixture_sensitivity dataset, Data as of 2026-06-03, unit: synthetic index, currency: not applicable, source date 2026-06-03, Accessed 2026-06-03.</caption>
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Margin change</th>
+            <th>Valuation index</th>
+            <th>Interpretation limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Downside fixture</td><td>-2</td><td>8</td><td>Layout test only</td></tr>
+          <tr><td>Base fixture</td><td>0</td><td>11</td><td>Layout test only</td></tr>
+          <tr><td>Upside fixture</td><td>2</td><td>14</td><td>Layout test only</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Catalyst, Risk, and Static Visual</h2>
+      <p>Catalysts and risks stay separate from recommendations. The figure is static SVG, not interactive chart output.</p>
+
+      <!-- data_sources/equity_research_fixture_catalyst_chart.csv -->
+      <figure class="chart static-chart">
+        <svg viewBox="0 0 720 280" role="img" aria-labelledby="fixture-en-chart-title fixture-en-chart-desc">
+          <title id="fixture-en-chart-title">Fixture Catalyst and Risk Index</title>
+          <desc id="fixture-en-chart-desc">Validation fixture static line chart comparing synthetic catalyst readiness and risk pressure by quarter.</desc>
+          <rect x="0" y="0" width="720" height="280" fill="#ffffff"/>
+          <line x1="70" y1="220" x2="660" y2="220" stroke="#6d7884" stroke-width="1"/>
+          <line x1="70" y1="40" x2="70" y2="220" stroke="#6d7884" stroke-width="1"/>
+          <text x="70" y="245" font-size="12" fill="#5d6772">Q1</text>
+          <text x="260" y="245" font-size="12" fill="#5d6772">Q2</text>
+          <text x="450" y="245" font-size="12" fill="#5d6772">Q3</text>
+          <text x="635" y="245" font-size="12" fill="#5d6772">Q4</text>
+          <polyline points="70,166 260,142 450,128 640,112" fill="none" stroke="#3f7f5f" stroke-width="4"/>
+          <polyline points="70,134 260,145 450,154 640,160" fill="none" stroke="#9a4d37" stroke-width="4"/>
+          <circle cx="70" cy="166" r="5" fill="#3f7f5f"/>
+          <circle cx="260" cy="142" r="5" fill="#3f7f5f"/>
+          <circle cx="450" cy="128" r="5" fill="#3f7f5f"/>
+          <circle cx="640" cy="112" r="5" fill="#3f7f5f"/>
+          <circle cx="70" cy="134" r="5" fill="#9a4d37"/>
+          <circle cx="260" cy="145" r="5" fill="#9a4d37"/>
+          <circle cx="450" cy="154" r="5" fill="#9a4d37"/>
+          <circle cx="640" cy="160" r="5" fill="#9a4d37"/>
+          <text x="94" y="55" font-size="13" fill="#3f7f5f">Catalyst readiness fixture index</text>
+          <text x="94" y="76" font-size="13" fill="#9a4d37">Risk pressure fixture index</text>
+        </svg>
+        <figcaption>Source: synthetic catalyst/risk fixture series. Data basis: equity_research_fixture_catalyst_chart dataset, Data as of 2026-06-03, unit: synthetic index, currency: not applicable, source date 2026-06-03, Accessed 2026-06-03. Alternative text: catalyst readiness rises while risk pressure declines gradually by quarter.</figcaption>
+      </figure>
+
+      <div class="two-col">
+        <div class="box">
+          <h3>Catalysts</h3>
+          <p>Fixture catalysts are synthetic section-separation examples, not real product launches, demand signals, or management guidance.</p>
+        </div>
+        <div class="box">
+          <h3>Risks and Downside</h3>
+          <p>Fixture risks show data vintage, stale-source, and scenario-sensitivity boundaries without making a trading recommendation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Limits and Conclusion</h2>
+      <p>The fixture-level conclusion is limited to validating structure, English captions, data-basis wording, and non-advisory boundaries. It does not prove financial truth, legal suitability, investment suitability, rating readiness, target-price readiness, or distribution readiness.</p>
+    </section>
+
+    <section class="references" id="report-references">
+      <h2>Appendix A. References</h2>
+      <ol>
+        <li>Validation fixture datasets generated for equity_research preset artifact testing. Accessed 2026-06-03.</li>
+        <li>Preset validation checklist: equity_research module, fixture scope only. Accessed 2026-06-03.</li>
+      </ol>
+      <p id="fn-1"><sup>1</sup> This is not a real regulatory, legal, research-distribution, or securities disclosure.</p>
+    </section>
+  </main>
+</body>
+</html>

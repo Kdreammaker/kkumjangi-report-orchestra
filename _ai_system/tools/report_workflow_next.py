@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import html
 import json
 import re
@@ -17,6 +18,13 @@ from validate_reference_register_consistency import validate_project as validate
 PROJECT_ROOT = Path("00_사용자_작업공간")
 DATA_SUFFIXES = {".csv", ".xlsx", ".xls", ".tsv"}
 PLAN_DATA_FILENAMES = {"visual_plan.csv"}
+STYLE_PASS_REQUIRED = [
+    "style_risk_findings.json",
+    "protected_spans.json",
+    "style_rewrite_diff.md",
+    "style_fidelity_review.md",
+    "style_naturalness_review.md",
+]
 
 
 def now_kst() -> str:
@@ -35,6 +43,33 @@ def read_json(path: Path) -> dict[str, object]:
     except json.JSONDecodeError:
         return {}
     return data if isinstance(data, dict) else {}
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def clean_field_value(value: str) -> str:
+    cleaned = value.strip().strip("`").strip()
+    cleaned = re.split(r"\s+#|\s+\(|\s+//|\s+\|", cleaned, maxsplit=1)[0].strip()
+    return "" if cleaned.casefold() in {"", "n/a", "na", "none", "null", "undecided", "미정"} else cleaned
+
+
+def extract_field(files: list[Path], field_names: list[str]) -> str:
+    normalized = {name.casefold() for name in field_names}
+    for path in files:
+        for raw in read_text(path).splitlines():
+            line = raw.strip()
+            if not line or ":" not in line:
+                continue
+            line = re.sub(r"^[-*]\s*", "", line)
+            key, value = line.split(":", 1)
+            key = key.strip().strip("`").casefold()
+            if key in normalized:
+                cleaned = clean_field_value(value)
+                if cleaned:
+                    return cleaned
+    return ""
 
 
 def visual_pass_current(project: Path, body_chapters: list[Path]) -> tuple[bool, str]:
@@ -64,6 +99,53 @@ def visual_pass_current(project: Path, body_chapters: list[Path]) -> tuple[bool,
     return True, ""
 
 
+def style_pass_paths(project: Path) -> list[Path]:
+    style_dir = project / "reports" / "style_pass"
+    return [style_dir / filename for filename in STYLE_PASS_REQUIRED]
+
+
+def style_pass_current(project: Path, chapters: list[Path], summary_chapters: list[Path]) -> tuple[bool, str]:
+    required = style_pass_paths(project)
+    for path in required:
+        if not path.exists():
+            return False, rel(path, project)
+    input_paths = [*chapters, *summary_chapters]
+    visual_review = project / "reports" / "visual_review.md"
+    if visual_review.exists():
+        input_paths.append(visual_review)
+    latest_input_mtime = max((path.stat().st_mtime_ns for path in input_paths if path.exists()), default=0)
+    oldest_style_mtime = min((path.stat().st_mtime_ns for path in required), default=0)
+    if latest_input_mtime and oldest_style_mtime < latest_input_mtime:
+        return False, "reports/style_pass/* is stale after chapter, Chapter 0, or visual changes"
+    return True, ""
+
+
+def assembly_current_after_style(
+    project: Path,
+    report: Path | None,
+    assembly_manifest: Path,
+    style_pass_ok: bool,
+) -> tuple[bool, str]:
+    if not style_pass_ok:
+        return False, "style pass is not current"
+    if not (report and report.exists()) or not assembly_manifest.exists():
+        return False, "reports/report_assembly_manifest.json and active assembled report"
+    data = read_json(assembly_manifest)
+    recorded = data.get("style_pass_artifacts")
+    if not isinstance(recorded, list) or not recorded:
+        return False, "assembly manifest has no style_pass_artifacts; reassemble after style pass"
+    recorded_hashes = {
+        str(item.get("path", "")): str(item.get("sha256", ""))
+        for item in recorded
+        if isinstance(item, dict)
+    }
+    for path in style_pass_paths(project):
+        rel_path = rel(path, project)
+        if recorded_hashes.get(rel_path) != sha256_file(path):
+            return False, f"assembly is stale after style pass artifact: {rel_path}"
+    return True, ""
+
+
 def chapter_quality_current(project: Path, chapters: list[Path], workpacks: list[Path]) -> tuple[bool, str, dict[str, object]]:
     status_path = project / "reports" / "chapter_quality" / "chapter_quality.json"
     if not chapters:
@@ -84,6 +166,24 @@ def chapter_quality_current(project: Path, chapters: list[Path], workpacks: list
     if int(summary.get("chapters_checked", 0) or 0) < len(chapters):
         return False, "chapter quality review did not check all chapter fragments", data
     return True, "", data
+
+
+def chapter_enhancement_current(project: Path, chapters: list[Path], quality_payload: dict[str, object]) -> tuple[bool, str]:
+    candidates = [
+        project / "reports" / "chapter_quality" / "enhancement_log.md",
+        project / "reports" / "chapter_enhancement.md",
+    ]
+    candidates.extend(sorted((project / "worklogs").glob("*enhancement*.md")))
+    existing = [path for path in candidates if path.exists()]
+    if not existing:
+        return False, "reports/chapter_quality/enhancement_log.md or no-change rationale"
+    latest_chapter_mtime = max((path.stat().st_mtime_ns for path in chapters if path.exists()), default=0)
+    latest_log_mtime = max(path.stat().st_mtime_ns for path in existing)
+    if latest_chapter_mtime and latest_log_mtime < latest_chapter_mtime:
+        return False, "chapter enhancement log is stale after chapter changes"
+    if quality_payload.get("skill_action_required"):
+        return False, "chapter quality hook still requires AI review/revision action"
+    return True, ""
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -135,8 +235,17 @@ def source_record_count(project: Path) -> int:
 
 
 def active_report(project: Path) -> tuple[Path | None, str]:
+    pointer = project / "reports" / "current" / "version_pointer.json"
+    pointer_data = read_json(pointer)
+    for key in ("current_artifact", "artifact", "source_artifact"):
+        value = pointer_data.get(key)
+        if isinstance(value, str) and value.strip():
+            candidate = project / value.strip()
+            if candidate.exists() and candidate.is_file():
+                return candidate, f"{rel(pointer, project)}:{key}"
     manifests = [
         project / "reports" / "report_assembly_manifest.json",
+        project / "reports" / "assembly_manifest.json",
         project / "project_state" / "report_stage_manifest.json",
     ]
     for manifest in manifests:
@@ -202,7 +311,27 @@ def drafting_preflight(project_name: str) -> tuple[bool, dict[str, object]]:
     return isinstance(exit_code, int) and exit_code == 0, payload
 
 
-def recommended_for(action: str, project_name: str, next_chapter: str) -> list[str]:
+def style_context_command(project_name: str, style_profile: str, target_reader_tone: str, output_language: str) -> str:
+    command = f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage style"
+    if style_profile and re.fullmatch(r"[A-Za-z0-9_.-]+", style_profile):
+        command += f" --style-profile {style_profile}"
+    elif target_reader_tone:
+        command += " --style-query <target_reader_tone_or_style_profile>"
+    else:
+        command += " --style-query <target_reader_tone_or_style_profile>"
+    if output_language in {"ko", "en", "mixed", "undecided"}:
+        command += f" --output-language {output_language}"
+    return command + " --write-packet"
+
+
+def recommended_for(
+    action: str,
+    project_name: str,
+    next_chapter: str,
+    style_profile: str = "",
+    target_reader_tone: str = "",
+    output_language: str = "",
+) -> list[str]:
     commands_by_action = {
         "create_report_prd": [
             f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage interview --write-packet",
@@ -238,11 +367,22 @@ def recommended_for(action: str, project_name: str, next_chapter: str) -> list[s
             f"python _ai_system/tools/report_chapter_quality_coach.py --project {project_name} --write-status",
             f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage review --write-packet",
         ],
+        "enhance_chapter_fragments": [
+            f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage review --write-packet",
+            f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage chapter --chapter {next_chapter} --write-packet",
+            f"python _ai_system/tools/report_chapter_quality_coach.py --project {project_name} --write-status",
+        ],
         "create_visual_plan_and_data": [
             f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage chart --chapter {next_chapter} --write-packet",
         ],
         "prepare_cover_data": [
             f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage assemble --write-packet",
+        ],
+        "write_chapter0_summary": [
+            f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage chapter --chapter ch00_summary --write-packet",
+        ],
+        "run_pre_assembly_style_pass": [
+            style_context_command(project_name, style_profile, target_reader_tone, output_language),
         ],
         "assemble_report": [
             f"python _ai_system/tools/assemble_report.py --project {project_name}",
@@ -250,10 +390,6 @@ def recommended_for(action: str, project_name: str, next_chapter: str) -> list[s
         "repair_factory_gaps": [
             f"python _ai_system/tools/validate_report_factory.py --project {project_name} --strict",
             f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage review --write-packet",
-        ],
-        "write_chapter0_then_reassemble": [
-            f"python _ai_system/tools/compose_report_context.py --project {project_name} --stage chapter --chapter ch00_summary --write-packet",
-            f"python _ai_system/tools/assemble_report.py --project {project_name}",
         ],
         "run_review_candidate_gates": [
             f"python _ai_system/tools/run_guarded_step.py --project {project_name} --step review-candidate",
@@ -263,7 +399,7 @@ def recommended_for(action: str, project_name: str, next_chapter: str) -> list[s
     return commands_by_action.get(action, [])
 
 
-def prompt_for(action: str, project_name: str, next_chapter: str) -> str:
+def prompt_for(action: str, project_name: str, next_chapter: str, style_profile: str = "") -> str:
     task_prefix = (
         "tasks/current_task.md의 active 단계를 먼저 확인하고, "
         "해당 단계의 Read Before Work와 Required Rules 범위 안에서 "
@@ -272,17 +408,19 @@ def prompt_for(action: str, project_name: str, next_chapter: str) -> str:
         "create_report_prd": f"{task_prefix}compose_report_context.py --stage interview --write-packet 결과를 읽은 뒤 {project_name}의 보고서 PRD를 먼저 제안해 주세요. 아직 본문 작성이나 자료 인테이크는 하지 말고, 목적·독자·핵심 질문·범위·증거 기준·산출물만 정리한 뒤 승인 여부를 물어봐 주세요.",
         "create_detailed_toc": f"{task_prefix}compose_report_context.py --stage architect --write-packet 결과를 읽은 뒤 {project_name}의 상세 목차를 작성해 주세요. PRD 범위를 벗어난 결론은 쓰지 말고, 각 장의 질문·필요 원문·예상 claim·필요 시각자료를 함께 매핑해 주세요.",
         "review_detailed_toc": f"{task_prefix}{project_name}의 상세 목차를 PRD 기준으로 셀프 검수해 주세요. 대목차·중목차·소목차가 주제 범위, 정책/법안, 주요 플레이어, 사업기회, 반론, 리스크, 시각자료 후보를 충분히 덮는지 확인하고, 보강안과 함께 사용자 목차 승인을 요청해 주세요. 승인 전에는 근거 수집이나 본문 작성으로 넘어가지 마세요.",
-        "create_source_collection_plan": f"{task_prefix}compose_report_context.py --stage source --write-packet 결과를 읽은 뒤 {project_name}의 source collection plan을 작성해 주세요. 공식 링크, 인용 위치 확인, 파일이 필요하지만 사용자가 제공해야 할 자료, source_link_register와 user_requested_materials.md 처리 방식을 구분해 주세요.",
-        "create_major_skeleton": f"{task_prefix}compose_report_context.py --stage architect --write-packet 결과를 읽은 뒤 {project_name}의 major skeleton을 작성한 뒤 report_skeleton_score.py로 점검해 주세요. 독자 의사결정, 논지, 증거, 반론, 리스크, 데이터와 시각자료 계획까지만 정리하고 최종 본문은 아직 쓰지 마세요.",
-        "map_sources_and_claims": f"{task_prefix}새 참고자료가 있으면 intake_reference_batch.py로 원본 보존과 Docling 정규화를 먼저 처리한 뒤 build_project_context_db.py --project {project_name}로 로컬 색인을 갱신해 주세요. 그 다음 compose_report_context.py --stage source --write-packet 결과를 읽고 출처와 claim register를 보강해 주세요. confirmed_fact나 report_citable로 올리기 전 원문 위치와 보존 상태를 분리해서 기록하고, 본문 작성은 preflight 통과 후 진행해 주세요.",
+        "create_source_collection_plan": f"{task_prefix}compose_report_context.py --stage source --write-packet 결과를 읽은 뒤 {project_name}의 source collection plan을 작성해 주세요. 공식 링크, 인용 위치 확인, 파일이 필요하지만 사용자가 제공해야 할 자료, source_link_register와 user_requested_materials.md 처리 방식을 구분해 주세요. 이 단계는 계획 수립이며, 출처/claim 확정이나 본문 작성으로 건너뛰지 마세요.",
+        "map_sources_and_claims": f"{task_prefix}새 사용자 제공 파일이 있으면 intake_reference_batch.py로 원본 보존과 Docling 정규화를 처리한 뒤 build_project_context_db.py --project {project_name}로 로컬 색인을 갱신해 주세요. 외부 웹/규제 출처는 다운로드를 시도하지 말고 정확한 공식 링크, 접근일, source_locator, use_level을 source_link_register.csv에 기록하세요. 필요한 파일은 user_requested_materials.md에 사용자 요청 항목으로 남긴 뒤, compose_report_context.py --stage source --write-packet 결과를 읽고 출처와 claim register를 보강해 주세요. confirmed_fact나 report_citable로 올리기 전 원문 위치와 보존 상태를 분리해서 기록하고, 본문 작성은 preflight 통과 후 진행해 주세요.",
+        "create_major_skeleton": f"{task_prefix}compose_report_context.py --stage architect --write-packet 결과와 source/claim mapping을 함께 읽은 뒤 {project_name}의 major skeleton을 작성하고 report_skeleton_score.py로 구조 누락만 점검해 주세요. 독자 의사결정, 논지, 증거, 반론, 리스크, 데이터와 시각자료 계획까지만 정리하고 최종 본문은 아직 쓰지 마세요.",
         "create_chapter_workpacks": f"{task_prefix}compose_report_context.py --stage architect --write-packet 결과를 읽은 뒤 {project_name}의 reports/chapter_workpacks/에 장별 workpack을 만들어 주세요. 각 workpack에는 장 질문, 독자 의사결정, 문단 계획, 증거, claim, 반론, required visuals, 금지할 과장 표현을 넣어 주세요.",
         "draft_chapter_fragments": f"{task_prefix}build_project_context_db.py --project {project_name}로 로컬 색인이 최신인지 확인한 뒤 compose_report_context.py --stage chapter --chapter {next_chapter} --write-packet 결과만 읽고 {project_name}의 {next_chapter}만 작성해 주세요. 필요한 경우 query_project_context.py로 해당 장의 키워드만 조회하고, 원문·claim·visual은 필요한 단위만 읽어 reports/chapters/{next_chapter}.html 조각으로 작성하세요. 큰 HTML 전체를 다시 쓰지 마세요. 초안 작성 후에는 최종 완료나 closeout 통과가 아니라 검수/교차검증이 필요한 내부 초안으로 보고하세요.",
-        "run_chapter_quality_review": f"{project_name}의 reports/chapter_quality/chapter_quality.json을 확인하고 report_reviewer 관점으로 needs_attention 장을 검수하세요. 먼저 파일 수정 없이 문제점, 근거 보강, 반론, 리스크, 표·그래프, 참고자료 표시, 표지/독자용 구성의 보완 목록을 작성하세요. 사용자가 고도화를 승인하면 해당 보완 목록을 기준으로 chapter_writer 방식으로 reports/chapters/chNN.html과 데이터/시각자료를 수정하고 다시 chapter quality hook을 실행하세요. 이 단계에서는 전체 AGENTS 재독해 대신 compose_report_context.py --stage review --write-packet 또는 해당 장의 --stage chapter --write-packet 결과만 읽으세요.",
+        "run_chapter_quality_review": f"{project_name}의 장별 초안을 먼저 파일 수정 없이 검수/교차검증해 주세요. reports/chapter_quality/chapter_quality.json과 compose_report_context.py --stage review --write-packet 결과를 확인하고, 문제점, 근거 보강, 반론, 리스크, 표·그래프 필요, 참고자료 표시, 독자용 구성의 보완 목록을 reports/chapter_quality/enhancement_log.md에 초안으로 남기세요. 이 단계의 산출물은 고도화 지시 목록이며, 바로 visual/data pass나 closeout으로 넘어가지 마세요.",
+        "enhance_chapter_fragments": f"{task_prefix}reports/chapter_quality/enhancement_log.md의 검수/교차검증 결과를 기준으로 사용자 승인된 보완만 수행해 주세요. 수정이 필요하면 reports/chapters/chNN.html, 관련 데이터, 시각자료 계획 같은 원본 산출물을 고치고 합본 HTML은 직접 편집하지 마세요. 수정이 없으면 no-change rationale을 같은 로그에 남긴 뒤 report_chapter_quality_coach.py --write-status를 다시 실행해 고도화 이후 상태를 기록하세요.",
         "create_visual_plan_and_data": f"{task_prefix}compose_report_context.py --stage chart --chapter {next_chapter} --write-packet 결과를 읽은 뒤 {project_name}의 본문 챕터에 맞는 표·차트·다이어그램을 chart builder 방식으로 만드세요. visual_plan.csv의 decision_use에 맞춰 별도 CSV/XLSX 또는 source-record-backed artifact를 만들고, 본문에는 자료: 와 근거 데이터:를 넣어 주세요. 완료 후 reports/visual_review.md 체크리스트에 본문 이후 시각자료 검토 결과를 남기고, 필요할 때만 finalize_visual_pass.py 훅으로 해시 기록을 보조하세요.",
         "prepare_cover_data": f"{task_prefix}compose_report_context.py --stage assemble --write-packet 결과를 읽은 뒤 {project_name}의 reports/cover.data.json을 reusable cover component에 맞춰 작성해 주세요. 표지 코드를 새로 만들지 말고 public_release, team_review, executive_decision, partner_proposal 중 문서 목적에 맞는 cover_preset을 고른 뒤 템플릿 값을 채우고 validate_cover_render.py --write-preview로 확인하세요.",
-        "assemble_report": f"{task_prefix}compose_report_context.py --stage assemble --write-packet 결과를 읽은 뒤 {project_name}의 assemble_report.py를 실행해 표지와 챕터 조각을 합쳐 주세요. 조립 단계에서는 본문을 새로 쓰거나 요약하지 말고, 조립 결과와 active_report 선언 여부만 보고해 주세요.",
+        "write_chapter0_summary": f"{task_prefix}compose_report_context.py --stage chapter --chapter ch00_summary --write-packet 결과를 읽은 뒤 {project_name}의 본문·시각자료·리스크가 안정되었는지 확인하고, 마지막으로 ch00_summary / 제0장 요약 조각을 작성해 주세요. 아직 합본 조립으로 넘어가지 말고, 다음 단계에서 합본 전 style pass를 진행하세요.",
+        "run_pre_assembly_style_pass": f"{task_prefix}PRD의 style_profile{f' `{style_profile}`' if style_profile else ''}을 확인하고, 없거나 미정이면 _ai_system/style_profiles/INDEX.json에서 독자 톤에 맞는 guidance-only profile을 먼저 선택하세요. 그 다음 compose_report_context.py --stage style에 --style-profile 또는 --style-query를 포함해 packet을 만들고, {project_name}의 장별 원본, 제0장 요약, 시각자료 캡션만 대상으로 합본 전 문체 검수/톤 조정을 수행해 주세요. reports/style_pass/에 style_risk_findings.json, protected_spans.json, style_rewrite_diff.md, style_fidelity_review.md, style_naturalness_review.md를 남기고, 바꿀 필요가 없거나 보호 span 때문에 보류한 변경도 diff와 review에 기록하세요. 합본 HTML을 직접 윤문하거나 전체 문서를 자동 humanize하지 마세요.",
+        "assemble_report": f"{task_prefix}compose_report_context.py --stage assemble --write-packet 결과를 읽은 뒤 {project_name}의 assemble_report.py를 실행해 표지와 챕터 조각을 합쳐 주세요. 조립 단계에서는 본문을 새로 쓰거나 요약하지 말고, 합본 전 style pass가 최신인지 확인한 뒤 조립 결과와 active_report 선언 여부만 보고해 주세요.",
         "repair_factory_gaps": f"{project_name}의 strict Report Factory 검증 실패를 먼저 고쳐 주세요. 특히 상세 목차의 대목차/중목차/소목차가 reports/chapters/chNN.html 원본 장 파일에 그대로 반영되어 있는지 확인하고, 합본 HTML을 직접 고치지 말고 해당 장 파일을 보강한 뒤 assemble_report.py로 다시 조립해 주세요.",
-        "write_chapter0_then_reassemble": f"{task_prefix}compose_report_context.py --stage chapter --chapter ch00_summary --write-packet 결과를 읽은 뒤 {project_name}의 본문·시각자료·리스크가 안정되었는지 확인하고, 마지막으로 ch00_summary / 제0장 요약 조각을 작성한 뒤 assemble_report.py로 다시 조립해 주세요.",
         "run_review_candidate_gates": f"{task_prefix}{project_name}의 review-candidate 검증을 실행하기 전에 파일 수정 없는 보고서 검수/교차검증 결과가 작업로그에 반영되어 있는지 확인해 주세요. workspace validation과 report content validation을 분리해서 보고하고, 실패하면 다음 생산 작업으로 번역해 주세요. 일반 프로젝트 작업 중 _ai_system/ 또는 _internal/ 등 시스템 코어 변경이 감지되면 closeout 대신 core 변경 여부를 별도로 보고하세요.",
     }
     return prompts.get(action, f"{task_prefix}compose_report_context.py 결과만 읽고 {project_name}의 다음 보고서 생산 단계를 점검해 주세요.")
@@ -316,7 +454,15 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
     assembly_manifest = project / "reports" / "report_assembly_manifest.json"
     report, report_source = active_report(project)
     visual_pass_ok, visual_pass_issue = visual_pass_current(project, chapters)
-    chapter_quality_ok, chapter_quality_issue, chapter_quality_payload = chapter_quality_current(project, [*chapters, *summary_chapters], workpacks)
+    style_pass_ok, style_pass_issue = style_pass_current(project, chapters, summary_chapters)
+    assembly_after_style_ok, assembly_after_style_issue = assembly_current_after_style(
+        project,
+        report,
+        assembly_manifest,
+        style_pass_ok,
+    )
+    chapter_quality_ok, chapter_quality_issue, chapter_quality_payload = chapter_quality_current(project, chapters, workpacks)
+    chapter_enhancement_ok, chapter_enhancement_issue = chapter_enhancement_current(project, chapters, chapter_quality_payload)
     factory_status = validate_report_factory_project(project, strict=True, enforce_modern=False)
     factory_errors = factory_status.get("errors", [])
     if not isinstance(factory_errors, list):
@@ -342,6 +488,9 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
             if candidate.startswith("ch") and not (project / "reports" / "chapters" / f"{candidate}.html").exists():
                 next_chapter = candidate
                 break
+    style_profile = extract_field(prd_files, ["style_profile"])
+    target_reader_tone = extract_field(prd_files, ["target_reader_tone", "reader_tone", "tone"])
+    output_language = extract_field(prd_files, ["output_language"])
 
     missing: list[str] = []
     blocked: list[str] = []
@@ -369,11 +518,6 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
         current_step = "toc_exists_source_plan_missing"
         missing.append("drafts/source_collection_plan.md or notes/source_collection_plan.md")
         blocked.append("Do not treat external leads as collected originals before the source collection plan exists.")
-    elif not skeleton_files:
-        action = "create_major_skeleton"
-        current_step = "planning_ready_skeleton_missing"
-        missing.append("reports/major_skeleton.md or drafts/*skeleton*.md")
-        blocked.append("Do not write full chapter prose before the major skeleton is scored.")
     elif sources == 0 or claims == 0 or not reference_consistency_ok:
         action = "map_sources_and_claims"
         current_step = "evidence_mapping_needed"
@@ -385,6 +529,11 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
             missing.append("reference/source register consistency")
         blocked.append("Do not present material conclusions as confirmed facts until source records and claim rows exist.")
         blocked.append("Do not call the reference library complete while source records, source index, and reference inventory are out of sync.")
+    elif not skeleton_files:
+        action = "create_major_skeleton"
+        current_step = "source_claim_mapping_ready_skeleton_missing"
+        missing.append("reports/major_skeleton.md or drafts/*skeleton*.md")
+        blocked.append("Do not write full chapter prose before the major skeleton is scored.")
     elif not workpacks:
         action = "create_chapter_workpacks"
         current_step = "skeleton_exists_workpacks_missing"
@@ -409,6 +558,12 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
         missing.append(chapter_quality_issue)
         blocked.append("Do not move to visual pass, assembly, review-candidate, or closeout until the chapter-quality hook has no required AI review/revision action.")
         blocked.append("Do not treat file count, visible length, or a numeric quality score as a substitute for report_reviewer review.")
+    elif not chapter_enhancement_ok:
+        action = "enhance_chapter_fragments"
+        current_step = "chapter_quality_review_done_enhancement_required"
+        missing.append(chapter_enhancement_issue)
+        blocked.append("Do not move from first draft review directly to visual pass or final language; record user-approved enhancement or a no-change rationale first.")
+        blocked.append("Do not repair this by editing the assembled HTML; update chapter source fragments and rerun chapter-quality status when changes are made.")
     elif not visual_plan.exists() or not visual_rows or not data_files or not visual_pass_ok:
         action = "create_visual_plan_and_data"
         current_step = "chapter_fragments_exist_visuals_incomplete"
@@ -422,6 +577,18 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
             missing.append(visual_pass_issue)
         blocked.append("Do not rely on hard-coded report numbers without backing data/source artifacts.")
         blocked.append("Do not treat the final report as review-ready before table/chart/diagram work is reviewed after body chapters.")
+    elif not chapter0 or not summary_chapters:
+        action = "write_chapter0_summary"
+        current_step = "body_and_visuals_stable_chapter0_missing"
+        missing.append("reports/chapters/ch00_summary.html or visible 제0장 요약")
+        blocked.append("Do not write the final executive summary until body chapters, visuals, and risks are stable.")
+        blocked.append("Do not assemble before Chapter 0 exists and the pre-assembly style pass is complete.")
+    elif not style_pass_ok:
+        action = "run_pre_assembly_style_pass"
+        current_step = "chapter0_exists_style_pass_required"
+        missing.append(style_pass_issue)
+        blocked.append("Do not assemble before the selected style profile and protected-span workflow have reviewed body chapters, Chapter 0, and visual captions.")
+        blocked.append("Do not run style correction as repeated drafting polish; it belongs after stable chapters and before assembly.")
     elif not cover_data.exists():
         action = "prepare_cover_data"
         current_step = "content_exists_cover_data_missing"
@@ -432,18 +599,18 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
         current_step = "components_ready_assembly_missing"
         missing.append("reports/report_assembly_manifest.json and active assembled report")
         blocked.append("Do not call the report review-ready before assemble_report.py declares the active report.")
+    elif not assembly_after_style_ok:
+        action = "assemble_report"
+        current_step = "style_pass_complete_reassembly_required"
+        missing.append(assembly_after_style_issue)
+        blocked.append("Do not move to review-candidate until the assembled report is rebuilt after the current style pass artifacts.")
+        blocked.append("Do not repair this by polishing the assembled HTML; reassemble source fragments without rewriting prose.")
     elif factory_errors:
         action = "repair_factory_gaps"
         current_step = "strict_factory_gaps_block_review"
         missing.extend(str(item) for item in factory_errors[:8])
         blocked.append("Do not move to review-candidate or closeout while strict Report Factory validation has errors.")
         blocked.append("Do not repair this by editing the assembled HTML directly; fix the relevant chapter source fragment and reassemble.")
-    elif not chapter0 or not summary_chapters:
-        action = "write_chapter0_then_reassemble"
-        current_step = "assembled_report_exists_chapter0_missing"
-        missing.append("reports/chapters/ch00_summary.html or visible 제0장 요약")
-        blocked.append("Do not write the final executive summary until body chapters, visuals, and risks are stable.")
-
     if report_source == "latest_html_fallback":
         warnings.append("active report is not declared; latest HTML fallback is unverified for handoff.")
     if visual_plan.exists() and visual_rows and not data_files:
@@ -468,8 +635,8 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
         "missing_artifacts": missing,
         "allowed_actions": [action, "update worklog/question log when decisions change"],
         "blocked_actions": blocked,
-        "recommended_commands": recommended_for(action, project_name, next_chapter),
-        "human_prompt": prompt_for(action, project_name, next_chapter),
+        "recommended_commands": recommended_for(action, project_name, next_chapter, style_profile, target_reader_tone, output_language),
+        "human_prompt": prompt_for(action, project_name, next_chapter, style_profile),
         "warnings": warnings,
         "metrics": {
             "prd_files": [rel(path, project) for path in prd_files],
@@ -490,10 +657,19 @@ def analyze_project(project_name: str, include_probes: bool = False) -> dict[str
             "chapter_quality_current": chapter_quality_ok,
             "chapter_quality_issue": chapter_quality_issue,
             "chapter_quality_summary": chapter_quality_payload.get("summary", {}) if isinstance(chapter_quality_payload, dict) else {},
+            "chapter_enhancement_current": chapter_enhancement_ok,
+            "chapter_enhancement_issue": chapter_enhancement_issue,
             "visual_plan_rows": len(visual_rows),
             "data_files": len(data_files),
             "visual_pass_current": visual_pass_ok,
             "visual_pass_issue": visual_pass_issue,
+            "style_pass_current": style_pass_ok,
+            "style_pass_issue": style_pass_issue,
+            "assembly_current_after_style": assembly_after_style_ok,
+            "assembly_after_style_issue": assembly_after_style_issue,
+            "style_profile": style_profile,
+            "target_reader_tone": target_reader_tone,
+            "output_language": output_language,
             "cover_data": cover_data.exists(),
             "assembly_manifest": assembly_manifest.exists(),
             "strict_factory_errors": len(factory_errors),

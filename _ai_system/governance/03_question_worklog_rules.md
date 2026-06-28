@@ -81,6 +81,8 @@ Rules:
 
 - Update the active project worklog whenever research scope changes, evidence is added, or a conclusion is formed.
 - Update the active project worklog whenever a report, PRD, governance file, chart, table, source index, claim register, assumption register, or data file is materially created or changed.
+- Update the active project worklog whenever a new artifact version is preserved, `report_registry.csv` is updated, or a dashboard change-log event is created for a report/document artifact.
+- When creating a derived artifact or project from another artifact, log the source project id, source artifact path, source artifact version if known, reuse scope, and new verification scope before drafting.
 - Do not overwrite old conclusions silently. Add a correction note with date/time and reason.
 - If a source is rejected as unreliable or stale, log that decision.
 - If a claim comes from an image/PDF extraction, note whether it was visually verified.
@@ -88,6 +90,7 @@ Rules:
 - If a report conclusion changes because of new evidence, log the old conclusion, new conclusion, source ids, and reason for change.
 - Worklogs, task lists, implementation plans, and walkthroughs count only when they are saved inside this workspace. AI-service artifact folders outside the workspace may be useful scratch space, but they are not durable project records unless mirrored into the project or `_ai_system/`.
 - If an AI cannot save a planning or walkthrough artifact into this workspace, it must state that limitation and avoid reporting it as a project deliverable.
+- If an AI creates a temporary script or scratch helper during project work, log why the existing tools were not enough, where the helper was placed, whether it was removed, and which production files it changed. Temporary helpers must not be used to hide broad rewrites or validator-chasing.
 
 ## Document and PRD Change Logging Matrix
 
@@ -105,6 +108,9 @@ Use this matrix to decide where to record a change.
 | Claim register changed | yes | only if claim-handling policy changes | no | claim register |
 | Report PRD field changed | yes | yes | if user decided | report PRD |
 | Report output format changed | yes | yes | if user decided | report PRD |
+| Artifact version created or current pointer changed | yes | yes if status/scope changes | if user approved/rejected | version_history, report_registry, dashboard_change_log |
+| Derived artifact/project created from another artifact | yes | yes | yes if user chose reuse scope | source lineage fields in PRD |
+| Temporary helper script created during project work | yes | no | no unless risky | scratch path and cleanup note |
 | Governance rule changed | yes | no unless it changes an active report PRD | if user decided | governance file |
 | User clarifies scope, audience, assumption, or design preference | yes | yes if it changes report PRD | yes | report PRD or design doc |
 

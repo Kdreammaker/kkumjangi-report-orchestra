@@ -1,0 +1,23 @@
+{
+  "preset_id": "education_curriculum",
+  "label_ko": "강의자료 / 교안",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Curriculum, lesson material, instructor notes, learner handouts, activities, assignments, and assessment design.",
+  "quality_emphasis": [
+    "lesson-by-lesson learning objectives",
+    "instructor and learner material separation",
+    "activity, assignment, and assessment alignment",
+    "teaching flow and timing practicality"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

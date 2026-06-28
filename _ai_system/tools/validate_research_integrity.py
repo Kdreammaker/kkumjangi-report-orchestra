@@ -183,6 +183,10 @@ def normalize_header(value: str) -> str:
         return "local_original_path"
     if "local path" in text or "로컬 보관 경로" in text or "url_or_path" in compact:
         return "url_or_path"
+    if text == "official_url":
+        return "url"
+    if "source_locator" in compact:
+        return "source_locator"
     if "claim_id" in compact or "claim id" in text:
         return "claim_id"
     if "claim_type" in compact or "주장 유형" in text or text == "type":
@@ -509,7 +513,10 @@ def source_link_register_by_source(project: Path) -> dict[str, dict[str, str]]:
         for row in csv.DictReader(f):
             source_id = (row.get("source_id") or "").strip()
             if source_id:
-                result[source_id] = {str(k or "").strip(): str(v or "").strip() for k, v in row.items()}
+                normalized = {normalize_header(str(k or "").strip()): str(v or "").strip() for k, v in row.items()}
+                if not normalized.get("url") and row.get("official_url"):
+                    normalized["url"] = str(row.get("official_url") or "").strip()
+                result[source_id] = normalized
     return result
 
 
@@ -631,31 +638,19 @@ def validate_project(project: Path, check_urls: bool = False) -> dict[str, objec
         link_row = link_register.get(source_id, {})
         if link_row:
             url_status = link_row.get("url_status", "").lower()
-            download_status = link_row.get("download_status", "").lower()
-            capture_status = link_row.get("capture_status", "").lower()
             use_level = link_row.get("use_level", "").lower()
             link_url = link_row.get("url", "").strip()
-            link_original_path = link_row.get("original_path", "").strip()
-            link_capture_path = link_row.get("capture_path", "").strip()
+            source_locator = link_row.get("source_locator", "").strip()
             if source_status == "report_citable" and (not link_url or is_generic_url(link_url)):
                 errors.append(f"{source_id}: report_citable source_link_register row requires an exact non-generic URL")
             if source_status == "report_citable" and use_level not in {"report_citable", "quote_verified"}:
                 errors.append(f"{source_id}: source_link_register use_level={use_level or '(blank)'} does not allow report_citable use")
             if source_status == "report_citable" and not (
                 url_status in {"ok", "verified", "200", "exact_url_verified"}
-                or download_status in {"downloaded", "ok", "downloaded_original"}
-                or capture_status in {"captured", "ok", "captured_html"}
             ):
-                errors.append(f"{source_id}: report_citable source lacks verified URL status or explicit user-provided/captured evidence in source_link_register.csv")
-            if (
-                source_status == "report_citable"
-                and use_level in {"report_citable", "quote_verified"}
-                and not (link_original_path or link_capture_path)
-            ):
-                warnings.append(
-                    f"{source_id}: quote_verified URL source has no preserved original/capture path; "
-                    "verify quote/location in the source record and add the file to user_requested_materials.md if file-level evidence is needed"
-                )
+                errors.append(f"{source_id}: report_citable source lacks verified exact URL status in source_link_register.csv")
+            if source_status == "report_citable" and use_level in {"report_citable", "quote_verified"} and not source_locator:
+                errors.append(f"{source_id}: report_citable URL source requires source_locator in source_link_register.csv")
         url_or_path = clean_md_link(record.get("url_or_path") or row.get("url_or_path", ""))
         evidence_class = (record.get("evidence_class") or row.get("evidence_class") or "").strip("` ")
         readiness = (record.get("source_readiness_status") or row.get("source_readiness_status") or "").strip("` ")
@@ -814,6 +809,9 @@ def validate_project(project: Path, check_urls: bool = False) -> dict[str, objec
                 # Fall back to old check only if no stubs either
                 if not ai_stub_paths and not re.match(r"https?://", url_or_path):
                     errors.append(f"{source_id}: Exact Quotes exist but no preserved evidence file can be checked")
+                elif not ai_stub_paths and re.match(r"https?://", url_or_path) and source_status == "report_citable":
+                    if not (link_row.get("source_locator") or record.get("source_locator") or record.get("exact_quote_location")):
+                        errors.append(f"{source_id}: URL-only Exact Quotes require source_locator or exact_quote_location")
 
     claim_rows = parse_markdown_table(claim_register)
     for row in claim_rows:

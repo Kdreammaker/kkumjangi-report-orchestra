@@ -1,0 +1,23 @@
+{
+  "preset_id": "service_planning",
+  "label_ko": "서비스 기획",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "service_planning",
+  "description": "Service planning documents covering users, UX flow, operating policy, KPI, and rollout scope.",
+  "quality_emphasis": [
+    "user problem and target segment clarity",
+    "journey and workflow coverage",
+    "operating policy and KPI definition",
+    "scope boundaries and launch risks"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

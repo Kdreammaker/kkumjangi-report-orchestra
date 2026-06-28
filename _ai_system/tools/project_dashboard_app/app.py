@@ -217,7 +217,7 @@ def default_project_profile(project_dir: Path) -> dict[str, object]:
                 "blank",
             ],
             "project_logo_filename": "project_logo.png",
-            "notes": "보고서별 지정 로고가 없으면 brand_assets/project_logo.png만 프로젝트 로고로 자동 사용합니다.",
+            "notes": "산출물별 지정 로고가 없으면 brand_assets/project_logo.png만 프로젝트 로고로 자동 사용합니다.",
         },
         "notes": "문서 분류와 대외비 여부는 보고서 PRD에서 매번 확인합니다.",
     }
@@ -491,7 +491,7 @@ class DashboardStore:
             parts.append("삭제 " + ", ".join(removed[:5]))
         if changed:
             parts.append("변경 " + "; ".join(changed[:5]))
-        return "; ".join(parts) if parts else "보고서 관리 저장"
+        return "; ".join(parts) if parts else "산출물 관리 저장"
 
     def reference_inventory(self) -> dict[str, object]:
         fields, rows = read_csv_with_fields(self.inventory_path, INVENTORY_FIELDS)
@@ -526,7 +526,7 @@ class DashboardStore:
     def _safe_report_file(self, rel_path: str) -> tuple[Path, str]:
         normalized = rel_path.strip().replace("\\", "/")
         if not normalized:
-            raise ValueError("연결된 보고서 파일이 없습니다.")
+            raise ValueError("연결된 산출물 파일이 없습니다.")
         if normalized.startswith("/") or re.match(r"^[A-Za-z]:", normalized) or ".." in Path(normalized).parts:
             raise ValueError("프로젝트 내부 상대경로만 열 수 있습니다.")
         if not normalized.startswith(ALLOWED_REPORT_FILE_PREFIXES):
@@ -535,7 +535,7 @@ class DashboardStore:
         if target.suffix.lower() not in ALLOWED_REPORT_FILE_SUFFIXES:
             raise ValueError("허용되지 않은 파일 형식입니다.")
         if not target.exists() or not target.is_file():
-            raise ValueError("보고서 파일을 찾을 수 없습니다.")
+            raise ValueError("산출물 파일을 찾을 수 없습니다.")
         return target, normalized
 
     def _open_local_path(self, target: Path) -> None:
@@ -1001,16 +1001,16 @@ async function openFolder(folderKey, label) {
 }
 async function openReportFile(path) {
   if (!path) {
-    showToast('연결된 보고서 파일이 없습니다.', 'error');
+    showToast('연결된 산출물 파일이 없습니다.', 'error');
     return;
   }
   try {
     const response = await fetch('/api/open-report', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ path }) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || response.status);
-    showToast('보고서 파일을 열었습니다.', 'ok');
+    showToast('산출물 파일을 열었습니다.', 'ok');
   } catch (error) {
-    showToast('보고서를 열지 못했습니다. 파일 경로를 확인해 주세요.', 'error');
+    showToast('산출물을 열지 못했습니다. 파일 경로를 확인해 주세요.', 'error');
   }
 }
 async function checkHeartbeat() {
@@ -1086,7 +1086,7 @@ def layout(title: str, body: str, nav: str = "", active: str = "dashboard") -> s
     <div class="top-actions">
       {nav_link("대시보드", "/", "dashboard", active)}
       {nav_link("프로젝트 정보", "/profile", "profile", active)}
-      {nav_link("보고서 관리", "/reports", "reports", active)}
+      {nav_link("산출물 관리", "/reports", "reports", active)}
       {nav_link("문서 대장", "/references", "references", active)}
       {nav_link("수정 이력", "/changes", "changes", active)}
       <button class="danger" type="button" onclick="shutdownDashboard()">{icon("stop")}대시보드 종료</button>
@@ -1137,7 +1137,7 @@ def dashboard_page(store: DashboardStore) -> str:
     nav = f"""<div class="hero">
   <div class="hero-title">{html.escape(display_title)}</div>
   <div class="hero-subtitle">폴더명: {html.escape(folder_name)}</div>
-  <p class="lead">프로젝트 정보, 보고서 관리, 문서 대장을 다루는 서버형 작업관리 화면입니다. 보고서 작성 자체는 AI가 별도 작업 흐름에서 수행합니다.</p>
+  <p class="lead">프로젝트 정보, 산출물 관리, 문서 대장을 다루는 서버형 작업관리 화면입니다. 문서 대장은 사용자 제공 자료와 정확 링크 후보를 정리하고, 출처 위치 보강과 인용 검증은 AI가 별도 작업 흐름에서 수행합니다.</p>
 </div>"""
     body = f"""
 <section class="metric-grid" aria-label="프로젝트 요약">
@@ -1149,12 +1149,12 @@ def dashboard_page(store: DashboardStore) -> str:
   <div class="metric">
     <div class="metric-label">보고서</div>
     <div class="metric-value">{summary['report_count']}건</div>
-    <p class="small">보고서별 단계와 버전은 보고서 관리에서 확인합니다.</p>
+    <p class="small">산출물별 단계와 버전은 산출물 관리에서 확인합니다.</p>
   </div>
   <div class="metric">
     <div class="metric-label">문서</div>
     <div class="metric-value">{summary['reference_count']}건</div>
-    <p class="small">원본파일 관리대장 기준 문서 수입니다.</p>
+    <p class="small">사용자 제공 파일과 직접 등록한 정확 링크 후보를 포함한 대장 기준 문서 수입니다.</p>
   </div>
 </section>
 
@@ -1174,7 +1174,7 @@ def dashboard_page(store: DashboardStore) -> str:
       <strong>{html.escape(str(current_task.get('updated_at_kst', '') or '미확인'))}</strong>
     </div>
   </div>
-  <p class="small">이 현황은 AI가 남긴 작업 기록 기준입니다. 실제 보고서 품질이나 완료율을 자동 판정하지 않습니다.</p>
+  <p class="small">이 현황은 AI가 남긴 작업 기록 기준입니다. 실제 보고서 품질, 출처 진위, 인용 가능 여부를 자동 판정하지 않습니다.</p>
 </section>
 
 <details class="panel">
@@ -1339,19 +1339,19 @@ def reports_page(store: DashboardStore) -> str:
     rows_json = json.dumps(store.report_registry(), ensure_ascii=False)
     fields_json = json.dumps(REPORT_REGISTRY_FIELDS, ensure_ascii=False)
     recent_changes = change_list_html(store.changes("report_registry", 3))
-    nav = """<h1>보고서 관리</h1>
-<p class="lead">한 프로젝트 안에서 만들어지는 여러 보고서의 분류, 버전, 단계, 담당자, 최신 산출물을 관리합니다.</p>"""
+    nav = """<h1>산출물 관리</h1>
+<p class="lead">한 프로젝트 안에서 만들어지는 여러 문서 산출물의 분류, 버전, 단계, 담당자, 최신 파일을 관리합니다.</p>"""
     body = f"""
 <section class="panel">
   <div class="actions">
     <button class="primary" type="button" onclick="saveRows()">{icon("save")}저장</button>
-    <button type="button" onclick="addRow()">{icon("plus")}보고서 추가</button>
+    <button type="button" onclick="addRow()">{icon("plus")}산출물 추가</button>
   </div>
   <p id="status" class="status" aria-live="polite"></p>
   <div id="registryTable"></div>
 </section>
 <section class="panel">
-  <h2>최근 보고서 관리 저장 이력</h2>
+  <h2>최근 산출물 관리 저장 이력</h2>
   {recent_changes}
 </section>
 <script id="fields" type="application/json">{fields_json}</script>
@@ -1360,8 +1360,8 @@ def reports_page(store: DashboardStore) -> str:
 const fields = JSON.parse(document.getElementById('fields').textContent);
 let rows = JSON.parse(document.getElementById('rows').textContent);
 const labels = {{
-  report_id:'보고서 ID', report_title:'보고서명', document_classification:'문서 분류', confidentiality_status:'대외비', version:'버전',
-  stage:'단계', owner:'보고서 책임자', practitioners:'담당 실무자', reviewers:'검토자', latest_file:'보고서 파일',
+  report_id:'산출물 ID', report_title:'산출물명', document_classification:'문서 분류', confidentiality_status:'대외비', version:'버전',
+  stage:'단계', owner:'산출물 책임자', practitioners:'담당 실무자', reviewers:'검토자', latest_file:'산출물 파일',
   prd_path:'기획 문서', updated_at_kst:'수정일', next_action:'다음 확인 사항', notes:'비고'
 }};
 const primaryFields = ['report_title','document_classification','confidentiality_status','version','stage','owner'];
@@ -1390,13 +1390,13 @@ function control(row, index, field) {{
 function render() {{
   if (!rows.length) rows = [emptyRow()];
   document.getElementById('registryTable').innerHTML = rows.map((row, index) => {{
-    const title = row.report_title || row.report_id || '보고서명 미입력';
+    const title = row.report_title || row.report_id || '산출물명 미입력';
     const pills = ['version','stage','document_classification','confidentiality_status','owner'].map((field) => row[field] ? '<span class="pill">' + escapeHtml(labels[field]) + ': ' + escapeHtml(row[field]) + '</span>' : '').join('');
     const allControls = fields.map((field) => control(row, index, field)).join('');
     const filePath = row.latest_file || '';
     const openButton = filePath
-      ? '<button class="primary" type="button" onclick="openReportFile(\\'' + escapeJs(filePath) + '\\')">보고서 열기</button><button class="path" type="button" onclick="copyText(\\'' + escapeJs(filePath) + '\\')">경로 복사</button>'
-      : '<button class="secondary" type="button" disabled>보고서 파일 없음</button>';
+      ? '<button class="primary" type="button" onclick="openReportFile(\\'' + escapeJs(filePath) + '\\')">산출물 열기</button><button class="path" type="button" onclick="copyText(\\'' + escapeJs(filePath) + '\\')">경로 복사</button>'
+      : '<button class="secondary" type="button" disabled>산출물 파일 없음</button>';
     return '<section class="list-card"><div class="list-card-head"><div><div class="list-card-title">' + escapeHtml(title) + '</div><div class="pill-row">' + pills + '</div></div><div class="btn-row">' + openButton + '<button class="secondary" type="button" onclick="toggleDetails(\\'report-extra-' + index + '\\')">상세 편집</button><button class="danger" type="button" onclick="removeRow(' + index + ')">삭제</button></div></div><div id="report-extra-' + index + '" class="detail-grid hidden">' + allControls + '</div></section>';
   }}).join('');
 }}
@@ -1413,13 +1413,13 @@ async function saveRows() {{
   const response = await fetch('/api/report-registry', {{ method:'POST', headers:{{'Content-Type':'application/json'}}, body:JSON.stringify({{ rows }}) }});
   const data = await response.json();
   document.getElementById('status').textContent = response.ok ? '저장되었습니다. ' + data.saved_at_kst : '저장 실패: ' + (data.error || response.status);
-  if (response.ok) {{ clearDirty(); showToast('보고서 관리를 저장했습니다.', 'ok'); }} else {{ showToast('저장에 실패했습니다.', 'error'); }}
+  if (response.ok) {{ clearDirty(); showToast('산출물 관리를 저장했습니다.', 'ok'); }} else {{ showToast('저장에 실패했습니다.', 'error'); }}
 }}
 document.addEventListener('input', (event) => {{ if (event.target.matches('input,select,textarea')) markDirty(); }});
 render();
 </script>
 """
-    return layout("보고서 관리", body, nav, "reports")
+    return layout("산출물 관리", body, nav, "reports")
 
 
 def references_page(store: DashboardStore) -> str:
@@ -1449,7 +1449,7 @@ def references_page(store: DashboardStore) -> str:
     ]
     visible_json = json.dumps(visible_fields, ensure_ascii=False)
     nav = """<h1>문서 대장</h1>
-<p class="lead">프로젝트에 들어온 원본 자료와 URL을 관리합니다. 원본 보존과 출처 확인 상태를 한곳에서 정리합니다.</p>"""
+<p class="lead">프로젝트에 들어온 사용자 제공 자료와 정확 링크 후보를 관리합니다. 파일 다운로드 결과가 아니라 원본/링크 위치, 사용자 보강 필요 여부, 로컬 처리 상태를 분리해 봅니다.</p>"""
     body = f"""
 <section class="panel">
   <div class="actions">
@@ -1458,7 +1458,7 @@ def references_page(store: DashboardStore) -> str:
     <button type="button" onclick="scanMaterials()">{icon("search")}자료 폴더 스캔</button>
     <button type="button" id="normalizeButton" onclick="startNormalization()">{icon("refresh")}파싱/정규화/색인 실행</button>
   </div>
-  <p class="small">이 화면은 원본파일 관리대장을 직접 정리하는 용도입니다. 파싱/정규화/색인은 로컬 변환 산출물, 검색용 색인, 상태값만 갱신하며, 자료의 의미 판단이나 인용 검증은 별도 보고서 작업에서 처리합니다.</p>
+  <p class="small">사용자는 제목, 출처 성격, 공개 범위, 비고를 직접 정리합니다. 시스템은 파일 해시, 읽기/정규화/색인 상태, source_id 연결 같은 보조 상태만 갱신합니다. 외부 URL은 정확 링크와 출처 위치를 보강하거나 필요한 파일을 사용자 제공 요청으로 남깁니다.</p>
   <p id="status" class="status" aria-live="polite"></p>
   <div id="referenceTable"></div>
 </section>
@@ -1475,14 +1475,14 @@ const visibleFields = JSON.parse(document.getElementById('visibleFields').textCo
 let rows = JSON.parse(document.getElementById('rows').textContent);
 const labels = {{
   reference_id:'문서 ID', title:'제목', file_type:'유형', material_origin_ko:'출처 성격', visibility_ko:'공개 범위',
-  source_tier:'자료 성격', intake_status:'등록 상태', parse_status:'내용 읽기 상태', original_path:'원본 위치',
+  source_tier:'자료 성격', intake_status:'등록 상태', parse_status:'내용 읽기 상태', original_path:'원본/링크 위치',
   open_path:'확인 위치', source_id:'출처 연결', sha256:'파일 해시', file_size_bytes:'파일 크기', last_modified_kst:'수정 시각',
   ocr_status:'OCR 상태', normalized_status:'정규화 상태', context_index_status:'색인 상태', notes:'비고'
 }};
 const primaryFields = ['title','file_type','material_origin_ko','visibility_ko','notes'];
 const systemFields = ['reference_id','source_tier','intake_status','parse_status','ocr_status','normalized_status','context_index_status','source_id','sha256','file_size_bytes','last_modified_kst','original_path','open_path','source_record_path','derived_text_path','normalized_text_path','normalized_manifest_path','normalized_unit_index_path'];
 const options = {{
-  material_origin_ko:['','사용자 제공','AI 수집 후보','외부','공식 공개자료','언론/보조자료'],
+  material_origin_ko:[{value:'',label:'선택'},{value:'사용자 제공',label:'사용자 제공'},{value:'AI 수집 후보',label:'링크 확인 후보'},{value:'외부',label:'외부 링크'},{value:'공식 공개자료',label:'공식 공개자료'},{value:'언론/보조자료',label:'언론/보조자료'}],
   visibility_ko:['','내부','대외비','공개','공개 가능','확인 필요'],
   source_tier:[{{value:'',label:'선택'}},{{value:'Tier 1 - Primary official',label:'공식 원출처'}},{{value:'Tier 1 - Primary legal/regulatory',label:'법령·금융당국 원출처'}},{{value:'Tier 2 - Primary commercial/issuer',label:'기업·기관 공식자료'}},{{value:'Tier 2 - Primary organization',label:'정당·기관 공식자료'}},{{value:'secondary',label:'보조자료'}},{{value:'unknown',label:'검토 필요'}}],
   intake_status:[{{value:'',label:'선택'}},{{value:'manual_lead',label:'수동 등록'}},{{value:'received',label:'자료 접수'}},{{value:'inventoried',label:'대장 등록'}},{{value:'blocked',label:'확인 필요'}},{{value:'needs_ai_intake',label:'정리 필요'}}],
@@ -1531,7 +1531,7 @@ function displayValue(row, field) {{
     if (value.includes('commercial') || value.includes('issuer')) return '기업·기관 공식자료';
     if (value.includes('organization')) return '정당·기관 공식자료';
   }}
-  if (field === 'material_origin_ko' && value === '외부') return 'AI 수집/외부 링크';
+  if (field === 'material_origin_ko' && value === '외부') return '외부 링크/정확 위치 확인';
   if (valueLabels[field] && valueLabels[field][value]) return valueLabels[field][value];
   return value || '-';
 }}
@@ -1645,7 +1645,7 @@ render();
 def changes_page(store: DashboardStore) -> str:
     rows_json = json.dumps(store.changes(limit=500), ensure_ascii=False)
     nav = """<h1>수정 이력</h1>
-<p class="lead">대시보드에서 직접 저장한 프로젝트 정보, 보고서 관리, 문서 대장 변경만 표시합니다.</p>"""
+<p class="lead">대시보드에서 직접 저장한 프로젝트 정보, 산출물 관리, 문서 대장 변경만 표시합니다.</p>"""
     body = f"""
 <section class="panel">
   <div class="grid">
@@ -1653,7 +1653,7 @@ def changes_page(store: DashboardStore) -> str:
       <select id="scopeFilter" onchange="renderChanges()">
         <option value="">전체</option>
         <option value="project_profile">프로젝트 정보</option>
-        <option value="report_registry">보고서 관리</option>
+        <option value="report_registry">산출물 관리</option>
         <option value="reference_inventory">문서 대장</option>
       </select>
     </label>
@@ -1664,7 +1664,7 @@ def changes_page(store: DashboardStore) -> str:
 <script>
 const rows = JSON.parse(document.getElementById('changeRows').textContent);
 const labels = {{ changed_at_kst:'저장 시각', scope:'화면', target_file:'저장 위치', summary:'변경 요약', pc_name:'PC 이름', anonymous_device_id:'기기 식별값', before_hash:'변경 전 기록', after_hash:'변경 후 기록', app_version:'앱 버전' }};
-const scopeLabels = {{ project_profile:'프로젝트 정보', report_registry:'보고서 관리', reference_inventory:'문서 대장' }};
+const scopeLabels = {{ project_profile:'프로젝트 정보', report_registry:'산출물 관리', reference_inventory:'문서 대장' }};
 const primaryFields = ['changed_at_kst','scope','summary','pc_name'];
 const detailFields = ['target_file','anonymous_device_id','before_hash','after_hash','app_version'];
 function escapeHtml(value) {{ return String(value || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }}

@@ -1,0 +1,4 @@
+symptom,likely_cause,check_step,resolution,as_of
+Fixture status banner missing,Sample HTML was copied without cover block,Check report header,Restore validation fixture banner,2026-06-03
+Long token overlaps table,Wrapping class was removed,Check long-token sample cell,Apply scoped wrapping to code and table cells,2026-06-03
+Figure caption missing,Static visual was inserted without figcaption,Check figure block,Add semantic figcaption with fixture data basis,2026-06-03

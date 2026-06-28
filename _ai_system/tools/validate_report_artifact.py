@@ -65,6 +65,20 @@ PLACEHOLDER_PATTERNS: list[tuple[str, str]] = [
     ("unresolved template token", r"\{\{[A-Za-z0-9_]+\}\}"),
 ]
 
+LAYOUT_RISK_PATTERNS: list[tuple[str, str]] = [
+    (
+        "viewport-dependent CSS sizing",
+        r"(?:width|min-width|max-width|height|min-height|max-height|margin|padding|top|right|bottom|left|font-size)\s*:"
+        r"[^;{}]*(?:\d+(?:\.\d+)?(?:vh|vw|vmin|vmax|dvh|dvw|svh|svw|lvh|lvw))",
+    ),
+    ("absolute/fixed/sticky positioning", r"position\s*:\s*(?:absolute|fixed|sticky)\b"),
+    (
+        "interactive controls or event handlers",
+        r"<(?:button|input|select|textarea)\b|contenteditable\s*=|on(?:click|change|input|submit|mouseover|keydown)\s*=",
+    ),
+    ("canvas-dependent visual", r"<canvas\b"),
+]
+
 
 class TextExtractor(html.parser.HTMLParser):
     def __init__(self) -> None:
@@ -84,6 +98,33 @@ def read_text(path: Path) -> str:
 
 def strip_comments(text: str) -> str:
     return re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)
+
+
+def report_language(raw: str) -> str:
+    if re.search(r"<html\b[^>]*\blang=[\"']en(?:[-_][A-Za-z0-9]+)?[\"']", raw, flags=re.I):
+        return "en"
+    if re.search(r"\bdata-output-language=[\"'](?:en|mixed)[\"']", raw, flags=re.I):
+        return "en"
+    if re.search(
+        r"<meta\b[^>]*\bname=[\"'](?:output_language|output-language)[\"'][^>]*\bcontent=[\"'](?:en|mixed)[\"']",
+        raw,
+        flags=re.I,
+    ):
+        return "en"
+    return "ko"
+
+
+def count_pattern(text: str, pattern: str) -> int:
+    return len(re.findall(pattern, text, flags=re.I))
+
+
+def layout_risk_signals(text: str) -> list[str]:
+    signals: list[str] = []
+    for label, pattern in LAYOUT_RISK_PATTERNS:
+        count = len(re.findall(pattern, text, flags=re.I | re.S))
+        if count:
+            signals.append(f"{label} ({count})")
+    return signals
 
 
 def strip_cover_component(text: str) -> str:
@@ -150,6 +191,8 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
     parser = TextExtractor()
     parser.feed(visible_html)
     visible_text = parser.visible_text()
+    language = report_language(raw)
+    english_label_allowed = language == "en"
     source_ids = source_ids_from_index(project)
     substantial = bool(
         re.search(
@@ -184,6 +227,23 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
     for label, pattern in PLACEHOLDER_PATTERNS:
         if re.search(pattern, raw, flags=re.I):
             errors.append(f"report contains unresolved layout/template placeholder: {label}")
+    if re.search(r"word-break\s*:\s*break-all", visible_html, flags=re.I):
+        message = "report CSS uses word-break: break-all; use scoped long-token wrapping for URLs, paths, code, and table cells instead"
+        if strict_delivery:
+            errors.append(message)
+        else:
+            warnings.append(message)
+    risky_layout_signals = layout_risk_signals(visible_html)
+    if risky_layout_signals:
+        warnings.append(
+            "DOCX/PDF layout risk signals found: "
+            + "; ".join(risky_layout_signals)
+            + "; confirm these are scoped and do not drive essential report layout"
+        )
+        if strict_delivery:
+            warnings.append(
+                "strict delivery should avoid interactive controls, canvas-only visuals, viewport-dependent sizing, and absolute/fixed/sticky layout unless separately export-verified"
+            )
 
     footnote_count = len(re.findall(r"<sup\b|class=[\"'][^\"']*footnote|주석|참고문헌", visible_html, flags=re.I))
     if substantial and footnote_count == 0:
@@ -191,9 +251,19 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
 
     table_count = len(re.findall(r"<table\b", report_body_no_cover, flags=re.I))
     figure_count = count_material_figures(report_body_no_cover)
-    source_caption_count = visible_text.count("자료:")
-    data_caption_count = visible_text.count("근거 데이터")
-    data_caption_values = re.findall(r"근거\s*데이터\s*:\s*([^<\n]+)", visible_html_no_style, flags=re.I)
+    ko_source_caption_count = visible_text.count("자료:")
+    ko_data_caption_count = visible_text.count("근거 데이터")
+    en_source_caption_count = count_pattern(visible_text, r"\bSource\s*:")
+    en_data_caption_count = count_pattern(visible_text, r"\b(?:Underlying data|Data basis)\s*:")
+    source_caption_count = ko_source_caption_count + (en_source_caption_count if english_label_allowed else 0)
+    data_caption_count = ko_data_caption_count + (en_data_caption_count if english_label_allowed else 0)
+    data_caption_values = re.findall(
+        r"(?:근거\s*데이터|Underlying data|Data basis)\s*:\s*([^<\n]+)",
+        visible_html_no_style,
+        flags=re.I,
+    )
+    if not english_label_allowed and (en_source_caption_count or en_data_caption_count):
+        errors.append("English caption labels require html lang=\"en\" or an explicit output_language marker")
 
     # ------------------------------------------------------------------
     # NEW: Cover page element validation
@@ -268,20 +338,26 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
             warnings.append(message)
     data_refs: list[str] = re.findall(r"data_sources[/\\][^\s<)]+?\.(?:csv|xlsx|xls|tsv)", raw, flags=re.I)
     if table_count and source_caption_count == 0:
-        errors.append("tables exist without reader-facing 자료: source captions")
+        expected_source_label = "Source:" if english_label_allowed else "자료:"
+        errors.append(f"tables exist without reader-facing {expected_source_label} source captions")
     if substantial and (table_count or figure_count) and not data_files:
         errors.append("tables/charts exist but no CSV/XLSX data file exists under data_sources/")
     if substantial and (table_count or figure_count) and data_caption_count == 0:
-        errors.append("tables/charts exist without reader-facing 근거 데이터 caption")
+        expected_data_label = "Underlying data/Data basis" if english_label_allowed else "근거 데이터"
+        errors.append(f"tables/charts exist without reader-facing {expected_data_label} caption")
     if re.search(r"자료:\s*(?:\.\./)?data_sources[/\\]|자료:\s*[A-Za-z0-9_./\\-]+\.csv", visible_text):
         errors.append("local CSV/data path is shown as the visible source instead of 근거 데이터")
+    if re.search(r"\bSource\s*:\s*(?:\.\./)?data_sources[/\\]|\bSource\s*:\s*[A-Za-z0-9_./\\-]+\.csv", visible_text, flags=re.I):
+        errors.append("local CSV/data path is shown as the visible source instead of a data-basis label")
     if re.search(r"근거\s*데이터\s*:\s*(?:\.\./)?data_sources[/\\]", visible_text):
         errors.append("raw local data_sources path is visible in reader-facing 근거 데이터 text; keep paths in comments, data indexes, or appendices")
+    if re.search(r"\b(?:Underlying data|Data basis)\s*:\s*(?:\.\./)?data_sources[/\\]", visible_text, flags=re.I):
+        errors.append("raw local data_sources path is visible in reader-facing data-basis text; keep paths in comments, data indexes, or appendices")
     if strict_delivery and table_count + figure_count:
         visual_count = table_count + figure_count
         if data_caption_count < visual_count:
             errors.append(
-                f"strict delivery requires a 근거 데이터 caption for each table/figure/chart; "
+                f"strict delivery requires a {'Underlying data/Data basis' if english_label_allowed else '근거 데이터'} caption for each table/figure/chart; "
                 f"found {data_caption_count} captions for {visual_count} visuals"
             )
         if len(data_refs) < visual_count:
@@ -303,10 +379,10 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
             errors.append("strict delivery 근거 데이터 files do not exist: " + " | ".join(missing_data_refs[:5]))
         empty_data_notes = [value.strip() for value in data_caption_values if not value.strip()]
         if empty_data_notes:
-            errors.append("strict delivery 근거 데이터 captions must name the dataset or qualitative evidence in reader-facing Korean text")
+            errors.append("strict delivery data-basis captions must name the dataset or qualitative evidence in reader-facing text")
     if re.search(r"[A-Za-z]:[\\/]|file:///", visible_text):
         errors.append("absolute local path is visible in reader-facing report text")
-    if re.search(r"\baccessed\s+\d{4}", visible_text, flags=re.I):
+    if re.search(r"\baccessed\s+\d{4}", visible_text, flags=re.I) and not english_label_allowed:
         warnings.append("Korean reader-facing references should use `접근일: YYYY.MM.DD` instead of English `accessed YYYY-MM-DD`")
 
     if substantial and not re.search(r"\b(Appendix|부록)\b", visible_text, flags=re.I):
@@ -401,6 +477,7 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
             "figures_or_charts": figure_count,
             "source_captions": source_caption_count,
             "data_captions": data_caption_count,
+            "report_language": language,
             "data_files": len(data_files),
             "footnote_markers": footnote_count,
             "substantial": substantial,
@@ -409,6 +486,7 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
             "assembled_report": assembled_report,
             "chapter_fragments": len(chapter_fragments),
             "uses_cover_component": cover_component,
+            "layout_risk_signals": risky_layout_signals,
             "docx_details": docx_details,
         },
     }

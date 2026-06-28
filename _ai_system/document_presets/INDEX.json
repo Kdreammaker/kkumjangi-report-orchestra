@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-04",
+  "source": "_ai_system/document_presets",
+  "presets": [
+    {
+      "preset_id": "general_report",
+      "label_ko": "일반 근거 기반 보고서",
+      "status": "supported",
+      "aliases": ["일반 보고서", "근거 기반 보고서", "시장조사", "산업 트렌드"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/general_report",
+      "read_first": ["general_report/preset.json", "general_report/prd_questions.md"],
+      "read_for_workflow": ["general_report/stage_overlays.md"]
+    },
+    {
+      "preset_id": "business_strategy",
+      "label_ko": "사업 전략/의사결정 보고서",
+      "status": "supported",
+      "aliases": ["전략 보고서", "의사결정 메모", "내부 검토 보고서", "경영진 보고"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/business_strategy",
+      "read_first": ["business_strategy/preset.json", "business_strategy/prd_questions.md"],
+      "read_for_workflow": ["business_strategy/stage_overlays.md"]
+    },
+    {
+      "preset_id": "regulatory_review",
+      "label_ko": "정책/규제 리스크 검토",
+      "status": "supported",
+      "aliases": ["규제 검토", "정책 검토", "컴플라이언스 검토", "승인 경로 검토"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/regulatory_review",
+      "read_first": ["regulatory_review/preset.json", "regulatory_review/prd_questions.md"],
+      "read_for_workflow": ["regulatory_review/stage_overlays.md"]
+    },
+    {
+      "preset_id": "academic_research",
+      "label_ko": "학술/문헌 리서치",
+      "status": "supported",
+      "aliases": ["학술 리서치", "문헌 연구", "논문형 검토", "선행연구 검토"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/academic_research",
+      "read_first": ["academic_research/preset.json", "academic_research/prd_questions.md"],
+      "read_for_workflow": ["academic_research/stage_overlays.md"]
+    },
+    {
+      "preset_id": "technical_design",
+      "label_ko": "기술 설계/도입 검토",
+      "status": "supported",
+      "aliases": ["기술 도입 검토", "아키텍처 문서", "API 설계", "운영 설계"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/technical_design",
+      "read_first": ["technical_design/preset.json", "technical_design/prd_questions.md"],
+      "read_for_workflow": ["technical_design/stage_overlays.md"]
+    },
+    {
+      "preset_id": "service_planning",
+      "label_ko": "서비스 기획",
+      "status": "supported",
+      "aliases": ["서비스 기획서", "UX 플로우", "운영 정책", "서비스 블루프린트"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/service_planning",
+      "read_first": ["service_planning/preset.json", "service_planning/prd_questions.md"],
+      "read_for_workflow": ["service_planning/stage_overlays.md"]
+    },
+    {
+      "preset_id": "product_prd",
+      "label_ko": "제품 PRD",
+      "status": "supported",
+      "aliases": ["PRD", "제품 요구사항", "수용 기준", "릴리스 범위"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/product_prd",
+      "read_first": ["product_prd/preset.json", "product_prd/prd_questions.md"],
+      "read_for_workflow": ["product_prd/stage_overlays.md"]
+    },
+    {
+      "preset_id": "investor_brief",
+      "label_ko": "투자자 브리프 / IR 설명자료",
+      "status": "supported",
+      "aliases": ["투자자 브리프", "IR 설명자료", "IR 문서", "투자자용 factbook", "투자자 팩트북", "투자자 Q&A", "투자자 질의응답", "IR 브리프"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/investor_brief",
+      "read_first": ["investor_brief/preset.json", "investor_brief/prd_questions.md"],
+      "read_for_workflow": ["investor_brief/stage_overlays.md"],
+      "read_for_design": ["investor_brief/design_patterns.md"],
+      "language_guidance": ["investor_brief/language_guidance.md"]
+    },
+    {
+      "preset_id": "equity_research",
+      "label_ko": "섹터/기업 분석 보고서",
+      "status": "supported",
+      "aliases": ["섹터 분석", "기업 분석 보고서", "주식 리서치", "애널리스트 보고서", "실적 분석", "밸류에이션 분석", "종목 분석", "리스크 분석"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/equity_research",
+      "read_first": ["equity_research/preset.json", "equity_research/prd_questions.md"],
+      "read_for_workflow": ["equity_research/stage_overlays.md"],
+      "read_for_design": ["equity_research/design_patterns.md"],
+      "language_guidance": ["equity_research/language_guidance.md"]
+    },
+    {
+      "preset_id": "business_proposal",
+      "label_ko": "사업 제안서",
+      "status": "supported",
+      "aliases": ["사업 제안서", "제안 문서", "고객 제안서", "파트너 제안서", "협업 제안서", "파트너사 발송용 제안", "제휴 제안서"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/business_proposal",
+      "read_first": ["business_proposal/preset.json", "business_proposal/prd_questions.md"],
+      "read_for_workflow": ["business_proposal/stage_overlays.md"],
+      "read_for_design": ["business_proposal/design_patterns.md"],
+      "language_guidance": ["business_proposal/language_guidance.md"]
+    },
+    {
+      "preset_id": "product_manual",
+      "label_ko": "제품 설명서 / 매뉴얼",
+      "status": "supported",
+      "aliases": ["제품 설명서", "제품 매뉴얼", "사용자 매뉴얼", "사용 설명서", "설치 가이드", "설정 가이드", "FAQ", "문제 해결 가이드"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/product_manual",
+      "read_first": ["product_manual/preset.json", "product_manual/prd_questions.md"],
+      "read_for_workflow": ["product_manual/stage_overlays.md"],
+      "read_for_design": ["product_manual/design_patterns.md"]
+    },
+    {
+      "preset_id": "education_curriculum",
+      "label_ko": "강의자료 / 교안",
+      "status": "supported",
+      "aliases": ["강의자료", "교안", "교육 커리큘럼", "차시별 수업안", "강사용 노트", "학습자 핸드아웃", "과제 설계", "평가 루브릭"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/education_curriculum",
+      "read_first": ["education_curriculum/preset.json", "education_curriculum/prd_questions.md"],
+      "read_for_workflow": ["education_curriculum/stage_overlays.md"],
+      "read_for_design": ["education_curriculum/design_patterns.md"]
+    },
+    {
+      "preset_id": "academic_paper",
+      "label_ko": "논문형 / 학술 문서",
+      "status": "supported",
+      "aliases": ["논문형 문서", "학술 논문", "학술 문서", "연구 논문", "세미나 페이퍼", "선행연구", "방법론", "참고문헌 스타일"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/academic_paper",
+      "read_first": ["academic_paper/preset.json", "academic_paper/prd_questions.md"],
+      "read_for_workflow": ["academic_paper/stage_overlays.md"],
+      "read_for_design": ["academic_paper/design_patterns.md"]
+    },
+    {
+      "preset_id": "press_release",
+      "label_ko": "보도자료",
+      "status": "supported",
+      "aliases": ["보도자료", "프레스 릴리스", "언론 배포문", "외부 공개문", "공식 발표문", "보도문", "엠바고 자료", "회사 소개 문구"],
+      "base_flow": "short_form_public_release",
+      "default_artifact_workflow_mode": "brief",
+      "module_path": "_ai_system/document_presets/press_release",
+      "read_first": ["press_release/preset.json", "press_release/prd_questions.md"],
+      "read_for_workflow": ["press_release/stage_overlays.md"],
+      "read_for_design": ["press_release/design_patterns.md"],
+      "language_guidance": ["press_release/language_guidance.md"]
+    }
+  ],
+  "hold_candidates": [
+    {
+      "candidate_id": "quotation",
+      "label_ko": "견적서",
+      "aliases": ["견적", "견적서"],
+      "reason": "Pricing, tax, validity, and line-item arithmetic need a separate commercial document data model."
+    },
+    {
+      "candidate_id": "newsletter",
+      "label_ko": "뉴스레터",
+      "aliases": ["뉴스레터"],
+      "reason": "Email cadence, CTA, audience segmentation, and send-format constraints do not fit the substantial report flow."
+    },
+    {
+      "candidate_id": "resume_career_profile",
+      "label_ko": "이력서/경력기술서",
+      "aliases": ["이력서", "경력기술서", "이력서/경력기술서"],
+      "reason": "Career profile writing needs a lighter privacy-first profile module rather than the full report factory."
+    }
+  ]
+}

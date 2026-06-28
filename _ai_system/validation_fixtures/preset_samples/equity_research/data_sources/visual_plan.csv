@@ -1,0 +1,5 @@
+visual_id,title,visual_type,required,data_file,status,purpose
+vis_01,Fixture Financial Index Table,table,yes,equity_research_fixture_financials.csv,implemented,show exportable financial table structure
+vis_02,Fixture Peer Comparison Table,table,yes,equity_research_fixture_peers.csv,implemented,show peer criteria and period alignment
+vis_03,Fixture Sensitivity Table,table,yes,equity_research_fixture_sensitivity.csv,implemented,show scenario separation
+vis_04,Fixture Catalyst and Risk Index,chart,yes,equity_research_fixture_catalyst_chart.csv,implemented,show static chart with source and data caption

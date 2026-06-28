@@ -8,6 +8,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from query_document_preset import query_document_preset
+from query_style_profile import query_style_profile
 from workspace_config import active_domain_preset, load_config, list_value
 
 
@@ -16,16 +18,27 @@ KST = timezone(timedelta(hours=9))
 
 STAGE_SKILLS = {
     "interview": "_ai_system/report_skills/decision_interviewer/SKILL.md",
+    "design": "_ai_system/report_skills/visual_designer/SKILL.md",
     "architect": "_ai_system/report_skills/report_architect/SKILL.md",
     "source": "_ai_system/report_skills/source_collector/SKILL.md",
     "chapter": "_ai_system/report_skills/chapter_writer/SKILL.md",
     "visual": "_ai_system/report_skills/visual_designer/SKILL.md",
     "chart": "_ai_system/report_skills/chart_builder/SKILL.md",
     "assemble": "_ai_system/report_skills/report_assembler/SKILL.md",
+    "style": "_ai_system/report_skills/report_reviewer/SKILL.md",
     "review": "_ai_system/report_skills/report_reviewer/SKILL.md",
     "export": "_ai_system/report_skills/export_operator/SKILL.md",
     "cloud": "_ai_system/report_skills/cloud_platform_bridge/SKILL.md",
 }
+
+STYLE_PASS_FILES = [
+    ("_ai_system/style_profiles/korean_tone_workflow_design_v1.md", "common Korean style-pass workflow", True),
+    ("_ai_system/style_profiles/templates/style_risk_findings.json", "style risk findings template", True),
+    ("_ai_system/style_profiles/templates/protected_spans.json", "protected spans template", True),
+    ("_ai_system/style_profiles/templates/style_rewrite_diff.md", "limited rewrite diff template", True),
+    ("_ai_system/style_profiles/templates/style_fidelity_review.md", "style fidelity review template", True),
+    ("_ai_system/style_profiles/templates/style_naturalness_review.md", "style naturalness review template", True),
+]
 
 
 def first_existing(paths: list[Path]) -> Path | None:
@@ -130,6 +143,63 @@ def packet_markdown(payload: dict[str, object]) -> str:
                 extracted_lines.append(f"- {key}: " + ", ".join(f"`{value}`" for value in values))
     if not extracted_lines:
         extracted_lines.append("- 없음")
+    language = payload.get("language", {})
+    language_lines: list[str] = []
+    if isinstance(language, dict) and language:
+        language_lines.append(f"- output_language: `{language.get('output_language', '')}`")
+        language_lines.append(f"- guidance_policy: {language.get('guidance_policy', '')}")
+        language_lines.append(f"- implementation_basis: {language.get('implementation_basis', '')}")
+    if not language_lines:
+        language_lines.append("- 없음")
+    document_preset = payload.get("document_preset", {})
+    preset_lines: list[str] = []
+    if isinstance(document_preset, dict) and document_preset:
+        preset = document_preset.get("preset", {})
+        automation = document_preset.get("automation", {})
+        if isinstance(preset, dict):
+            preset_lines.append(f"- preset_id: `{preset.get('preset_id', '')}`")
+            preset_lines.append(f"- label: {preset.get('label_ko', '')}")
+        else:
+            preset_lines.append(f"- status: {document_preset.get('status', '')}")
+        preset_lines.append(f"- preset_stage: `{document_preset.get('preset_stage', '')}`")
+        if isinstance(automation, dict):
+            preset_lines.append(f"- workflow_automation: `{automation.get('workflow_automation', '')}`")
+            preset_lines.append(f"- note: {automation.get('note', '')}")
+    if not preset_lines:
+        preset_lines.append("- 없음")
+    style_profile = payload.get("style_profile", {})
+    style_lines: list[str] = []
+    if isinstance(style_profile, dict) and style_profile:
+        profile = style_profile.get("profile", {})
+        automation = style_profile.get("automation", {})
+        if isinstance(profile, dict):
+            style_lines.append(f"- profile_id: `{profile.get('profile_id', '')}`")
+            style_lines.append(f"- label: {profile.get('label_ko', '')}")
+            style_lines.append(f"- risk_level: `{profile.get('risk_level', '')}`")
+        else:
+            style_lines.append(f"- status: {style_profile.get('status', '')}")
+        if isinstance(automation, dict):
+            style_lines.append(f"- automation_status: `{automation.get('automation_status', '')}`")
+            style_lines.append(f"- rewrite_automation: `{automation.get('rewrite_automation', '')}`")
+            style_lines.append(f"- note: {automation.get('note', '')}")
+        style_lines.append("- boundary: style profile guidance may inform reader fit, but it must not rewrite protected spans or verify source truth.")
+    if not style_lines:
+        style_lines.append("- 없음")
+    style_pass = payload.get("style_pass", {})
+    style_pass_lines: list[str] = []
+    if isinstance(style_pass, dict) and style_pass:
+        style_pass_lines.append(f"- status: `{style_pass.get('status', '')}`")
+        style_pass_lines.append(f"- automation_status: `{style_pass.get('automation_status', '')}`")
+        style_pass_lines.append(f"- output_dir: `{style_pass.get('recommended_output_dir', '')}`")
+        workflow_files = style_pass.get("workflow_files", [])
+        if isinstance(workflow_files, list):
+            style_pass_lines.append("- read: " + "; ".join(f"`{item}`" for item in workflow_files))
+        artifacts = style_pass.get("artifact_templates", [])
+        if isinstance(artifacts, list):
+            style_pass_lines.append("- leave artifacts: " + "; ".join(f"`{item}`" for item in artifacts))
+        style_pass_lines.append("- boundary: detect risks, mark protected spans, perform limited rewrite only when allowed, then run fidelity and naturalness review; no automatic whole-document rewrite or score gate.")
+    if not style_pass_lines:
+        style_pass_lines.append("- 없음")
     return f"""# Context Packet v1
 
 - generated_at: {now}
@@ -155,6 +225,22 @@ def packet_markdown(payload: dict[str, object]) -> str:
 ## Extracted References
 
 {chr(10).join(extracted_lines)}
+
+## Language Guidance
+
+{chr(10).join(language_lines)}
+
+## Document Preset
+
+{chr(10).join(preset_lines)}
+
+## Style Profile
+
+{chr(10).join(style_lines)}
+
+## Style Pass
+
+{chr(10).join(style_pass_lines)}
 
 ## Context Files
 
@@ -290,7 +376,83 @@ def add_workpack_related_items(
     return refs
 
 
-def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object]:
+def add_document_preset_items(
+    items: list[dict[str, str]],
+    warnings: list[str],
+    document_preset: str,
+    preset_query: str,
+    stage: str,
+    output_language: str,
+) -> dict[str, object]:
+    query = document_preset or preset_query
+    if not query:
+        return {}
+    preset_payload = query_document_preset(query, stage, output_language=output_language)
+    if preset_payload.get("status") != "matched":
+        warnings.append(f"document preset was not matched for context packet: {query} ({preset_payload.get('status')})")
+        return preset_payload
+    for asset in preset_payload.get("stage_assets", []):
+        if not isinstance(asset, dict):
+            continue
+        path = str(asset.get("path", ""))
+        if not path:
+            continue
+        add_if_exists(
+            items,
+            Path(path),
+            str(asset.get("role", "document preset stage asset")),
+            required=True,
+        )
+    return preset_payload
+
+
+def add_style_profile_items(
+    items: list[dict[str, str]],
+    warnings: list[str],
+    style_profile: str,
+    style_query: str,
+    output_language: str,
+) -> dict[str, object]:
+    query = style_profile or style_query
+    if not query:
+        return {}
+    profile_payload = query_style_profile(query, output_language=output_language)
+    if profile_payload.get("status") != "matched":
+        warnings.append(f"style profile was not matched for context packet: {query} ({profile_payload.get('status')})")
+        return profile_payload
+    automation = profile_payload.get("automation", {})
+    if isinstance(automation, dict) and automation.get("rewrite_automation") != "not_enabled":
+        warnings.append(f"style profile must not enable automatic rewrite: {query}")
+    for asset in profile_payload.get("style_assets", []):
+        if not isinstance(asset, dict):
+            continue
+        path = str(asset.get("path", ""))
+        if not path:
+            continue
+        add_if_exists(
+            items,
+            Path(path),
+            str(asset.get("role", "style profile guidance")),
+            required=True,
+        )
+    return profile_payload
+
+
+def add_style_pass_items(items: list[dict[str, str]]) -> None:
+    for path, role, required in STYLE_PASS_FILES:
+        add_if_exists(items, Path(path), role, required=required)
+
+
+def context_for(
+    project_name: str,
+    stage: str,
+    chapter: str,
+    document_preset: str = "",
+    preset_query: str = "",
+    style_profile: str = "",
+    style_query: str = "",
+    output_language: str = "",
+) -> dict[str, object]:
     config = load_config()
     project = PROJECT_ROOT / project_name
     items: list[dict[str, str]] = []
@@ -315,12 +477,12 @@ def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object
         if major.exists():
             skeleton.append(major)
 
-    if stage in {"interview", "architect", "source", "chapter", "visual", "chart", "assemble", "review", "export", "cloud"}:
+    if stage in {"interview", "design", "architect", "source", "chapter", "visual", "chart", "assemble", "style", "review", "export", "cloud"}:
         for path in prd[:3]:
             add_if_exists(items, path, "report PRD")
         for path in toc[:3]:
             add_if_exists(items, path, "detailed TOC")
-    if stage in {"interview", "chapter", "visual", "chart", "assemble", "review", "export", "cloud"}:
+    if stage in {"interview", "design", "chapter", "visual", "chart", "assemble", "style", "review", "export", "cloud"}:
         for path in skeleton[:3]:
             add_if_exists(items, path, "major skeleton")
 
@@ -328,6 +490,10 @@ def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object
         add_if_exists(items, project / "questions" / "question_log.md", "question and decision log")
         add_if_exists(items, project / "assumptions" / "assumption_register.md", "assumption register")
         add_if_exists(items, project / "project_state" / "report_stage_manifest.json", "current report stage record")
+    elif stage == "design":
+        add_if_exists(items, Path("_ai_system/templates/report_design_template.md"), "report design template", required=True)
+        add_if_exists(items, Path("_ai_system/DESIGN_DOCUMENT.md"), "shared report design rules")
+        add_if_exists(items, project / "reports" / "report_design.md", "current report design file")
     elif stage == "source":
         add_if_exists(items, project / "drafts" / "source_collection_plan.md", "source collection plan")
         add_if_exists(items, project / "references" / "reference_inventory.csv", "reference inventory")
@@ -375,6 +541,26 @@ def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object
         if chapter_dir.exists():
             for path in sorted(chapter_dir.glob("ch*.html"))[:30]:
                 add_if_exists(items, path, "chapter fragment source of truth")
+    elif stage == "style":
+        add_style_pass_items(items)
+        add_if_exists(items, project / "reports" / "report_claim_register.md", "claim register")
+        add_if_exists(items, project / "source_index" / "source_master_index.md", "source master index")
+        add_if_exists(items, project / "project_state" / "context_index_manifest.json", "local DuckDB context index manifest")
+        add_if_exists(items, project / "reports" / "style_pass", "recommended style-pass artifact folder")
+        chapter_id = chapter
+        if chapter_id:
+            workpack = project / "reports" / "chapter_workpacks" / f"{chapter_id}_workpack.md"
+            fragment = project / "reports" / "chapters" / f"{chapter_id}.html"
+            add_if_exists(items, workpack, f"chapter workpack for style pass: {chapter_id}", required=True)
+            add_if_exists(items, fragment, f"chapter fragment to review for style pass: {chapter_id}", required=True)
+            if workpack.exists():
+                extracted_refs = add_workpack_related_items(items, warnings, project, workpack, chapter_id)
+        else:
+            add_if_exists(items, project / "reports" / "internal_review_report.html", "assembled reading copy for style review")
+            chapter_dir = project / "reports" / "chapters"
+            if chapter_dir.exists():
+                for path in sorted(chapter_dir.glob("ch*.html"))[:30]:
+                    add_if_exists(items, path, "chapter fragment source of truth for style pass")
     elif stage in {"review", "export", "cloud"}:
         add_if_exists(items, project / "reports" / "internal_review_report.html", "assembled report")
         add_if_exists(items, project / "data_sources" / "visual_plan.csv", "visual plan")
@@ -383,6 +569,27 @@ def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object
             add_if_exists(items, project / "reports" / "export_manifest.json", "local export manifest")
             add_if_exists(items, project / "references" / "source_link_register.csv", "source link register")
             add_if_exists(items, project / "source_index" / "source_master_index.md", "source master index")
+
+    document_preset_payload = add_document_preset_items(items, warnings, document_preset, preset_query, stage, output_language)
+    style_profile_payload = add_style_profile_items(items, warnings, style_profile, style_query, output_language)
+    style_pass_payload: dict[str, object] = {}
+    if stage == "style" or style_profile_payload:
+        style_pass_payload = {
+            "status": "available",
+            "automation_status": "guidance_only",
+            "recommended_output_dir": (project / "reports" / "style_pass").as_posix(),
+            "workflow_files": [path for path, _, _ in STYLE_PASS_FILES[:1]],
+            "artifact_templates": [path for path, _, _ in STYLE_PASS_FILES[1:]],
+            "risk_types": ["style-only", "evidence-related", "approval-sensitive", "genre-drift", "reader-fit"],
+            "required_sequence": ["style risk findings", "protected spans", "limited rewrite diff when allowed", "fidelity review", "naturalness review", "rollback or human review when required"],
+        }
+    if stage == "style" and not (style_profile or style_query):
+        warnings.append("style stage requested without --style-profile or --style-query; read INDEX.json and select a guidance-only profile before limited rewrite")
+    language_payload = {
+        "output_language": output_language,
+        "guidance_policy": "include selected language_guidance.md only for explicit en or mixed context packets",
+        "implementation_basis": "explicit CLI option is used instead of automatic PRD parsing to avoid unreliable inference and accidental translation/rewrite behavior",
+    } if output_language else {}
 
     items = dedupe_items(items)
     missing_required = [item["path"] for item in items if item["required"] == "yes" and item["exists"] == "no"]
@@ -402,6 +609,10 @@ def context_for(project_name: str, stage: str, chapter: str) -> dict[str, object
             "usage": "If this exists, query it for specific source/page/slide snippets instead of rereading all originals or all source records.",
         },
         "legacy_project": project_name in set(list_value(config, "legacy_report_factory_projects")),
+        "language": language_payload,
+        "document_preset": document_preset_payload,
+        "style_profile": style_profile_payload,
+        "style_pass": style_pass_payload,
         "extracted_refs": extracted_refs,
         "context_files": items,
         "warnings": warnings,
@@ -415,9 +626,23 @@ def main() -> int:
     parser.add_argument("--project", required=True, help="Project folder name under 00_사용자_작업공간")
     parser.add_argument("--stage", required=True, choices=sorted(STAGE_SKILLS), help="Report factory stage.")
     parser.add_argument("--chapter", default="", help="Chapter id such as ch03 or ch00_summary for chapter-stage work.")
+    parser.add_argument("--document-preset", default="", help="Selected document preset_id to add stage-specific preset assets.")
+    parser.add_argument("--preset-query", default="", help="Document type alias/query to resolve before adding stage-specific preset assets.")
+    parser.add_argument("--style-profile", default="", help="Selected guidance-only style profile_id to add profile guidance assets.")
+    parser.add_argument("--style-query", default="", help="Reader tone/style alias query to resolve before adding guidance-only style profile assets.")
+    parser.add_argument("--output-language", default="", choices=["", "ko", "en", "mixed", "undecided"], help="Current PRD/task output_language. Adds selected language_guidance.md for en or mixed without enabling translation/rewrite.")
     parser.add_argument("--write-packet", action="store_true", help="Write context_packets/*.compact.md and *.compact.tsv for this stage.")
     args = parser.parse_args()
-    payload = context_for(args.project, args.stage, args.chapter)
+    payload = context_for(
+        args.project,
+        args.stage,
+        args.chapter,
+        args.document_preset,
+        args.preset_query,
+        args.style_profile,
+        args.style_query,
+        args.output_language,
+    )
     if args.write_packet:
         payload["context_packet"] = write_context_packet(args.project, payload)
     print(json.dumps(payload, ensure_ascii=False, indent=2))

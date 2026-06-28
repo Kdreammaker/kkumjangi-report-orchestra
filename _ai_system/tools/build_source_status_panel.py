@@ -30,33 +30,33 @@ def source_index_by_id(project: Path) -> dict[str, dict[str, str]]:
 def classify_link(row: dict[str, str], source_status: str, has_record: bool) -> dict[str, object]:
     use_level = row.get("use_level", "").strip().lower()
     url_status = row.get("url_status", "").strip().lower()
-    download_status = row.get("download_status", "").strip().lower()
-    capture_status = row.get("capture_status", "").strip().lower()
+    source_locator = row.get("source_locator", "").strip()
+    needs_user_file = row.get("needs_user_file", "").strip().lower()
     has_evidence_path = bool(row.get("original_path", "").strip() or row.get("capture_path", "").strip())
-    failed = any(status in {"failed", "blocked"} for status in [url_status, download_status, capture_status])
+    failed = url_status in {"failed", "blocked"} or needs_user_file == "yes"
 
     warnings: list[str] = []
     action = "추가 조치 없음"
     state = "ok"
     if use_level in {"lead", "not_collected", "collection_blocked", ""}:
         state = "blocked" if failed or use_level == "collection_blocked" else "lead"
-        action = "원문 파일, 정확 URL 캡처, 또는 사용자 제공 자료가 필요합니다."
+        action = "정확한 공식 링크와 출처 위치를 보강하거나, 필요한 파일을 사용자 요청 목록에 올리세요."
     elif use_level == "url_only":
-        state = "needs_capture"
-        action = "quote verifier로 URL 본문과 Exact Quotes를 대조하고 캡처를 남겨야 합니다."
-    elif use_level in {"quote_verified", "report_citable"} and not has_evidence_path:
-        state = "needs_capture"
-        action = "quote_verified 상태에는 original_path 또는 capture_path가 필요합니다."
-        warnings.append("quote_verified_without_evidence_path")
+        state = "needs_locator"
+        action = "정확 URL, 접근일, source_locator, source record의 인용 위치를 맞춰 주세요."
+    elif use_level in {"quote_verified", "report_citable"} and not source_locator:
+        state = "needs_locator"
+        action = "quote_verified/report_citable 상태에는 source_locator가 필요합니다."
+        warnings.append("quote_verified_without_source_locator")
     elif use_level in {"quote_verified", "report_citable"}:
         state = "quote_verified"
-        action = "source record와 claim register의 정확 위치까지 함께 확인하세요."
+        action = "source record와 claim register의 정확 위치까지 함께 확인하세요. 파일 캡처는 기본 요구사항이 아닙니다."
 
     if source_status == "report_citable" and not has_record:
         state = "risk"
         action = "report_citable 출처에는 source record가 필요합니다."
         warnings.append("report_citable_without_source_record")
-    if source_status == "report_citable" and state in {"blocked", "lead", "needs_capture"}:
+    if source_status == "report_citable" and state in {"blocked", "lead", "needs_locator"}:
         warnings.append("report_citable_but_link_not_ready")
 
     return {
@@ -91,7 +91,7 @@ def panel_payload(project: Path) -> dict[str, object]:
         else:
             classification = {
                 "state": "no_link_row",
-                "action": "URL-only 또는 수집 실패 출처라면 source_link_register.csv row가 필요합니다.",
+                "action": "URL-only 또는 외부 링크 후보라면 정확 URL, 접근일, 출처 위치를 source_link_register.csv에 남기세요.",
                 "warnings": [],
                 "has_evidence_path": False,
                 "failed_or_blocked_status": False,
@@ -108,10 +108,11 @@ def panel_payload(project: Path) -> dict[str, object]:
                 "source_status": source_status,
                 "has_source_record": has_record,
                 "url": link.get("url", ""),
+                "official_url": link.get("official_url") or link.get("url", ""),
                 "use_level": link.get("use_level", ""),
                 "url_status": link.get("url_status", ""),
-                "download_status": link.get("download_status", ""),
-                "capture_status": link.get("capture_status", ""),
+                "source_locator": link.get("source_locator", ""),
+                "needs_user_file": link.get("needs_user_file", ""),
                 "original_path": link.get("original_path", ""),
                 "capture_path": link.get("capture_path", ""),
                 "state": state,
@@ -151,9 +152,9 @@ def render_html(payload: dict[str, object]) -> str:
 
     state_labels = {
         "quote_verified": "인용 검증 근거 있음",
-        "needs_capture": "캡처/대조 필요",
-        "blocked": "수집 차단",
-        "lead": "리드",
+        "needs_locator": "링크/위치 보강 필요",
+        "blocked": "링크/파일 요청 필요",
+        "lead": "정확 링크 후보",
         "no_link_row": "링크 row 없음",
         "risk": "위험",
         "ok": "확인",
@@ -167,9 +168,9 @@ def render_html(payload: dict[str, object]) -> str:
             f"<tr class=\"state-{esc(state)}\">"
             f"<td><strong>{esc(item.get('source_id'))}</strong><br><span>{esc(item.get('file_name') or item.get('title'))}</span></td>"
             f"<td>{esc(state_labels.get(state, state))}</td>"
-            f"<td>{esc(item.get('use_level'))}<br><span>{esc(item.get('url_status'))} / {esc(item.get('download_status'))} / {esc(item.get('capture_status'))}</span></td>"
+            f"<td>{esc(item.get('use_level'))}<br><span>{esc(item.get('url_status'))} / {esc(item.get('source_locator'))}</span></td>"
             f"<td>{esc(item.get('source_status'))}<br><span>record: {esc('yes' if item.get('has_source_record') else 'no')}</span></td>"
-            f"<td>{esc(item.get('capture_path') or item.get('original_path') or item.get('url'))}</td>"
+            f"<td>{esc(item.get('capture_path') or item.get('original_path') or item.get('official_url') or item.get('url'))}</td>"
             f"<td>{esc(item.get('action'))}</td>"
             "</tr>"
         )
@@ -207,7 +208,7 @@ def render_html(payload: dict[str, object]) -> str:
     th, td {{ border-bottom:1px solid #e5e7eb; padding:9px 10px; text-align:left; vertical-align:top; font-size:14px; }}
     th {{ background:#f9fafb; }}
     .state-quote_verified td:first-child {{ border-left:4px solid #167A5B; }}
-    .state-needs_capture td:first-child, .state-blocked td:first-child, .state-risk td:first-child {{ border-left:4px solid #B8567A; }}
+    .state-needs_locator td:first-child, .state-blocked td:first-child, .state-risk td:first-child {{ border-left:4px solid #B8567A; }}
     .state-lead td:first-child, .state-no_link_row td:first-child {{ border-left:4px solid #D97706; }}
     ul {{ margin:8px 0 0 20px; padding:0; }}
   </style>
@@ -216,7 +217,7 @@ def render_html(payload: dict[str, object]) -> str:
 <main>
   <header>
     <h1>{esc(payload.get("project"))} 출처 상태</h1>
-    <p class="note">이 패널은 source link register, source index, source records를 사람이 읽기 쉽게 합친 보기입니다. 원문 진위나 보고서 closeout을 대체하지 않습니다.</p>
+    <p class="note">이 패널은 source link register, source index, source records를 사람이 읽기 쉽게 합친 보기입니다. 기본 흐름은 외부 파일 다운로드가 아니라 정확 링크, 출처 위치, 사용자 제공 필요 자료를 분리해 남기는 것입니다. 원문 진위나 보고서 closeout을 대체하지 않습니다.</p>
   </header>
   <section class="summary">
     <div class="tile"><div class="label">전체 출처 ID</div><div class="value">{esc(summary.get("total_sources_seen", 0))}</div></div>
@@ -229,7 +230,7 @@ def render_html(payload: dict[str, object]) -> str:
   <ul>{warning_items}</ul>
   <h2>출처별 상태</h2>
   <table>
-    <thead><tr><th>출처</th><th>상태</th><th>링크 수집</th><th>보고서 상태</th><th>근거 위치</th><th>다음 조치</th></tr></thead>
+    <thead><tr><th>출처</th><th>상태</th><th>링크/위치 상태</th><th>보고서 상태</th><th>확인 위치</th><th>다음 조치</th></tr></thead>
     <tbody>{row_html}</tbody>
   </table>
 </main>

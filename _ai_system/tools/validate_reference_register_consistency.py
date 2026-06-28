@@ -12,8 +12,6 @@ PROJECT_ROOT = Path("00_사용자_작업공간")
 REPORT_USE_STATUSES = {"claim_ready", "quote_verified", "report_citable"}
 LINK_USE_LEVELS = {"quote_verified", "report_citable"}
 URL_STATUS_OK = {"ok", "verified", "200", "exact_url_verified"}
-DOWNLOAD_STATUS_OK = {"downloaded", "ok", "downloaded_original"}
-CAPTURE_STATUS_OK = {"captured", "ok", "captured_html"}
 PENDING_QUOTE_RE = re.compile(r"quote\s+verification\s+pending|인용\s*검증\s*대기|인용\s*확인\s*대기", re.I)
 
 
@@ -54,8 +52,14 @@ def normalize_header(value: str) -> str:
         return "download_status"
     if "capture_status" in compact:
         return "capture_status"
-    if text == "url":
+    if text in {"url", "official_url"}:
         return "url"
+    if "source_locator" in compact or "quote_location" in compact or "exact_quote_location" in compact:
+        return "source_locator"
+    if "needs_user_file" in compact:
+        return "needs_user_file"
+    if "user_file_request_id" in compact:
+        return "user_file_request_id"
     return compact
 
 
@@ -141,11 +145,7 @@ def path_exists(project: Path, value: str) -> bool:
 
 
 def link_has_verified_collection(link: dict[str, str]) -> bool:
-    return (
-        clean(link.get("url_status")).lower() in URL_STATUS_OK
-        or clean(link.get("download_status")).lower() in DOWNLOAD_STATUS_OK
-        or clean(link.get("capture_status")).lower() in CAPTURE_STATUS_OK
-    )
+    return clean(link.get("url_status")).lower() in URL_STATUS_OK
 
 
 def source_is_report_used(row: dict[str, str], record: dict[str, str] | None = None, link: dict[str, str] | None = None) -> bool:
@@ -218,13 +218,14 @@ def validate_project(project: Path) -> dict[str, object]:
             if use_level not in LINK_USE_LEVELS:
                 errors.append(f"{source_id}: source_link_register use_level={use_level} cannot support report use")
             if not link_has_verified_collection(link):
-                errors.append(f"{source_id}: source_link_register lacks verified URL/download/capture status")
+                errors.append(f"{source_id}: source_link_register lacks verified exact URL status")
+            if not clean(link.get("url")):
+                errors.append(f"{source_id}: source_link_register lacks exact official URL")
+            if use_level in LINK_USE_LEVELS and not clean(link.get("source_locator")):
+                errors.append(f"{source_id}: quote/report-citable link row requires source_locator")
+            if clean(link.get("needs_user_file")).lower() == "yes" and not clean(link.get("user_file_request_id")):
+                warnings.append(f"{source_id}: needs_user_file=yes should reference user_requested_materials.md")
             evidence_paths = [clean(link.get("original_path")), clean(link.get("capture_path"))]
-            if use_level in LINK_USE_LEVELS and not any(evidence_paths):
-                warnings.append(
-                    f"{source_id}: quote/report-citable link row has no original_path/capture_path; "
-                    "use exact URL plus source-record quote/location, or list file needs in user_requested_materials.md"
-                )
             for value in evidence_paths:
                 if value and not path_exists(project, value):
                     errors.append(f"{source_id}: source_link_register evidence path does not exist: {value}")

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validation Fixture Investor Brief Sample</title>
+  <!-- Reusable template reference: _ai_system/templates/report_html/report.css -->
+  <style>
+    :root {
+      --ink: #1e252c;
+      --muted: #5f6973;
+      --line: #cbd5df;
+      --soft: #f4f7f9;
+      --accent: #315f7d;
+      --warn: #8f6041;
+      --good: #43785d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8fa;
+      color: var(--ink);
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      line-height: 1.58;
+    }
+    .report-page {
+      width: min(960px, calc(100% - 32px));
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 40px;
+    }
+    .cover-page {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+    }
+    .fixture-banner {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: 31px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .subhead {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0;
+    }
+    .cover-grid, .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    aside {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--warn);
+      background: #fffaf6;
+      padding: 14px;
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      margin: 12px 0 22px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th { background: var(--soft); }
+    caption, figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    caption {
+      caption-side: bottom;
+      padding-top: 8px;
+    }
+    figure {
+      margin: 14px 0 24px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+    }
+    .long-token, code {
+      overflow-wrap: anywhere;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .references {
+      border-top: 1px solid var(--line);
+      margin-top: 30px;
+      padding-top: 16px;
+    }
+    @media (max-width: 720px) {
+      .report-page { width: calc(100% - 20px); padding: 26px; }
+      .cover-grid, .meta-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page assembled-report" data-assembled-report="true" data-preset-id="investor_brief">
+    <section class="cover-page report-cover" data-cover-component="report-cover-v1">
+      <span class="fixture-banner">Validation Fixture - Synthetic Investor Brief</span>
+      <h1>Fixture Investor Brief Factbook</h1>
+      <p class="subhead">투자자 브리프 프리셋의 KPI, 위험, Q&amp;A, 정적 시각화 구조 검증용 HTML fixture</p>
+      <div class="cover-grid" aria-label="document control metadata">
+        <div><strong>보고서 번호:</strong> FIX-IB-2026-06</div>
+        <div><strong>보안 등급:</strong> Internal validation fixture</div>
+        <div><strong>작성일:</strong> 2026.06.03</div>
+        <div><strong>데이터 기준일:</strong> 2026.06.03</div>
+        <div><strong>문서 분류 코드:</strong> investor_brief sample</div>
+        <div><strong>승인 상태:</strong> Fixture-only sample approval</div>
+      </div>
+    </section>
+
+    <aside aria-label="fixture boundary">
+      <strong>면책 및 사용 제한:</strong> 본 문서는 validation fixture입니다. 실제 회사, 주주, 투자자, 매출, 사용자, 자금조달, 기업가치, 투자조건, 법률 검토를 포함하지 않습니다. 모든 수치와 질의응답은 synthetic fixture 값이며 투자 권유나 IR 배포물이 아닙니다.<sup id="fnref-1">1</sup>
+      <div class="meta-grid">
+        <div><strong>데이터 상태:</strong> fixture-only synthetic dataset</div>
+        <div><strong>공유 범위:</strong> validator structure check only</div>
+      </div>
+    </aside>
+
+    <section>
+      <h1>제0장 요약</h1>
+      <p>이 샘플은 `investor_brief` 프리셋이 controlled factbook 형식으로 KPI, forward-looking statement 경계, investor Q&amp;A, 위험 메모를 분리할 수 있는지 확인합니다. 결론은 산출물 구조 검증 가능성에 한정됩니다.</p>
+    </section>
+
+    <section>
+      <h2>1. KPI와 승인 상태 분리</h2>
+      <p>아래 표는 실제 운영 지표가 아니라, KPI 이름과 값, 승인 상태, 기준일을 좁은 표 안에서 표현하는지 확인하는 합성 데이터입니다.</p>
+
+      <h3>Fixture KPI Status Table</h3>
+      <!-- data_sources/investor_brief_fixture_kpi.csv -->
+      <table>
+        <caption>자료: synthetic investor brief KPI fixture. 근거 데이터: investor_brief_fixture_kpi dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>기간</th>
+            <th>합성 값</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Fixture recurring index</td><td>FY2026Q1</td><td>104</td><td>검증용 합성 지표</td></tr>
+          <tr><td>Fixture retention index</td><td>FY2026Q1</td><td>91</td><td>검증용 합성 지표</td></tr>
+          <tr><td>Fixture pipeline index</td><td>FY2026Q1</td><td>118</td><td>검증용 합성 지표</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Risk and Diligence Table</h3>
+      <!-- data_sources/investor_brief_fixture_risk.csv -->
+      <table>
+        <caption>자료: synthetic diligence risk fixture. 근거 데이터: investor_brief_fixture_risk dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>위험 영역</th>
+            <th>Fixture 신호</th>
+            <th>통제 메모</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Commercial fit</td><td>medium</td><td>근거와 forward-looking assumption을 분리하는 구조 검증</td></tr>
+          <tr><td>Funding readiness</td><td>low</td><td>투자 추천 문구를 피하는 구조 검증</td></tr>
+          <tr><td>Data limitation</td><td>high</td><td>합성 값은 실사 근거가 아니라는 경계 표시</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Static KPI and Question Trend</h2>
+      <p>투자자 질문과 KPI 흐름을 한 figure 안에 넣되, JavaScript나 interactive chart 없이 static SVG로 표현합니다.</p>
+
+      <!-- data_sources/investor_brief_fixture_trend.csv -->
+      <figure class="chart static-chart">
+        <svg viewBox="0 0 700 260" role="img" aria-labelledby="ib-chart-title ib-chart-desc">
+          <title id="ib-chart-title">Fixture KPI and Question Trend</title>
+          <desc id="ib-chart-desc">Synthetic investor brief trend showing fixture KPI index rising and fixture question index easing.</desc>
+          <rect x="0" y="0" width="700" height="260" fill="#ffffff"/>
+          <line x1="64" y1="206" x2="640" y2="206" stroke="#66717b"/>
+          <line x1="64" y1="42" x2="64" y2="206" stroke="#66717b"/>
+          <polyline points="64,160 250,142 436,121 622,101" fill="none" stroke="#43785d" stroke-width="4"/>
+          <polyline points="64,118 250,126 436,134 622,144" fill="none" stroke="#8f6041" stroke-width="4"/>
+          <text x="82" y="58" font-size="13" fill="#43785d">Fixture KPI index</text>
+          <text x="82" y="78" font-size="13" fill="#8f6041">Fixture open-question index</text>
+          <text x="62" y="230" font-size="12" fill="#5f6973">Q1</text>
+          <text x="246" y="230" font-size="12" fill="#5f6973">Q2</text>
+          <text x="432" y="230" font-size="12" fill="#5f6973">Q3</text>
+          <text x="618" y="230" font-size="12" fill="#5f6973">Q4</text>
+        </svg>
+        <figcaption>자료: synthetic investor brief trend fixture. 근거 데이터: investor_brief_fixture_trend dataset, 기준일 2026.06.03. 대체 설명: fixture KPI index는 상승하고 open-question index는 완만히 낮아지는 구조 검증용 그래프입니다.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>3. Investor Q&amp;A 경계</h2>
+      <p><strong>질문:</strong> 이 fixture가 실제 투자 검토나 기업 실사를 대체합니까?</p>
+      <p><strong>답변:</strong> 아닙니다. 이 문서는 표, figure, figcaption, footnote, appendix, 긴 토큰 wrapping을 검증하기 위한 합성 산출물입니다. 예시 토큰 <code class="long-token">fixture-investor-brief-token-2026-06-03-not-a-real-company-or-investor-reference.example.invalid</code>은 줄바꿈 검증용입니다.</p>
+    </section>
+
+    <section>
+      <h2>4. 한계 및 결론</h2>
+      <p>이 샘플의 결론은 프리셋 구조가 validator에서 점검 가능한 형태로 표현된다는 fixture-level 확인입니다. 실제 보고서 품질, 출처 진위, 투자 적합성, 법률 적합성, 외부 배포 준비 상태를 증명하지 않습니다.</p>
+    </section>
+
+    <section class="references" id="report-references">
+      <h2>부록 A. 참고자료 목록</h2>
+      <ol>
+        <li>Validation fixture datasets generated for investor_brief preset artifact testing. 접근일: 2026.06.03.</li>
+        <li>Preset validation checklist: investor_brief module, fixture scope only. 접근일: 2026.06.03.</li>
+      </ol>
+      <p id="fn-1"><sup>1</sup> Footnote marker included to verify substantial-report note handling. It is not a real securities, IR, or legal disclosure.</p>
+    </section>
+  </main>
+</body>
+</html>

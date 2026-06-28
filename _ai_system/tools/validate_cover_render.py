@@ -48,13 +48,33 @@ def truthy(value: object) -> bool:
 
 
 def confidential_from_cover_data(data: dict[str, object]) -> bool:
-    fields = [
-        data.get("confidentiality_status", ""),
-        data.get("classification", ""),
-        data.get("security_level", ""),
-        data.get("security_tag", ""),
-    ]
-    return bool(data.get("is_confidential")) or any("대외비" in str(value) or truthy(value) for value in fields)
+    explicit = data.get("is_confidential")
+    if isinstance(explicit, bool):
+        return explicit
+    if truthy(explicit):
+        return True
+
+    status = str(data.get("confidentiality_status", "")).strip().lower()
+    if status in {"대외비", "confidential"}:
+        return True
+    if status in {"대외비 아님", "not_confidential", "not confidential", "public", "공개", ""}:
+        return False
+
+    fields = [data.get("security_level", ""), data.get("security_tag", "")]
+    return any(truthy(value) for value in fields)
+
+
+def display_classification(value: object) -> str:
+    text = str(value).strip()
+    if not text:
+        return ""
+    text = text.strip("[] ")
+    text = re.sub(r"(?i)\bconfidential\b", "", text)
+    text = text.replace("대외비", "").replace("기밀", "")
+    text = re.sub(r"\s*(/|\\|\||·|-)+\s*", " / ", text)
+    text = re.sub(r"^(?:/|\\|\||·|-|\s)+|(?:/|\\|\||·|-|\s)+$", "", text)
+    text = re.sub(r"\s{2,}", " ", text).strip()
+    return text
 
 
 def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
@@ -70,8 +90,9 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     security_tag = str(data.get("security_tag", "")).strip()
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
+    tag_class = "cover-security-tag" if is_confidential else "cover-status-tag"
     security_tag_html = (
-        f'<span class="cover-security-tag">{html.escape(security_tag, quote=False)}</span>'
+        f'<span class="{tag_class}">{html.escape(security_tag, quote=False)}</span>'
         if security_tag
         else ""
     )
@@ -178,6 +199,7 @@ def render_cover(data: dict[str, object]) -> tuple[str, list[str]]:
         "meta_table_html": render_meta_table(data, preset),
         "approval_html": render_approval(data, preset),
     }
+    tokens["classification"] = display_classification(tokens.get("classification", ""))
     for key, value in tokens.items():
         if key.endswith("_html"):
             template = template.replace("{{" + key + "}}", str(value))

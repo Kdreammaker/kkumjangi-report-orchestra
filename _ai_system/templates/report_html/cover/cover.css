@@ -11,36 +11,25 @@
   border-top: 6px solid var(--cover-dark);
   box-sizing: border-box;
   color: var(--cover-ink);
-  display: grid;
-  grid-template-rows: auto 1fr auto auto;
-  min-height: 0;
+  display: block;
   padding: 30px 34px 32px;
   page-break-after: always;
 }
 
 .cover-topline {
   align-items: center;
+  border-bottom: 2px solid var(--cover-dark);
   display: flex;
   gap: 12px;
   justify-content: space-between;
   min-height: 36px;
   padding-bottom: 14px;
-  position: relative;
-}
-
-.cover-topline::after {
-  background: linear-gradient(90deg, var(--cover-dark), var(--cover-blue), rgba(255,255,255,0));
-  bottom: 0;
-  content: "";
-  height: 2px;
-  left: 0;
-  position: absolute;
-  right: 0;
 }
 
 .classification,
 .report-type,
-.cover-security-tag {
+.cover-security-tag,
+.cover-status-tag {
   border: 1px solid rgba(0, 107, 214, 0.24);
   color: var(--cover-dark);
   font-size: 13px;
@@ -73,13 +62,21 @@
   padding: 7px 10px;
 }
 
+.cover-status-tag {
+  background: #f8fafc;
+  border-color: var(--cover-line);
+  color: var(--cover-muted);
+  display: inline-flex;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
 .report-type {
   background: rgba(255, 255, 255, 0.74);
 }
 
 .cover-hero {
-  align-self: center;
-  margin: 28px 0 28px;
+  margin: 42px 0 26px;
   max-width: 920px;
 }
 
@@ -108,19 +105,19 @@
 
 .cover-hero h1 {
   color: var(--cover-dark);
-  font-size: clamp(26px, 3.2vw, 34px);
+  font-size: 30px;
   font-weight: 800;
   line-height: 1.28;
-  margin: 0 0 22px;
+  margin: 0 0 18px;
   max-width: 860px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .cover-hero .subtitle {
   border-left: 4px solid var(--cover-blue);
   color: #3f4855;
-  font-size: 17px;
-  line-height: 1.72;
+  font-size: 16px;
+  line-height: 1.62;
   margin: 0;
   max-width: 780px;
   padding-left: 16px;
@@ -131,7 +128,7 @@
   border-collapse: collapse;
   border: 1px solid var(--cover-line);
   border-top: 3px solid var(--cover-dark);
-  margin: 0 0 26px;
+  margin: 0 0 22px;
   width: 100%;
 }
 
@@ -155,7 +152,7 @@
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  margin: 24px 0 28px;
+  margin: 20px 0 24px;
 }
 
 .cover-approval-1 {
@@ -191,7 +188,7 @@
   border-left: 4px solid var(--cover-blue);
   color: #3f4855;
   font-size: 14px;
-  margin: 32px 0 0;
+  margin: 26px 0 0;
   padding: 12px 14px;
 }
 

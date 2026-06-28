@@ -52,7 +52,11 @@ body {
   font-size: 16px;
   line-height: 1.82;
   word-break: keep-all;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+}
+
+html[lang="en"] body {
+  word-break: normal;
 }
 
 .report-page {
@@ -81,7 +85,7 @@ h2,
 h3 {
   color: var(--rf-dark);
   line-height: 1.35;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   page-break-after: avoid;
 }
 
@@ -144,9 +148,11 @@ p {
 .report-table td {
   border-bottom: 1px solid var(--rf-line);
   font-size: 14px;
+  overflow-wrap: break-word;
   padding: 9px 11px;
   text-align: left;
   vertical-align: top;
+  word-break: normal;
 }
 
 .report-table th {
@@ -245,9 +251,11 @@ td {
   border-bottom: 1px solid var(--rf-line);
   font-size: 13.5px;
   line-height: 1.55;
+  overflow-wrap: break-word;
   padding: 10px 12px;
   text-align: left;
   vertical-align: top;
+  word-break: normal;
 }
 
 th {
@@ -322,6 +330,24 @@ li::marker {
   padding: 14px 16px;
   break-inside: avoid;
   page-break-inside: avoid;
+}
+
+a[href],
+code,
+kbd,
+samp,
+pre,
+.url,
+.path,
+.code,
+.long-token,
+.long-text {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+pre {
+  white-space: pre-wrap;
 }
 
 @media print {

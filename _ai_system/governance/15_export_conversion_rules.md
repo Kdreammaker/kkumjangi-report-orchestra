@@ -38,6 +38,8 @@ For DOCX/PDF export:
 
 DOCX readiness should preserve design quality. Do not flatten a premium HTML report into a plain text document only to make conversion easier.
 
+Readiness is not native Word automation support. Presets, design guidance, or validation notes may require conversion-friendly structure, but they must not be read as proof that advanced Word field, numbering, section, or chart-editing features are implemented.
+
 Prefer:
 
 - semantic HTML,
@@ -58,6 +60,29 @@ Avoid:
 - absolute local paths in reader-facing text.
 - viewport-height cover sizing that consumes a second margin layer during DOCX/PDF conversion,
 - background-heavy cover effects that become large images or unstable blocks in word processors.
+
+## Current Export Support
+
+Currently supported export claims are limited to:
+
+- DOCX/PDF file creation through the chosen conversion tool,
+- DOCX package or PDF page structure checks,
+- checks for headings, tables, figures/media, captions, references, and page breaks where relevant,
+- export evidence records under `reports/export_checks/`,
+- rendered or visually inspected sample pages when available.
+
+These checks can support `structure_checked`, `render_verified`, or `delivery_candidate` status only under the evidence rules above. They do not prove Word-native automation.
+
+## Unsupported Until PoC
+
+Treat the following as unsupported unless a task adds a documented proof-of-concept, validator, and export evidence:
+
+- Word field codes such as `PAGE` and `NUMPAGES`,
+- automatic Word caption numbering with `SEQ Table` or `SEQ Figure` fields,
+- Word landscape sections or mixed-orientation section breaks,
+- native editable Word chart creation, round-trip editing, or chart data binding.
+
+If a report needs any of these, record it as `unsupported_poc_required` or a known export limitation instead of claiming DOCX support from presets alone.
 
 ## Export Check Evidence
 

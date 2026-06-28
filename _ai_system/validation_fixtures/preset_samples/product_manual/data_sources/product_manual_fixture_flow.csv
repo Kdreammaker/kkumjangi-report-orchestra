@@ -1,0 +1,4 @@
+step,decision,yes_path,no_path,as_of
+1,Prerequisites checked,Continue to fixture setup,Review before-you-begin notes,2026-06-03
+2,Configuration accepted,Run sample verification,Return to settings table,2026-06-03
+3,Verification clean,Record fixture result,Escalate as validation-only issue,2026-06-03

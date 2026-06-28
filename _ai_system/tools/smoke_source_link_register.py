@@ -127,20 +127,16 @@ def main() -> int:
                 SMOKE_PROJECT,
                 "--source-id",
                 "src_url",
-                "--url",
+                "--official-url",
                 "https://example.com/reports/exact-document.pdf",
                 "--title",
                 "Exact official document",
                 "--url-status",
                 "failed",
-                "--download-status",
-                "failed",
-                "--capture-status",
-                "failed",
                 "--use-level",
                 "collection_blocked",
                 "--notes",
-                "download and capture failed in smoke",
+                "source stayed blocked in smoke",
             ]
         )
         blocked_payload = parse_json(blocked_proc)
@@ -157,79 +153,72 @@ def main() -> int:
             }
         )
 
-        verified_without_capture_proc = run(
+        verified_link_first_proc = run(
             [
                 "_ai_system/tools/record_source_link.py",
                 "--project",
                 SMOKE_PROJECT,
                 "--source-id",
                 "src_url",
-                "--url",
+                "--official-url",
                 "https://example.com/reports/exact-document.pdf",
                 "--title",
                 "Exact official document",
                 "--url-status",
                 "exact_url_verified",
-                "--download-status",
-                "not_attempted",
-                "--capture-status",
-                "not_attempted",
+                "--source-locator",
+                "exact URL section",
                 "--use-level",
                 "quote_verified",
+                "--claim-support-type",
+                "direct_quote",
                 "--notes",
-                "exact URL verified but no local capture in smoke",
+                "exact URL and locator verified without AI download in smoke",
             ]
         )
-        verified_without_capture_payload = parse_json(verified_without_capture_proc)
-        verified_without_capture_check_proc = run(["_ai_system/tools/validate_research_integrity.py", "--project", SMOKE_PROJECT])
-        verified_without_capture_check_payload = parse_json(verified_without_capture_check_proc)
-        warning_count = int(verified_without_capture_check_payload.get("warnings", 0) or 0)
+        verified_link_first_payload = parse_json(verified_link_first_proc)
+        verified_link_first_check_proc = run(["_ai_system/tools/validate_research_integrity.py", "--project", SMOKE_PROJECT])
+        verified_link_first_check_payload = parse_json(verified_link_first_check_proc)
         results.append(
             {
-                "case": "quote_verified_url_without_capture_warns_but_passes",
-                "exit_code": verified_without_capture_check_proc.returncode,
-                "passed": verified_without_capture_proc.returncode == 0
-                and verified_without_capture_check_proc.returncode == 0
-                and warning_count >= 1,
-                "payload": {"record": verified_without_capture_payload, "check": verified_without_capture_check_payload},
+                "case": "quote_verified_url_without_capture_passes_with_exact_link_and_locator",
+                "exit_code": verified_link_first_check_proc.returncode,
+                "passed": verified_link_first_proc.returncode == 0
+                and verified_link_first_check_proc.returncode == 0,
+                "payload": {"record": verified_link_first_payload, "check": verified_link_first_check_payload},
             }
         )
 
-        write_capture(project)
-        captured_proc = run(
+        missing_locator_proc = run(
             [
                 "_ai_system/tools/record_source_link.py",
                 "--project",
                 SMOKE_PROJECT,
                 "--source-id",
                 "src_url",
-                "--url",
+                "--official-url",
                 "https://example.com/reports/exact-document.pdf",
                 "--title",
                 "Exact official document",
                 "--url-status",
                 "exact_url_verified",
-                "--download-status",
-                "not_attempted",
-                "--capture-status",
-                "captured",
                 "--use-level",
                 "quote_verified",
-                "--capture-path",
-                "evidence/web_captures/src_url_capture.txt",
                 "--notes",
-                "exact quote verified against local capture in smoke",
+                "locator intentionally removed in smoke",
             ]
         )
-        captured_payload = parse_json(captured_proc)
-        captured_check_proc = run(["_ai_system/tools/validate_research_integrity.py", "--project", SMOKE_PROJECT])
-        captured_check_payload = parse_json(captured_check_proc)
+        missing_locator_payload = parse_json(missing_locator_proc)
+        missing_locator_check_proc = run(["_ai_system/tools/validate_research_integrity.py", "--project", SMOKE_PROJECT])
+        missing_locator_check_payload = parse_json(missing_locator_check_proc)
         results.append(
             {
-                "case": "captured_quote_verified_link_allows_report_citable",
-                "exit_code": captured_check_proc.returncode,
-                "passed": captured_proc.returncode == 0 and captured_check_proc.returncode == 0,
-                "payload": {"record": captured_payload, "check": captured_check_payload},
+                "case": "quote_verified_url_requires_locator",
+                "exit_code": missing_locator_check_proc.returncode,
+                "passed": missing_locator_proc.returncode == 0
+                and missing_locator_check_proc.returncode != 0
+                and any("requires source_locator" in error for error in result_errors(missing_locator_check_payload)),
+                "payload": {"record": missing_locator_payload, "check": missing_locator_check_payload},
             }
         )
     finally:

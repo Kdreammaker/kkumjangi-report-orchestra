@@ -1,0 +1,23 @@
+{
+  "preset_id": "product_prd",
+  "label_ko": "제품 PRD",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "product_prd",
+  "description": "Product requirements documents for user stories, acceptance criteria, rollout, and product decisions.",
+  "quality_emphasis": [
+    "problem, user, and outcome alignment",
+    "requirements and acceptance criteria",
+    "release scope and dependency clarity",
+    "decision log and open questions"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

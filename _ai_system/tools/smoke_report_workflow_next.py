@@ -83,18 +83,13 @@ def write_prd_toc_source_plan(project: Path) -> None:
         newline="\n",
     )
     (project / "drafts" / "source_collection_plan.md").write_text(
-        "# Source Collection Plan\n\nCollect official source originals before drafting.\n",
+        "# Source Collection Plan\n\nRecord official links, source locators, and user-needed files before drafting.\n",
         encoding="utf-8",
         newline="\n",
     )
 
 
-def write_skeleton_sources_claims(project: Path) -> None:
-    (project / "reports" / "major_skeleton.md").write_text(
-        "# Major Skeleton\n\n## Chapter plan\n\n- ch01: decision question, evidence, claims, counterarguments, visuals.\n",
-        encoding="utf-8",
-        newline="\n",
-    )
+def write_sources_claims(project: Path) -> None:
     (project / "references" / "source_records" / "src_001.md").write_text(
         "# Source Record\n\n- source_id: src_001\n- status: working_note\n",
         encoding="utf-8",
@@ -117,6 +112,14 @@ def write_skeleton_sources_claims(project: Path) -> None:
         "| claim_id | claim_type | status | source_ids | citation_type | exact_location |\n"
         "|---|---|---|---|---|---|\n"
         "| claim_001 | working | draft | src_001 | paraphrase | p.1 |\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
+def write_skeleton(project: Path) -> None:
+    (project / "reports" / "major_skeleton.md").write_text(
+        "# Major Skeleton\n\n## Chapter plan\n\n- ch01: decision question, evidence, claims, counterarguments, visuals.\n",
         encoding="utf-8",
         newline="\n",
     )
@@ -219,6 +222,19 @@ def write_chapter_quality(project: Path) -> None:
     )
 
 
+def write_enhancement_log(project: Path) -> None:
+    quality_dir = project / "reports" / "chapter_quality"
+    quality_dir.mkdir(parents=True, exist_ok=True)
+    (quality_dir / "enhancement_log.md").write_text(
+        "# Chapter Enhancement Log\n\n"
+        "- review_status: cross-check complete\n"
+        "- user_approved_changes: none for smoke fixture\n"
+        "- no_change_rationale: chapter fixture is intentionally minimal but structurally complete for workflow smoke.\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
 def write_visuals_cover_assembly(project: Path, include_summary: bool) -> None:
     (project / "data_sources" / "visual_plan.csv").write_text(
         "visual_id,chapter,visual_type,title,purpose,decision_use,expected_reader_takeaway,required,data_file,source_record,status\n"
@@ -261,11 +277,30 @@ def write_visuals_cover_assembly(project: Path, include_summary: bool) -> None:
             encoding="utf-8",
             newline="\n",
         )
+    write_assembly(project)
+
+
+def write_assembly(project: Path) -> None:
     report_text = "<!doctype html><html lang=\"ko\"><body data-assembled-report=\"true\"><main>"
     chapters = sorted((project / "reports" / "chapters").glob("ch*.html"))
     for chapter in chapters:
         report_text += chapter.read_text(encoding="utf-8", errors="ignore")
     report_text += "</main></body></html>\n"
+    style_dir = project / "reports" / "style_pass"
+    style_pass_artifacts = [
+        {
+            "path": (style_dir / filename).relative_to(project).as_posix(),
+            "sha256": hashlib.sha256((style_dir / filename).read_bytes()).hexdigest(),
+        }
+        for filename in [
+            "style_risk_findings.json",
+            "protected_spans.json",
+            "style_rewrite_diff.md",
+            "style_fidelity_review.md",
+            "style_naturalness_review.md",
+        ]
+        if (style_dir / filename).exists()
+    ]
     (project / "reports" / "internal_review_report.html").write_text(report_text, encoding="utf-8", newline="\n")
     (project / "reports" / "report_assembly_manifest.json").write_text(
         json.dumps(
@@ -279,10 +314,58 @@ def write_visuals_cover_assembly(project: Path, include_summary: bool) -> None:
                     }
                     for path in chapters
                 ],
+                "style_pass_artifacts": style_pass_artifacts,
             },
             ensure_ascii=False,
             indent=2,
         ),
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
+def write_style_pass(project: Path) -> None:
+    style_dir = project / "reports" / "style_pass"
+    style_dir.mkdir(parents=True, exist_ok=True)
+    (style_dir / "style_risk_findings.json").write_text(
+        json.dumps(
+            {
+                "status": "pass",
+                "scope": "pre_assembly_after_chapter0",
+                "findings": [],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
+    (style_dir / "protected_spans.json").write_text(
+        json.dumps(
+            {
+                "status": "pass",
+                "protected_spans": [
+                    {"span_type": "number", "text": "SMOKE-001", "action": "preserve"},
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
+    (style_dir / "style_rewrite_diff.md").write_text(
+        "# Style Rewrite Diff\n\nNo wording change needed for this smoke fixture.\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    (style_dir / "style_fidelity_review.md").write_text(
+        "# Style Fidelity Review\n\nResult: pass. No meaning, evidence, or protected span changed.\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    (style_dir / "style_naturalness_review.md").write_text(
+        "# Style Naturalness Review\n\nResult: pass. Reader-fit tone is acceptable without additional polish.\n",
         encoding="utf-8",
         newline="\n",
     )
@@ -318,18 +401,29 @@ def main() -> int:
         code, payload = workflow_action(project)
         results.append(
             {
-                "case": "prd_toc_source_plan_requests_skeleton",
+                "case": "prd_toc_source_plan_requests_source_claim_mapping",
+                "exit_code": code,
+                "passed": code == 0 and payload.get("next_action") == "map_sources_and_claims",
+                "payload": payload,
+            }
+        )
+
+        write_sources_claims(project)
+        code, payload = workflow_action(project)
+        results.append(
+            {
+                "case": "source_claim_mapping_requests_skeleton",
                 "exit_code": code,
                 "passed": code == 0 and payload.get("next_action") == "create_major_skeleton",
                 "payload": payload,
             }
         )
 
-        write_skeleton_sources_claims(project)
+        write_skeleton(project)
         code, payload = workflow_action(project)
         results.append(
             {
-                "case": "skeleton_evidence_requests_workpacks",
+                "case": "skeleton_requests_workpacks",
                 "exit_code": code,
                 "passed": code == 0 and payload.get("next_action") == "create_chapter_workpacks",
                 "payload": payload,
@@ -365,7 +459,18 @@ def main() -> int:
         code, payload = workflow_action(project)
         results.append(
             {
-                "case": "chapter_requests_visuals",
+                "case": "chapter_quality_requests_enhancement",
+                "exit_code": code,
+                "passed": code == 0 and payload.get("next_action") == "enhance_chapter_fragments",
+                "payload": payload,
+            }
+        )
+
+        write_enhancement_log(project)
+        code, payload = workflow_action(project)
+        results.append(
+            {
+                "case": "enhanced_chapter_requests_visuals",
                 "exit_code": code,
                 "passed": code == 0 and payload.get("next_action") == "create_visual_plan_and_data",
                 "payload": payload,
@@ -378,13 +483,35 @@ def main() -> int:
             {
                 "case": "assembled_without_summary_requests_chapter0",
                 "exit_code": code,
-                "passed": code == 0 and payload.get("next_action") == "write_chapter0_then_reassemble",
+                "passed": code == 0 and payload.get("next_action") == "write_chapter0_summary",
                 "payload": payload,
             }
         )
 
         write_visuals_cover_assembly(project, include_summary=True)
         write_chapter_quality(project)
+        code, payload = workflow_action(project)
+        results.append(
+            {
+                "case": "chapter0_without_style_pass_requests_pre_assembly_style",
+                "exit_code": code,
+                "passed": code == 0 and payload.get("next_action") == "run_pre_assembly_style_pass",
+                "payload": payload,
+            }
+        )
+
+        write_style_pass(project)
+        code, payload = workflow_action(project)
+        results.append(
+            {
+                "case": "style_pass_without_reassembly_requests_assembly",
+                "exit_code": code,
+                "passed": code == 0 and payload.get("next_action") == "assemble_report",
+                "payload": payload,
+            }
+        )
+
+        write_assembly(project)
         code, payload = workflow_action(project, write_status=True)
         status_files = payload.get("status_files") if isinstance(payload.get("status_files"), dict) else {}
         results.append(

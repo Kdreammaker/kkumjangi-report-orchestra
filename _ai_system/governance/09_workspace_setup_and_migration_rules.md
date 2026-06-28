@@ -67,7 +67,11 @@ If an AI tool recreates a root runtime folder such as `.playwright-mcp`, move it
 
 Do not assume previous absolute paths are still valid on a new PC. Prefer paths relative to the workspace root.
 
+Recheck/update requests are not fresh-install proof. If a Git checkout is available, the AI may compare local `VERSION.json`/HEAD with `origin/main`, but it may pull only when `origin` is the intended private repository, the system-core worktree has no local changes, and the update can fast-forward. If the workspace is a ZIP install, has public origin, has local system-core changes, has conflicts, or is ambiguous, do not update; report the state and ask for user direction. Do not use `git restore`, hard reset, or destructive repair to make a recheck look clean unless the user explicitly requested that operation.
+
 Use `_ai_system/tools/validate_workspace_setup.py --include-user-flow` for repeatable full validation where possible. Validation must suppress browser auto-open by using the dashboard app's silent mode or `PROJECT_DASHBOARD_NO_BROWSER=1`; opening the user's browser is reserved for explicit visual/browser checks. A manual check is acceptable only when the AI service cannot run local scripts; in that case the final report must state which checks were skipped.
+
+Report workspace validation as environment/structure validation. Do not call it document content validation, source verification, legal review, citation validation, or external sharing approval. If no active project artifact was inspected, say project artifact/content validation was `not_run`.
 
 ## Setup Validation Scope
 
@@ -135,6 +139,8 @@ Before creating files, apply the short-request confirmation flow:
    - project name,
    - purpose,
    - expected final outputs,
+   - default content depth,
+   - execution control mode,
    - likely research scope,
    - likely project handling sensitivity,
    - initial material location,
@@ -142,6 +148,8 @@ Before creating files, apply the short-request confirmation flow:
    - default setup scope.
 4. Use conservative defaults when the user did not specify details:
    - final output: internal review HTML report, unless the user says otherwise,
+   - content depth: standard,
+   - execution control mode: checkpointed,
    - project handling sensitivity: internal project workspace,
    - initial material location: the new project's `01_자료_넣는_곳/`,
    - additional items to confirm: none,
@@ -172,17 +180,17 @@ Before creating files, apply the short-request confirmation flow:
 13. Run workspace validation when possible and report the result separately from any research or report quality status.
 14. If `tasks/current_task.md` starts at `interview`, proceed to a short direction interview after setup unless the user asked to stop after folder creation. Do not treat this as report drafting or material intake.
 
-Use `_ai_system/tools/init_project_workspace.py` where possible instead of hand-creating the structure. A user may provide a topic rather than a final project name. In the setup brief, propose the project display name, safe folder name, and likely report title before creation. When the tool receives a bare project title/name, it must route the project directly under `00_사용자_작업공간/` using `YYMMDD_프로젝트명앞20자`, removing Windows-forbidden filename characters. A project-like folder in the workspace root is a setup failure, not a harmless extra folder.
+Use `_ai_system/tools/init_project_workspace.py` where possible instead of hand-creating the structure. A user may provide a topic rather than a final project name. In the setup brief, propose the project display name, safe folder name, and likely first artifact title before creation. When the tool receives a bare project title/name, it must route the project directly under `00_사용자_작업공간/` using `YYMMDD_프로젝트명앞20자`, removing Windows-forbidden filename characters. A project-like folder in the workspace root is a setup failure, not a harmless extra folder.
 
-`project_profile.json` is a project logistics file only. It may contain responsible people, approval line, practitioners, external contacts, organization, and CI/logo references. The first row in `responsible_people` is the project owner shown on the dashboard. It must not contain report-level default document classification, default confidentiality, or default external-sharing permission. Those are confirmed in the report PRD for each report. Project-level logo auto-selection is fixed to `brand_assets/project_logo.png`; do not auto-select arbitrary images from the folder.
+`project_profile.json` is a project logistics file only. It may contain responsible people, approval line, practitioners, external contacts, organization, and CI/logo references. The first row in `responsible_people` is the project owner shown on the dashboard. It must not contain artifact-level default document classification, default confidentiality, or default external-sharing permission. Those are confirmed in the PRD for each artifact. Project-level logo auto-selection is fixed to `brand_assets/project_logo.png`; do not auto-select arbitrary images from the folder.
 
-`reports/report_registry.csv` is the project-level report/version index. It tracks report title, document classification, confidentiality, version, stage, owner, practitioners, reviewers, latest file, PRD path, and next action for each report output. The primary editing path is the local dashboard app launched through `프로젝트_대시보드_실행.vbs`, which writes the real CSV and can open allowlisted project-internal report files. The report PRD remains the source of truth for report-level purpose, audience, classification, confidentiality, and evidence bar; the registry is the dashboard index.
+`reports/report_registry.csv` is the project-level artifact/version index. The filename is retained for compatibility, but it may track reports, handouts, proposals, manuals, briefs, press releases, and other document artifacts. It tracks artifact title, document classification, confidentiality, version, stage, owner, practitioners, reviewers, latest file, PRD path, and next action for each output. The primary editing path is the local dashboard app launched through `프로젝트_대시보드_실행.vbs`, which writes the real CSV and can open allowlisted project-internal artifact files. The PRD remains the source of truth for artifact-level purpose, audience, classification, confidentiality, evidence bar, source lineage, and verification scope; the registry is the dashboard index.
 
 `references/reference_inventory.csv` is the original-file/document ledger and is edited through the project dashboard document-ledger page. Dashboard edits to this ledger are metadata edits only; original preservation, Docling normalization, DuckDB indexing, source-record creation, and quote verification remain AI/tool-assisted intake tasks.
 
 New project initialization should reduce user-facing folder clutter. Do not create separate reference-library app folders or launchers for new projects; the project dashboard owns the document ledger. Hide AI/system folders in Windows Explorer by default where the OS supports it. User-facing navigation should center on `01_자료_넣는_곳/`, `reports/`, `04_공유_패키지/`, `brand_assets/`, and `프로젝트_대시보드_실행.vbs`. AI-only folders such as `tasks/`, `context_packets/`, `drafts/`, `project_state/`, `source_index/`, `evidence/`, `data_sources/`, `references/`, and `worklogs/` remain valid internal paths but should not be the default user browsing surface.
 
-Dashboard save audit logs are unified across the three dashboard-save surfaces: project profile, report registry, and reference inventory. Store them at `project_state/dashboard_change_log.jsonl` for machine-readable details and `worklogs/dashboard_change_log.csv` for human-readable summaries. These logs do not track AI edits to report/PRD/chapter/source files or manual edits made outside the dashboard.
+Dashboard save audit logs are unified across the three dashboard-save surfaces: project profile, artifact registry, and reference inventory. Store them at `project_state/dashboard_change_log.jsonl` for machine-readable details and `worklogs/dashboard_change_log.csv` for human-readable summaries. These logs do not track ordinary AI edits to PRD/chapter/source files or manual edits made outside the dashboard, except when the artifact version finalizer explicitly appends a version-preservation event.
 
 The workspace-local `.local_state/device_identity.json` stores a random local device identity used only to make dashboard logs stable across network/VPN changes. It must not use hardware IDs and must be excluded from Git, packaging, delivery outboxes, and cloud/shared folders.
 
@@ -190,7 +198,7 @@ The approval line is ordered from highest to lower authority. Row 1 is the top a
 
 `tasks/current_task.md` is the project-level task manifest for AI context control. It is the first file to read when resuming an existing project task. It should contain the stage checklist, current active stage, per-stage `Read Before Work`, `Required Rules`, `Do Not Read By Default`, completion criteria, and next stage. `AGENTS.md` remains a router for missing/ambiguous task manifests or fresh setup, not the default working brief once a project task manifest exists. `tasks/task_status.html` is the static human-facing status panel regenerated by the AI after stage changes. The editable project dashboard uses a local server through `프로젝트_대시보드_실행.vbs`; do not generate a separate static dashboard for new projects.
 
-The project dashboard should be a simple user-facing work-management control panel, not an AI operations manual and not the report-writing workspace itself. Its editable version is the local dashboard app launched through `프로젝트_대시보드_실행.vbs`. The main screen should show the project owner, report/document count, recent dashboard save history, simple material/report locations, and only the recorded current AI task from `tasks/current_task.md`. The top navigation is the primary entry point for project profile, report management, document ledger, and change history; do not duplicate the same actions again as a second button grid unless the design has a clear separate purpose. Do not show fake live progress, analysis depth, report quality, or a single project-level report stage when multiple reports can have different stages and owners. Put AI-only instructions, detailed ledgers, validation doctrine, and task manifests in OJT or `tasks/current_task.md`, not on the main dashboard.
+The project dashboard should be a simple user-facing work-management control panel, not an AI operations manual and not the document-writing workspace itself. Its editable version is the local dashboard app launched through `프로젝트_대시보드_실행.vbs`. The main screen should show the project owner, artifact/document count, recent dashboard save history, simple material/artifact locations, and only the recorded current AI task from `tasks/current_task.md`. The top navigation is the primary entry point for project profile, artifact management, document ledger, and change history; do not duplicate the same actions again as a second button grid unless the design has a clear separate purpose. Do not show fake live progress, analysis depth, artifact quality, or a single project-level artifact stage when multiple artifacts can have different stages and owners. Put AI-only instructions, detailed ledgers, validation doctrine, and task manifests in OJT or `tasks/current_task.md`, not on the main dashboard.
 
 The document-ledger page may provide user-triggered `자료 폴더 스캔` and `파싱/정규화/색인 실행` actions. Folder scan registers new material files in `references/reference_inventory.csv` by hash. Parsing/normalization/indexing may run the local reference-intake pipeline, refresh `project_state/context_index.duckdb`, write a project log under `project_state/`, and update parse/normalization/index fields. These actions are local metadata/derived-artifact operations only; they must not be reported as source truth verification, quote verification, or report-content validation.
 
@@ -383,7 +391,8 @@ The OJT document should explain the user workflow, not AI internals. It should s
 OJT copy prompts must stay short. Use this routing split:
 
 - Fresh install, workspace repair, new project creation, or ambiguous routing: mention `AGENTS.md`.
-- Existing project work such as report writing, reference intake, report improvement, review, cross-check, or outbox preparation: mention `tasks/current_task.md`.
+- Existing project work such as document writing, reference intake, artifact improvement, review, cross-check, follow-up artifact creation, or outbox preparation: mention `tasks/current_task.md`.
+- User-facing OJT prompts should remain generic. Do not make users paste preset-specific instructions for press releases, curricula, manuals, proposals, investor briefs, or analyst reports. Specialized handling is selected by `document_type_preset`, `artifact_workflow_mode`, PRD fields, `tasks/current_task.md`, and the selected preset/style guidance.
 - Simple status explanation, screen guidance, or installed-system next steps: do not force either file.
 
 Dashboard implementation details, hidden folder rules, parsing/indexing internals, logo filename rules, change-log paths, and validation doctrine belong in this governance file, `AGENTS.md`, `tasks/current_task.md`, tools, and templates. Do not make the user paste those details as normal OJT prompts.

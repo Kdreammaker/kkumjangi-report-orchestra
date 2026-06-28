@@ -14,6 +14,8 @@ A clean system-core package should include:
 - `START_HERE.html`,
 - `_ai_system/governance/`,
 - `_ai_system/environment/`,
+- `_ai_system/document_presets/`,
+- `_ai_system/style_profiles/`,
 - `_ai_system/templates/`,
 - `_ai_system/tools/`,
 - `_ai_system/validation_fixtures/` when needed,
@@ -79,3 +81,13 @@ Before saying a package is ready for a third party or GitHub:
 - confirm README or START_HERE explains how a new user should begin.
 
 If a public release seed is built, verify that private maintainer folders are absent from the generated package and that public README/INSTALL do not link to private maintainer memos.
+
+## Private/Public Install Source Guard
+
+Private install tests must validate that `VERSION.json` has `channel: main`, Git `origin` points to `Kdreammaker/kkumjangi-report-orchestra`, and `README.md` / `INSTALL.md` do not point to the public repository. Use:
+
+```powershell
+python _ai_system/tools/validate_workspace_setup.py --include-user-flow --expect-channel main
+```
+
+When preparing a public seed or pushing to the public repository, do not copy this private-only expectation blindly. Public packages should have `channel: public`, public README/INSTALL clone instructions, and should run workspace validation without `--expect-channel main` or with the public-appropriate expectation. Re-check generated public README/INSTALL after `build_system_core_package.py --public-release-version ...` so the public seed is intentionally public and not a stale private package.

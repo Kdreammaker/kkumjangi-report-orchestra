@@ -1,0 +1,4 @@
+setting_name,allowed_value,default_value,required_status,fixture_note,as_of
+fixture_workspace_mode,local_only,local_only,required,Synthetic setting for validation only,2026-06-03
+fixture_export_profile,static_html,static_html,optional,Synthetic setting for DOCX/PDF layout checks,2026-06-03
+fixture_support_channel,example.invalid,not_configured,optional,Reserved invalid domain for fixture contact,2026-06-03

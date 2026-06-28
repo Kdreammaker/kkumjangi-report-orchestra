@@ -1,0 +1,23 @@
+{
+  "preset_id": "regulatory_review",
+  "label_ko": "정책/규제 리스크 검토",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "regulatory_review",
+  "description": "Legal, policy, compliance, or approval-path analysis where uncertainty must remain explicit.",
+  "quality_emphasis": [
+    "primary-law and official-source priority",
+    "separation of fact, interpretation, and estimate",
+    "counsel-review markers",
+    "no approval-probability overclaims"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

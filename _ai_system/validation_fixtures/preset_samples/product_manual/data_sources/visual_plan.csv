@@ -1,0 +1,4 @@
+visual_id,title,visual_type,required,data_file,status,purpose
+vis_01,Fixture Configuration Table,table,yes,product_manual_fixture_configuration.csv,implemented,show semantic settings table with scoped long-token cells
+vis_02,Fixture Troubleshooting Table,table,yes,product_manual_fixture_troubleshooting.csv,implemented,show concise symptom-cause-resolution structure
+vis_03,Fixture Setup Decision Flow,flow,yes,product_manual_fixture_flow.csv,implemented,show static decision diagram with figcaption

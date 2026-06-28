@@ -36,7 +36,7 @@ The visual pass must explicitly decide: keep as table, convert to chart, convert
 
 - Use the locally installed Apache ECharts asset under `_ai_system/runtime/vendor/echarts/` as the preferred open-source renderer when an AI or local helper needs to generate bar, line, scatter, heatmap, timeline-like, or relationship charts from CSV/XLSX data.
 - Final report HTML should not depend on runtime JavaScript charts. Render material charts to static SVG or PNG before assembly, then place the static artifact in the chapter fragment with a normal `figure`, `img`/`svg`, caption, and data/source note.
-- Do not load a CDN version in confidential reports unless the user explicitly approves external network use.
+- Do not load CDN chart scripts in versioned, review-candidate, shared, confidential, or export-intended report HTML. CDN use in a scratch draft is at most a temporary limitation to record in `reports/visual_review.md`, not a delivery-ready state. If the user explicitly approves external network use for a draft, still replace it with local/static output before versioned sharing.
 - Use the workspace color tokens and typography when configuring ECharts. The library supplies rendering; the report design still controls palette, labels, and source notes.
 - If ECharts is not available in the local package, produce accessible inline SVG as the fallback and record the limitation in `reports/visual_review.md`.
 - When a CSV/XLSX changes, regenerate the static chart artifact and update `reports/visual_review.md`; do not hand-edit a chart image without updating the data artifact.

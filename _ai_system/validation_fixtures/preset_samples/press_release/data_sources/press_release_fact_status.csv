@@ -1,0 +1,5 @@
+item,status,fixture_value,data_basis,as_of
+headline,approved_for_fixture,"Validation fixture public notice sample","synthetic fixture text",2026-06-03
+lead_fact,approved_for_fixture,"Sample preset output can carry public-release sections","synthetic fixture assertion",2026-06-03
+quote,approved_for_fixture,"Synthetic approved quote placeholder","synthetic fixture quote",2026-06-03
+contact,approved_for_fixture,"fixture-contact@example.invalid","reserved invalid email domain",2026-06-03

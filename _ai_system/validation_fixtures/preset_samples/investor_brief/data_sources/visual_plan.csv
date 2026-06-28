@@ -1,0 +1,4 @@
+visual_id,title,visual_type,required,data_file,status,purpose
+vis_01,Fixture KPI Status Table,table,yes,investor_brief_fixture_kpi.csv,implemented,show narrow KPI table with status labels
+vis_02,Fixture Risk and Diligence Table,table,yes,investor_brief_fixture_risk.csv,implemented,separate risk notes from investor claims
+vis_03,Fixture KPI and Question Trend,chart,yes,investor_brief_fixture_trend.csv,implemented,show static trend figure with caption and backing data

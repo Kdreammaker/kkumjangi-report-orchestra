@@ -1,2 +1,2 @@
-source_id,title,publisher,official_url,accessed_at,url_status,download_status,capture_status,local_original_path,use_level,failure_reason,notes
-example-source-id,Official document title,Official publisher,https://example.com/official-document,2026-05-22,not_checked,not_attempted,not_attempted,,lead_only,,Use exact official document URLs rather than generic homepages.
+source_id,file_name,title,official_url,publisher,accessed_at_kst,url_status,source_locator,use_level,claim_support_type,needs_user_file,user_file_request_id,notes
+example-source-id,Official document title,Official document title,https://example.com/official-document,Official publisher,2026-05-22 00:00 KST,not_checked,page/section/URL anchor,lead,none,no,,Use exact official document URLs rather than generic homepages; do not attempt AI downloads.

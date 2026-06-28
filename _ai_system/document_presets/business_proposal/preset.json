@@ -1,0 +1,23 @@
+{
+  "preset_id": "business_proposal",
+  "label_ko": "사업 제안서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Partner-facing or customer-facing business proposal document with scope, value, execution plan, terms, and decision request.",
+  "quality_emphasis": [
+    "recipient-specific value proposition",
+    "scope, deliverables, and terms clarity",
+    "implementation and responsibility alignment",
+    "approval-ready external document tone"
+  ],
+  "recommended_cover_preset": "partner_proposal",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

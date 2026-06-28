@@ -95,10 +95,10 @@ Minimum report-use rule:
 - If source metadata and locator disagree, the source is blocked. A law database URL cannot verify a political pledge, company page, market report, or regulator release unless the law database is actually the cited source and the record title/publisher say so.
 - AI should not manually promote a source to `report_citable` just by filling fields. Promotion must be supported by preserved original evidence and checked by the research integrity tool.
 - `report_citable` requires a physical source record under `references/source_records/` with enough detail to audit the source. A source index row alone is not sufficient.
-- The source record must point to a preserved original file, exact official URL, or captured webpage/PDF. Generic homepages, portal top pages, and AI-written summaries are not sufficient.
-- URL-only report-citable sources must also have a row in `references/source_link_register.csv` with an exact non-generic URL, access time, verified URL status, and `use_level=quote_verified` or `report_citable`. If a needed file is unavailable, track it in `references/user_requested_materials.md` instead of pretending the source is preserved.
-- Download/capture failure is not a reason to retry indefinitely. Record the failed or blocked state once, keep the source at lead/url-only/collection-blocked level, and continue with source repair or a replacement source.
-- Use `_ai_system/tools/verify_source_link_quotes.py` to fetch URL-only sources, check source-record `Exact Quotes` against fetched text, and write a local capture before calling the URL quote-verified.
+- The source record must point to a preserved user-provided original file, exact official URL, or explicitly requested captured webpage/PDF. Generic homepages, portal top pages, and AI-written summaries are not sufficient.
+- URL-only report-citable sources must also have a row in `references/source_link_register.csv` with an exact non-generic URL, access time, verified URL status, source locator, and `use_level=quote_verified` or `report_citable`. If file-level evidence is needed, track it in `references/user_requested_materials.md` instead of pretending the source is preserved.
+- Do not attempt AI downloads or web captures merely because a URL source exists. Keep the source at lead/url-only/collection-blocked level until the exact link, locator, and source-record evidence support report use.
+- URL-only quote verification is an AI review task over exact links and recorded locators. Fetch/capture tools are optional manual audit aids, not normal production gates.
 - Overseas benchmark cases must be supported by original or high-quality source records for the specific case. Internal strategy slides may identify a benchmark lead, but they do not verify the foreign case as fact.
 - A report that names an external company, regulator, filing, law, product structure, dataset, market precedent, or benchmark case must have a source record for that named case. A source that briefly mentions one example does not verify another named example or adjacent case.
 
@@ -148,16 +148,19 @@ Hard gates:
 Before a report draft is described as evidence-backed:
 
 1. Every reader-facing citation maps to a source record.
-2. Every source record maps to a preserved original or official URL/capture.
+2. Every source record maps to a preserved user-provided original, exact official URL, or explicitly requested capture.
 3. Every exact quote includes page, section, paragraph, line, or URL context where available.
 4. Every local dataset is described as a reproducibility artifact, not as the external source itself.
 5. Every estimate cites both source data and assumptions.
 6. Every foreign-language source preserves original text separately from working translation and analysis.
-7. Reader-facing reports do not expose `source_id`, `claim_id`, `assumption_id`, or local path metadata.
-8. Detailed evidence ledgers are in project registers or appendices, not used as a replacement for footnotes/endnotes.
-9. Every chart or quantitative table maps to a local `.csv` or `.xlsx` reproducibility file and, where applicable, assumptions.
-10. The report length and depth are proportionate to the PRD and TOC. A short memo may be valid only if labeled as a brief/scaffold; it should not be called a comprehensive or final internal review report.
-11. The report earns a higher quality level when it includes original-backed evidence, claim locations, data-backed visuals, reusable template formatting, and verified DOCX/PDF conversion readiness.
+7. The PRD-confirmed output language, citation display language, access-date style, and caption labels match the rendered report.
+8. English `Source:`, `Underlying data:`, `Data basis:`, or `Accessed YYYY-MM-DD` labels appear only when the report is explicitly marked as English or mixed-language output.
+9. Language guidance has not changed direct quotes, numbers, statute names, proper nouns, approved public wording, source-backed claims, citation locators, or access dates unless the underlying source/claim record was deliberately corrected.
+10. Reader-facing reports do not expose `source_id`, `claim_id`, `assumption_id`, or local path metadata.
+11. Detailed evidence ledgers are in project registers or appendices, not used as a replacement for footnotes/endnotes.
+12. Every chart or quantitative table maps to a local `.csv` or `.xlsx` reproducibility file and, where applicable, assumptions.
+13. The report length and depth are proportionate to the PRD and TOC. A short memo may be valid only if labeled as a brief/scaffold; it should not be called a comprehensive or final internal review report.
+14. The report earns a higher quality level when it includes original-backed evidence, claim locations, data-backed visuals, reusable template formatting, and verified DOCX/PDF conversion readiness.
 
 ## Report Artifact Gate
 
@@ -175,6 +178,7 @@ The artifact gate should fail or warn when:
 - charts/figures are absent despite market, comparison, timeline, or roadmap content,
 - sales-like certainty terms remain in legal/regulatory prose,
 - report-specific HTML uses only one-off styling where a reusable workspace report template should be used,
+- English caption/access-date labels appear without an explicit English or mixed-language marker,
 - a generated DOCX/PDF is described as converted or delivery-ready without structure/render verification.
 
 ## Report Stage Labels
@@ -192,6 +196,26 @@ Do not call a report `final`, `completed`, `fully verified`, or `ready for submi
 Maintain the current stage in `project_state/report_stage_manifest.json` when practical. A report should not move beyond `draft_allowed` unless source and claim gates support substantive prose, and should not move to `review_candidate` unless research integrity and report artifact checks pass or residual risks are explicitly recorded.
 
 Stage labels are not self-certifying. If `_ai_system/tools/report_gate_status.py --project <project_name>` reports blockers, the report must be treated as blocked even when the manifest or worklog says `review_candidate`.
+
+## Style Profile Protection Gate
+
+A style profile can make prose more suitable for a reader, but it must not weaken research integrity.
+
+Protected spans must survive tone adjustment unchanged unless the source record, claim register, or legal wording is deliberately corrected and logged:
+
+- exact direct quotes and quoted translations,
+- numbers, dates, percentages, formulas, table values, and dataset labels,
+- statute names, article/section numbers, regulator names, company names, product names, and other proper nouns,
+- source-backed claim wording that depends on a verified quote, page, URL, filing, regulation, dataset, or capture,
+- citation locators, access dates, source titles, and reference-list details.
+
+If a style pass changes any protected span, treat it as a research-quality issue until the claim/source record is rechecked. Style profile guidance does not replace quote verification, claim readiness, legal review, citation display checks, or source-register consistency.
+
+## Language Guidance Boundary
+
+Language guidance helps the AI choose reader-appropriate questions, caution levels, display labels, access-date notation, and genre boundaries. It is not automatic translation, automatic humanization, jurisdiction-specific legal review, securities-law review, source verification, or approval review.
+
+When `output_language=en` or `mixed`, keep original source wording and working translations distinct. If an English report cites a Korean, Japanese, Chinese, or other non-English source, preserve the original source title and quoted wording in the source record, and mark translated/paraphrased reader-facing text as translation or paraphrase where material.
 
 ## Tone Gate
 
@@ -243,4 +267,4 @@ For a substantial report draft or revision:
 7. For substantial internal review reports, run strict gates:
    - `_ai_system/tools/report_preflight.py --project <project_name> --for-delivery --strict-research`
    - `_ai_system/tools/validate_report_artifact.py --project <project_name> --strict-delivery`
-   - `_ai_system/tools/validate_research_integrity.py --project <project_name> --check-urls` when network access is available and the report relies on live URLs.
+   - `_ai_system/tools/validate_research_integrity.py --project <project_name>` for normal report gates; `--check-urls` is an optional live availability probe, not source truth proof.

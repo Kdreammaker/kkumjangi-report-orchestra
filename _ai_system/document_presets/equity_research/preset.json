@@ -1,0 +1,23 @@
+{
+  "preset_id": "equity_research",
+  "label_ko": "섹터/기업 분석 보고서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Sector or company analysis in an equity-research style, centered on performance, valuation assumptions, catalysts, and risks.",
+  "quality_emphasis": [
+    "data-backed sector and company analysis",
+    "earnings and valuation assumption clarity",
+    "risk, catalyst, and sensitivity separation",
+    "non-advisory conclusion tone"
+  ],
+  "recommended_cover_preset": "executive_decision",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

@@ -8,11 +8,11 @@ This file is the detailed map for governance documents, report skills, templates
 |---|---|---|
 | `_ai_system/governance/00_workspace_overview.md` | Workspace map, root layout, project locations, validation meaning. | Choosing a project, checking folder conventions, or understanding workspace boundaries. |
 | `_ai_system/governance/01_research_evidence_rules.md` | Source reliability, direct quote/summary/interpretation/estimate separation, legal/source boundaries. | Source collection, regulatory/legal analysis, foreign-language source use, or estimates. |
-| `_ai_system/governance/02_report_workflow_rules.md` | Korean report writing, HTML-first format, detailed TOC, claim register, citations, tables/graphs, appendices. | Creating TOCs, writing reports, using claims, or producing report HTML. |
+| `_ai_system/governance/02_report_workflow_rules.md` | Report language decision, preset/style/register flow, HTML-first format, detailed TOC, claim register, citations, tables/graphs, appendices. | Creating TOCs, writing reports, using claims, deciding output language, choosing style/register guidance, or producing report HTML. |
 | `_ai_system/governance/03_question_worklog_rules.md` | Clarifying questions, durable user decisions, worklogs, scope alignment. | Asking the user questions, recording decisions, or changing scope/conclusions. |
 | `_ai_system/governance/04_benchmark_review_rules.md` | Benchmark case cards and red-team review. | Building or reviewing benchmark cases. |
 | `_ai_system/governance/05_chart_visualization_rules.md` | Chart type selection, visual usefulness, color/legend/label/source rules. | Creating or reviewing charts, diagrams, timelines, graph packs, or visual captions. |
-| `_ai_system/governance/06_report_prd_rules.md` | Report PRD/brief, required fields, revision log, boundary with design metadata. | Starting or revising report purpose, audience, classification, scope, evidence bar, or output format. |
+| `_ai_system/governance/06_report_prd_rules.md` | Report PRD/brief, required fields, style profile/register overlay decisions, revision log, boundary with design metadata. | Starting or revising report purpose, audience, classification, scope, evidence bar, style/register choices, or output format. |
 | `_ai_system/governance/07_ai_snapshot_change_detection_rules.md` | AI snapshot and manual-edit detection. | Before/after material file edits. |
 | `_ai_system/governance/08_reference_intake_rules.md` | File/URL intake, original-file ledger, Docling/DuckDB derived artifacts, user data harness. | User-provided files/URLs, document ledger work, reference normalization, or source-register repair. |
 | `_ai_system/governance/09_workspace_setup_and_migration_rules.md` | Install, migration, project initialization, dashboard, OJT, and A-to-Z setup flow. | New PC setup, workspace repair, new project creation, OJT updates, or full-flow orchestration. |
@@ -52,6 +52,33 @@ This file is the detailed map for governance documents, report skills, templates
 | Report HTML templates | `_ai_system/templates/report_html/` | Reusable cover/body/page shell and report styling. |
 | Cover component guide | `_ai_system/templates/report_html/cover/README.md` | Cover presets and cover-data validation. |
 
+## Document Preset Modules
+
+| Item | Path | Use |
+|---|---|---|
+| Preset index | `_ai_system/document_presets/INDEX.json` | Compact routing index for base, extension, and hold document preset candidates. |
+| Preset codemap | `_ai_system/document_presets/CODEMAP.md` | Human-readable map for choosing which preset files to read without opening every module. |
+| Preset modules | `_ai_system/document_presets/<preset_id>/` | Per-preset PRD questions, stage overlays, `design_patterns.md`, optional `language_guidance.md`, validation checklists, layout standards, and DOCX export-readiness guidance; extension modules may be guidance-only before workflow/tool automation is added. |
+
+Read `_ai_system/document_presets/INDEX.json` first when the user names a document type, asks for a new kind of output, or the interview/PRD stage must choose `document_type_preset`. Use its `default_artifact_workflow_mode` and `read_for_workflow` fields to decide whether the selected artifact should use full report stages or a compressed/specialized sequence. Read `CODEMAP.md` only when the compact index is not enough, then read only the selected preset's current-stage files and `stage_overlays.md` when workflow depth is being decided. When `output_language` is `en` or `mixed`, include the selected preset's `language_guidance.md` if present; do not create a `*_en` preset or enable translation.
+
+## Style Profile Modules
+
+| Item | Path | Use |
+|---|---|---|
+| Style profile overview | `_ai_system/style_profiles/README.md` | Guidance-only contract for reader- and purpose-specific tone calibration, protected spans, and limited rewrite review. |
+| Style profile index | `_ai_system/style_profiles/INDEX.json` | Compact routing index for supported style profiles, executable aliases, descriptive routing cues, ambiguity prompts, and recommended document preset pairings. |
+| Style profile codemap | `_ai_system/style_profiles/CODEMAP.md` | Human-readable map for choosing which style profile files to read without opening every module. |
+| Style profile route examples | `_ai_system/style_profiles/ROUTE_EXAMPLES.md` | Descriptive-query examples, collision notes, cue-routing checks, and ask-when-ambiguous behavior. |
+| Style profile modules | `_ai_system/style_profiles/<profile_id>/` | Per-profile `profile.json`, tone rules, forbidden patterns, rewrite protocol, examples, and optional `language_guidance.md`. Use for PRD/review/limited rewrite guidance only; no automatic rewrite or workflow automation is provided. |
+| Register overlays | `_ai_system/style_profiles/register_overlays/` | Guidance-only Korean delivery-mode overlays layered over a selected style profile, including written report, oral briefing, public written copy, educational explanation, adult user instruction, and conditional honorific/압존법 policy. |
+
+Read `_ai_system/style_profiles/INDEX.json` first when the user asks for a specific tone, the reader/use case implies a tone choice, or the PRD must choose `style_profile` / `target_reader_tone`. Read `CODEMAP.md` only when the compact index is not enough; read `ROUTE_EXAMPLES.md` when a descriptive request overlaps profiles or document presets, then read only the selected profile's current-stage files. Use `_ai_system/tools/query_style_profile.py` for alias-first routing, cue scoring, ambiguous returns, and overlay candidates when the choice is unclear. When `output_language` is `en` or `mixed`, include profile `language_guidance.md` if present. Language choice belongs in new-project/interview/PRD work before drafting; the expression-correction style pass belongs after body chapters, visual captions, and Chapter 0 are stable, but before assembly. A style profile is a protected writing aid, not an automatic polish tool: it must preserve direct quotes, numbers, statutes, proper nouns, source-backed claims, approval/contract/public wording, citation locators, and evidence wording unless a deliberate source/claim correction is recorded.
+
+Register, honorific, and user-instructional overlays are separate from style profiles. A style profile answers reader/purpose fit; a register overlay answers Korean delivery mode. Use `_ai_system/tools/query_style_profile.py` to surface overlay candidates when the query is 말투/높임말/절차 안내 중심, but do not treat those candidates as selected profiles. Read `_ai_system/style_profiles/register_overlays/README.md` only when that layer may be needed, then read the selected overlay file only. These overlays are guidance-only for AI style-pass judgment. 압존법 is default-off and should be considered only for special Korean spoken/internal hierarchy contexts; public, partner, legal, approval-sensitive, quote-sensitive, mixed-organization, and ordinary written-report contexts should preserve neutral names/titles or hold for review.
+
+Use `_ai_system/tools/validate_style_profiles.py` to verify aliases, `read_first` files, profile metadata, `automation_status=guidance_only`, language guidance paths, codemap presence, and protected span coverage.
+
 ## Main Tools
 
 | Tool | Path | Use |
@@ -63,15 +90,20 @@ This file is the detailed map for governance documents, report skills, templates
 | Core worktree guard | `_ai_system/tools/validate_core_worktree_clean.py` | Detect accidental system-core edits during ordinary project/report workflows. |
 | Project initializer | `_ai_system/tools/init_project_workspace.py` | Create a new project foundation after user approval. |
 | Current task validator | `_ai_system/tools/validate_current_task.py` | Validate `tasks/current_task.md` and refresh `task_status.html`. |
-| Stage context composer | `_ai_system/tools/compose_report_context.py` | Produce stage-specific read lists and `context_packets/*.compact.md`. |
+| Stage context composer | `_ai_system/tools/compose_report_context.py` | Produce stage-specific read lists and `context_packets/*.compact.md`; `--output-language en|mixed` adds selected language guidance without translation/rewrite automation. |
+| Document preset query | `_ai_system/tools/query_document_preset.py` | Resolve a document-type query to preset read guidance, design assets, language guidance, or unsupported hold candidates without enabling workflow automation. |
+| Document preset validator | `_ai_system/tools/validate_document_presets.py` | Validate preset module files, design-stage read guidance, language guidance paths, module-only boundaries, and hold-candidate routing. |
+| Style profile query | `_ai_system/tools/query_style_profile.py` | Resolve a reader-tone/style query to guidance-only profile files and optional language guidance while explicitly keeping rewrite automation disabled. |
+| Style profile validator | `_ai_system/tools/validate_style_profiles.py` | Validate style profile aliases, `read_first` paths, language guidance paths, module files, profile id alignment, guidance-only status, query routing, and protected span policy coverage. |
 | Workflow navigator | `_ai_system/tools/report_workflow_next.py` | Suggest next production action, blockers, and status panel. |
+| Artifact version finalizer | `_ai_system/tools/finalize_artifact_version.py` | Preserve a versioned artifact and update `report_registry.csv`, `version_history.md`, `version_pointer.json`, and dashboard change logs. |
 | Gate status | `_ai_system/tools/report_gate_status.py` | Compute current report/project gate and blocked actions. |
 | Guarded step runner | `_ai_system/tools/run_guarded_step.py` | Run bundled gate chains for drafting, review-candidate, closeout, export, handoff, or workspace checks. Review/closeout/handoff include the core worktree guard. |
 | Reference intake batch | `_ai_system/tools/intake_reference_batch.py` | Register source files, preserve originals, normalize with Docling/PDF parsing where available. |
 | Project context DB builder | `_ai_system/tools/build_project_context_db.py` | Build DuckDB context index from references, normalized units, source records, claims, and workpacks. |
 | Project context query | `_ai_system/tools/query_project_context.py` | Query targeted snippets instead of reading full originals. |
-| Source link recorder | `_ai_system/tools/record_source_link.py` | Record URL-only or collection-blocked source status. |
-| Source quote verifier | `_ai_system/tools/verify_source_link_quotes.py` | Verify exact quotes against fetched/captured source text. |
+| Source link recorder | `_ai_system/tools/record_source_link.py` | Record exact official URLs, source locators, use level, and user-file request status. |
+| Source quote verifier | `_ai_system/tools/verify_source_link_quotes.py` | Optional manual audit helper for fetched/captured source text; not part of the default report workflow. |
 | Source status panel | `_ai_system/tools/build_source_status_panel.py` | Build source/link status panels for non-technical review. |
 | Reference consistency validator | `_ai_system/tools/validate_reference_register_consistency.py` | Check reference inventory, source link register, source index, and source records agree. |
 | Research integrity validator | `_ai_system/tools/validate_research_integrity.py` | Check source, claim, citation, and tone risks. |
@@ -96,6 +128,7 @@ This file is the detailed map for governance documents, report skills, templates
 Smoke scripts under `_ai_system/tools/smoke_*.py` are developer release tests, not ordinary report-production steps. The most relevant system-core checks are:
 
 - `_ai_system/tools/smoke_context_composer.py`
+- `_ai_system/tools/smoke_english_language_layer.py`
 - `_ai_system/tools/smoke_report_workflow_next.py`
 - `_ai_system/tools/smoke_report_skills_and_hooks.py`
 - `_ai_system/tools/smoke_reference_register_consistency.py`

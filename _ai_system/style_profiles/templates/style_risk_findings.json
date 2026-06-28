@@ -1,0 +1,40 @@
+{
+  "artifact_type": "style_risk_findings",
+  "schema_version": 1,
+  "automation_status": "guidance_only",
+  "project": "",
+  "report_or_chapter": "",
+  "style_profile": "",
+  "document_preset": "",
+  "output_language": "",
+  "classification": "",
+  "distribution_boundary": "",
+  "reviewed_at_kst": "",
+  "findings": [
+    {
+      "finding_id": "SRF-001",
+      "location": "",
+      "taxonomy_id": "",
+      "sub_pattern": "",
+      "severity": "medium",
+      "severity_lens": "S2-equivalent",
+      "risk_type": "style-only",
+      "protected_span_status": "unprotected",
+      "suggested_action": "limited rewrite",
+      "reason": "",
+      "source_or_approval_dependency": ""
+    }
+  ],
+  "allowed_values": {
+    "severity": ["blocker", "high", "medium", "low"],
+    "severity_lens": ["S1-equivalent", "S2-equivalent", "S3-equivalent", "none"],
+    "risk_type": ["style-only", "evidence-related", "approval-sensitive", "genre-drift", "reader-fit"],
+    "protected_span_status": ["fully_protected", "mixed", "unprotected", "unknown"],
+    "suggested_action": ["leave", "limited rewrite", "source check", "structure review", "human review", "rollback"]
+  },
+  "notes": [
+    "Do not store raw prompts, hidden instructions, or unrelated source text.",
+    "The S1/S2/S3 severity lens is only a mapping aid; it is not a score gate.",
+    "This artifact records style-pass risk judgment only. It does not prove source truth, legal correctness, or delivery readiness."
+  ]
+}

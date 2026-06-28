@@ -1,11 +1,12 @@
 00_사용자_작업공간/
 .local_state/
-_internal/
-_release_staging/
 _ai_system/project_state/latest_ai_snapshot/
 _ai_system/runtime/
 _ai_system/backups/
 _ai_system/workspace_config.local.json
+_ai_system/validation_fixtures/*
+!_ai_system/validation_fixtures/preset_samples/
+!_ai_system/validation_fixtures/preset_samples/**
 __pycache__/
 *.pyc
 *.pyo

@@ -17,6 +17,7 @@ Use this file as `reports/report_design.md` for substantial reports.
 - Shared content width: cover and body should use the same conversion-safe width/margin tokens unless a preset explicitly documents a reason
 - Print rule: use A4 print CSS as a compatibility aid, but verify exported DOCX/PDF separately
 - Avoid: viewport-height covers, double margin layers, and background-heavy cover effects that become unstable in DOCX/PDF conversion
+- Long text wrapping: do not use global `word-break: break-all`; scope `overflow-wrap`/long-token handling to URLs, local path labels, identifiers, code snippets, and table cells only
 
 ## Typography
 
@@ -56,10 +57,18 @@ Use this file as `reports/report_design.md` for substantial reports.
 - Table style:
 - Chart style:
 - Diagram style:
+- Semantic HTML rule: callouts use `aside`, material tables use `table` with `caption`/`thead`/`tbody` where useful, and charts/diagrams/screenshots use `figure` plus `figcaption`
 - Data file rule: every material table/chart needs CSV/XLSX or source-backed qualitative artifact
 - Visual selection rule: decide whether each visual should remain a table, become a graph/chart, become a timeline/flow/diagram, move to appendix, or be retired
 - Source display rule: use `주:` and `자료:` in Korean reader-facing captions
 - Data display rule: reader-facing `근거 데이터:` names the dataset in Korean; raw `data_sources/...` paths belong in HTML comments, data indexes, or appendix artifact tables
+
+## Export PoC Backlog
+
+- Word field code automation:
+- SEQ caption automation:
+- Landscape section automation:
+- Notes: keep these out of normal report production until separately implemented and verified
 
 ## Revision Log
 

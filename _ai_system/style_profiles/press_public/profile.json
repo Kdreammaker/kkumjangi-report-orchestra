@@ -1,0 +1,12 @@
+{
+  "id": "press_public",
+  "profile_id": "press_public",
+  "label": "Press/Public",
+  "label_ko": "보도자료/외부 공개문",
+  "target_reader": "Journalists, external readers, customers, public stakeholders, and approved distribution recipients.",
+  "recommended_document_presets": ["press_release", "investor_brief", "business_proposal"],
+  "risk_level": "very_high",
+  "automation_status": "guidance_only",
+  "primary_use": "Approved-fact-centered public prose with clear lead, attribution, and public-risk discipline.",
+  "protected_span_priority": "maximum"
+}

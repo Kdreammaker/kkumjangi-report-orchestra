@@ -79,20 +79,22 @@ Original boundary:
 
 External source collection rule:
 
-- For external web or regulatory material, collection starts with exact official link registration: URL, publisher, access date, URL status, use level, and quote/location status. Downloaded files or webpage captures are optional user-provided or explicitly requested evidence, not the default success condition.
+- For external web or regulatory material, collection starts with exact official link registration: exact URL, publisher, access date, URL status, use level, and quote/location status. Do not attempt AI downloads or web captures as the default route.
+- User-provided local files are preserved and processed through the local intake flow. External URLs are recorded as link-first sources unless the user explicitly provides a file or separately requests file-level evidence.
 - AI-written summaries, copied snippets without source location, and “based on web search” notes are working materials only. Store them outside `received_originals/` and do not mark them as `original_official`, `original_secondary`, `claim_ready`, or `report_citable`.
-- If a file is necessary and the AI cannot safely obtain it, record the item in `references/user_requested_materials.md` with the official link, why it is needed, and what the user should download or provide. Do not write report prose from memory.
+- If a file is necessary, record the item in `references/user_requested_materials.md` with the official link, why it is needed, and what the user should provide. Do not describe it as an AI download failure, and do not write report prose from memory.
 - Do not create dummy PDFs, placeholder originals, shell PDFs, or synthetic extraction text to satisfy downstream validators. If an original cannot be obtained, record the item as a lead or missing source, not as `original_verified=yes`.
 - If a report will mention a named overseas benchmark, intake must create a separate reference row and source-record candidate for that named benchmark. Do not treat an internal deck's benchmark summary, or a domestic document's one-line mention, as the overseas original.
 
 URL-only source link register rule:
 
 - Every new project should include `references/source_link_register.csv`.
-- Use `_ai_system/tools/record_source_link.py` to add or update exact-URL source rows and collection/request status.
-- Required fields are `source_id`, `url`, `accessed_at_kst`, `url_status`, `download_status`, `capture_status`, and `use_level`.
+- Use `_ai_system/tools/record_source_link.py` to add or update exact-URL source rows and user-file request status.
+- Required fields are `source_id`, `official_url`, `accessed_at_kst`, `url_status`, `source_locator`, `use_level`, `claim_support_type`, and `needs_user_file`.
+- Legacy `download_status`, `capture_status`, `original_path`, and `capture_path` fields may appear in older projects, but they are not required for new URL-only sources and must not be used as a prompt to attempt external downloads.
 - `use_level=lead`, `not_collected`, or `collection_blocked` means the item is not report-citable.
 - `use_level=quote_verified` or `report_citable` requires an exact non-generic URL, verified URL status, and a quote/location locator in the source record. Preserved files are helpful but not mandatory unless the PRD or user requested file-level evidence.
-- Use `_ai_system/tools/verify_source_link_quotes.py --project <project> --write-capture --update-register` when a URL-only source must be checked against its `Exact Quotes` section and converted into captured quote evidence.
+- Do not run URL fetch/capture tools as a normal production step. If a separate manual audit explicitly uses `_ai_system/tools/verify_source_link_quotes.py`, report it as optional audit evidence, not as the default reference workflow.
 - A successful link-row update still does not replace source records, exact quote locations, or claim-register evidence.
 - Use `_ai_system/tools/build_source_status_panel.py --project <project> --write-status` after intake or source verification when the user needs a readable source-status view.
 - Keep `references/reference_inventory.csv`, `references/source_link_register.csv`, `source_index/source_master_index.md`, and `references/source_records/*.md` synchronized by `source_id`. Source records are audit notes; the reference inventory is the user-facing source ledger. If a source can be seen in one source ledger but not the inventory, review-candidate and closeout should stop.

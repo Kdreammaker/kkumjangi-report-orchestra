@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validation Fixture Business Proposal Sample</title>
+  <!-- Reusable template reference: _ai_system/templates/report_html/report.css -->
+  <style>
+    :root {
+      --ink: #20262d;
+      --muted: #616b75;
+      --line: #cdd6de;
+      --soft: #f5f7f9;
+      --accent: #2f6670;
+      --warn: #8a6441;
+      --stage: #4d738f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8fa;
+      color: var(--ink);
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      line-height: 1.58;
+    }
+    .report-page {
+      width: min(960px, calc(100% - 32px));
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 40px;
+    }
+    .cover-page {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+    }
+    .fixture-banner {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: 31px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    .subhead {
+      color: var(--muted);
+      font-size: 16px;
+      margin: 0;
+    }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    aside {
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--warn);
+      background: #fffaf5;
+      padding: 14px;
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      margin: 12px 0 22px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th { background: var(--soft); }
+    caption, figcaption {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: left;
+    }
+    caption {
+      caption-side: bottom;
+      padding-top: 8px;
+    }
+    figure {
+      margin: 14px 0 24px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      max-width: 700px;
+      height: auto;
+    }
+    .long-token, code {
+      overflow-wrap: anywhere;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .references {
+      border-top: 1px solid var(--line);
+      margin-top: 30px;
+      padding-top: 16px;
+    }
+    @media (max-width: 720px) {
+      .report-page { width: calc(100% - 20px); padding: 26px; }
+      .cover-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page assembled-report" data-assembled-report="true" data-preset-id="business_proposal">
+    <section class="cover-page report-cover" data-cover-component="report-cover-v1">
+      <span class="fixture-banner">Validation Fixture - Synthetic Proposal</span>
+      <h1>Fixture Business Proposal Sample</h1>
+      <p class="subhead">사업 제안서 프리셋의 범위표, 역할표, 일정 figure, 제외조건 구조 검증용 HTML fixture</p>
+      <div class="cover-grid" aria-label="document control metadata">
+        <div><strong>보고서 번호:</strong> FIX-BP-2026-06</div>
+        <div><strong>보안 등급:</strong> Internal validation fixture</div>
+        <div><strong>작성일:</strong> 2026.06.03</div>
+        <div><strong>데이터 기준일:</strong> 2026.06.03</div>
+        <div><strong>문서 분류 코드:</strong> business_proposal sample</div>
+        <div><strong>제안 상태:</strong> Fixture discussion sample only</div>
+      </div>
+    </section>
+
+    <aside aria-label="fixture boundary">
+      <strong>면책 및 사용 제한:</strong> 본 문서는 validation fixture입니다. 실제 고객, 파트너, 견적, 계약, 납품 약속, 법률 검토, 세무 조건, 조달 절차를 포함하지 않습니다. 모든 범위와 일정은 synthetic fixture 값이며 제품 데모나 영업 제안서가 아닙니다.<sup id="fnref-1">1</sup>
+    </aside>
+
+    <section>
+      <h1>제0장 요약</h1>
+      <p>이 샘플은 `business_proposal` 프리셋이 recipient context, scope boundary, role split, schedule, exclusions, next decision을 문서형 HTML로 표현할 수 있는지 확인합니다. 실제 제안 품질이나 상업 조건의 적정성은 검증하지 않습니다.</p>
+    </section>
+
+    <section>
+      <h2>1. Scope and Role Split</h2>
+      <p>제안서 fixture는 commitment, assumption, discussion item을 섞지 않도록 표 열에서 경계를 드러냅니다.</p>
+
+      <h3>Fixture Scope Boundary Table</h3>
+      <!-- data_sources/business_proposal_fixture_scope.csv -->
+      <table>
+        <caption>자료: synthetic proposal scope fixture. 근거 데이터: business_proposal_fixture_scope dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>범위 항목</th>
+            <th>포함 상태</th>
+            <th>Fixture 산출물</th>
+            <th>경계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Discovery workshop</td><td>included</td><td>Synthetic agenda map</td><td>실제 고객 약속 아님</td></tr>
+          <tr><td>Pilot outline</td><td>included</td><td>Fixture pilot canvas</td><td>가격 또는 법률 조건 아님</td></tr>
+          <tr><td>Operational handoff</td><td>discussion item</td><td>Fixture handoff checklist</td><td>실제 업무에서는 별도 승인 필요</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Fixture Role Split Table</h3>
+      <!-- data_sources/business_proposal_fixture_roles.csv -->
+      <table>
+        <caption>자료: synthetic role split fixture. 근거 데이터: business_proposal_fixture_roles dataset, 기준일 2026.06.03.</caption>
+        <thead>
+          <tr>
+            <th>활동</th>
+            <th>발신자 역할</th>
+            <th>수신자 역할</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Problem framing</td><td>sample questions 준비</td><td>sample assumptions 검토</td><td>합성 책임 분담</td></tr>
+          <tr><td>Pilot setup</td><td>fixture checklist 제공</td><td>fixture readiness 확인</td><td>합성 책임 분담</td></tr>
+          <tr><td>Review meeting</td><td>fixture summary 공유</td><td>next discussion path 선택</td><td>합성 책임 분담</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Static Proposal Timeline</h2>
+      <p>일정은 interactive roadmap이 아니라 문서 변환에 안전한 static SVG로 표시합니다.</p>
+
+      <!-- data_sources/business_proposal_fixture_timeline.csv -->
+      <figure class="diagram static-diagram">
+        <svg viewBox="0 0 700 250" role="img" aria-labelledby="bp-fig-title bp-fig-desc">
+          <title id="bp-fig-title">Fixture Proposal Timeline</title>
+          <desc id="bp-fig-desc">Synthetic proposal timeline with three phases and decision gates.</desc>
+          <rect x="0" y="0" width="700" height="250" fill="#ffffff"/>
+          <line x1="90" y1="126" x2="610" y2="126" stroke="#6b7580" stroke-width="2"/>
+          <circle cx="130" cy="126" r="26" fill="#f5f7f9" stroke="#2f6670" stroke-width="3"/>
+          <circle cx="350" cy="126" r="26" fill="#f5f7f9" stroke="#2f6670" stroke-width="3"/>
+          <circle cx="570" cy="126" r="26" fill="#f5f7f9" stroke="#2f6670" stroke-width="3"/>
+          <text x="110" y="132" font-size="13" fill="#20262d">A</text>
+          <text x="330" y="132" font-size="13" fill="#20262d">B</text>
+          <text x="550" y="132" font-size="13" fill="#20262d">C</text>
+          <text x="84" y="74" font-size="13" fill="#4d738f">Discovery alignment</text>
+          <text x="300" y="74" font-size="13" fill="#4d738f">Pilot configuration</text>
+          <text x="520" y="74" font-size="13" fill="#4d738f">Handoff review</text>
+          <text x="84" y="190" font-size="12" fill="#616b75">Gate: sample outline</text>
+          <text x="300" y="190" font-size="12" fill="#616b75">Gate: acceptance notes</text>
+          <text x="520" y="190" font-size="12" fill="#616b75">Gate: real work decision</text>
+        </svg>
+        <figcaption>자료: synthetic proposal schedule fixture. 근거 데이터: business_proposal_fixture_timeline dataset, 기준일 2026.06.03. 대체 설명: Phase A, B, C가 순서대로 이어지고 각 단계마다 fixture decision gate가 있는 정적 일정 도식입니다.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>3. Conditions and Exclusions</h2>
+      <p>이 fixture는 가격표, 세금 계산, 계약 조항, 발주 조건을 다루지 않습니다. 긴 논의 항목 예시는 <code class="long-token">fixture-proposal-deliverable-boundary-discussion-item-not-a-contract-or-quotation-2026-06-03.example.invalid</code>처럼 scoped wrapping이 적용되는지 확인하는 용도입니다.</p>
+    </section>
+
+    <section>
+      <h2>4. 한계 및 결론</h2>
+      <p>이 샘플의 결론은 프리셋 구조가 validator에서 점검 가능한 형태로 표현된다는 fixture-level 확인입니다. 실제 보고서 품질, 고객 적합성, 출처 진위, 계약 가능성, 법률 적합성, 외부 발송 준비 상태를 증명하지 않습니다.</p>
+    </section>
+
+    <section class="references" id="report-references">
+      <h2>부록 A. 참고자료 목록</h2>
+      <ol>
+        <li>Validation fixture datasets generated for business_proposal preset artifact testing. 접근일: 2026.06.03.</li>
+        <li>Preset validation checklist: business_proposal module, fixture scope only. 접근일: 2026.06.03.</li>
+      </ol>
+      <p id="fn-1"><sup>1</sup> Footnote marker included to verify substantial-report note handling. It is not a real commercial, procurement, or legal disclosure.</p>
+    </section>
+  </main>
+</body>
+</html>

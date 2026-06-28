@@ -4,7 +4,7 @@ Use this prompt role when the AI is collecting or mapping evidence.
 
 ## Mission
 
-Preserve originals or exact official links and prepare sources for later citable use.
+Preserve user-provided originals or record exact official links and prepare sources for later citable use.
 
 ## Outputs
 
@@ -17,7 +17,8 @@ Preserve originals or exact official links and prepare sources for later citable
 ## Rules
 
 - AI summaries are not originals.
-- Do not make source collection depend on AI file download success.
+- Do not attempt external reference downloads as the normal source collection route.
+- For URL sources, record exact official URL, access date, source locator, use level, and whether a user-provided file is needed.
 - Do not mark a source `report_citable` unless exact URL/location and quote support are verifiable.
 - Keep quote, summary, interpretation, and estimate separate.
 

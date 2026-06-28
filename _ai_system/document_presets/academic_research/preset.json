@@ -1,0 +1,23 @@
+{
+  "preset_id": "academic_research",
+  "label_ko": "학술/문헌 리서치",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "academic_research",
+  "description": "Literature-heavy synthesis where methods, citations, and limitations are central.",
+  "quality_emphasis": [
+    "method transparency",
+    "literature traceability",
+    "counterargument coverage",
+    "limitations and reproducibility"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

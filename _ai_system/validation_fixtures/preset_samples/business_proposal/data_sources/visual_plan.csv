@@ -1,0 +1,4 @@
+visual_id,title,visual_type,required,data_file,status,purpose
+vis_01,Fixture Scope Boundary Table,table,yes,business_proposal_fixture_scope.csv,implemented,show included items and exclusions without quotation terms
+vis_02,Fixture Role Split Table,table,yes,business_proposal_fixture_roles.csv,implemented,show RACI-like role split in narrow columns
+vis_03,Fixture Proposal Timeline,diagram,yes,business_proposal_fixture_timeline.csv,implemented,show static timeline with decision gates

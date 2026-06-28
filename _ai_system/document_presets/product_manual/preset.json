@@ -1,0 +1,23 @@
+{
+  "preset_id": "product_manual",
+  "label_ko": "제품 설명서 / 매뉴얼",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Product manual or user guide covering procedures, installation, configuration, FAQ, troubleshooting, versions, and caution notes.",
+  "quality_emphasis": [
+    "user task and procedure clarity",
+    "installation and configuration completeness",
+    "FAQ and troubleshooting coverage",
+    "version, warning, and safety note visibility"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

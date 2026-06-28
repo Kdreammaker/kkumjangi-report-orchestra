@@ -1,0 +1,23 @@
+{
+  "preset_id": "press_release",
+  "label_ko": "보도자료",
+  "status": "supported",
+  "base_flow": "short_form_public_release",
+  "integration_status": "module_only",
+  "description": "External-facing press release with headline, subheadline, lead, body, quotes, boilerplate, contact, embargo, and approval status.",
+  "quality_emphasis": [
+    "external-publication readiness",
+    "news value and lead clarity",
+    "quote and approval discipline",
+    "boilerplate, contact, embargo, and disclosure completeness"
+  ],
+  "recommended_cover_preset": "public_release",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

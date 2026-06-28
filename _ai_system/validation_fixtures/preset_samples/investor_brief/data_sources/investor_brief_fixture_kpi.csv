@@ -1,0 +1,4 @@
+metric,period,synthetic_value,status,as_of
+Fixture recurring index,FY2026Q1,104,synthetic fixture only,2026-06-03
+Fixture retention index,FY2026Q1,91,synthetic fixture only,2026-06-03
+Fixture pipeline index,FY2026Q1,118,synthetic fixture only,2026-06-03

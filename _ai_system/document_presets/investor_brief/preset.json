@@ -1,0 +1,23 @@
+{
+  "preset_id": "investor_brief",
+  "label_ko": "투자자 브리프 / IR 설명자료",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Document-style investor brief, IR explanatory material, factbook, or investor Q&A brief. This is not an IR deck or slide preset.",
+  "quality_emphasis": [
+    "investor-facing fact clarity",
+    "business model and performance evidence",
+    "assumption and risk separation",
+    "Q&A readiness without slide-deck framing"
+  ],
+  "recommended_cover_preset": "executive_decision",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

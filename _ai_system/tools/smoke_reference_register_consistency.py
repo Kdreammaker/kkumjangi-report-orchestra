@@ -72,8 +72,8 @@ def write_registers(project: Path, *, inventory: bool, pending_quote: bool = Fal
         write_text(project / "evidence" / "web_captures" / "src_001.html", "<html><body>검증된 원문 인용 문구입니다.</body></html>\n")
     write_text(
         project / "references" / "source_link_register.csv",
-        "source_id,title,url,publisher,accessed_at_kst,url_status,download_status,capture_status,use_level,original_path,capture_path,notes\n"
-        "src_001,Official source,https://example.com/source/1,Example,2026-05-25T00:00:00+09:00,ok,not_attempted,captured,report_citable,,evidence/web_captures/src_001.html,\n",
+        "source_id,file_name,title,official_url,url,publisher,accessed_at_kst,url_status,source_locator,use_level,claim_support_type,needs_user_file,user_file_request_id,notes\n"
+        "src_001,Official source,Official source,https://example.com/source/1,https://example.com/source/1,Example,2026-05-25T00:00:00+09:00,ok,section 1,report_citable,direct_quote,no,,\n",
     )
     if inventory:
         write_text(

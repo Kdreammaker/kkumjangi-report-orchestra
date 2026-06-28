@@ -1,0 +1,12 @@
+{
+  "id": "internal_executive_summary",
+  "profile_id": "internal_executive_summary",
+  "label": "Internal Executive Summary",
+  "label_ko": "내부 경영진 요약",
+  "target_reader": "Internal executives, decision owners, and operating leads who need a quick decision view.",
+  "recommended_document_presets": ["business_strategy", "general_report", "regulatory_review", "investor_brief", "equity_research"],
+  "risk_level": "medium",
+  "automation_status": "guidance_only",
+  "primary_use": "Conclusion-first internal summaries that preserve evidence, caveats, responsibility, and residual risk.",
+  "protected_span_priority": "high"
+}

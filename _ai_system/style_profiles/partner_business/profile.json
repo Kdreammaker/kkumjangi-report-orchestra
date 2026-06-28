@@ -1,0 +1,12 @@
+{
+  "id": "partner_business",
+  "profile_id": "partner_business",
+  "label": "Partner Business",
+  "label_ko": "파트너/고객 비즈니스 문서",
+  "target_reader": "External partners, customers, procurement reviewers, and collaboration stakeholders.",
+  "recommended_document_presets": ["business_proposal", "service_planning", "technical_design", "product_manual"],
+  "risk_level": "high",
+  "automation_status": "guidance_only",
+  "primary_use": "Trustworthy partner-facing prose that keeps scope, conditions, responsibilities, and negotiation status clear.",
+  "protected_span_priority": "very_high"
+}

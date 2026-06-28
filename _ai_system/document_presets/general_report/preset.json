@@ -1,0 +1,23 @@
+{
+  "preset_id": "general_report",
+  "label_ko": "일반 근거 기반 보고서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "general_report",
+  "description": "Default evidence-backed business, policy, research, or strategy report workflow.",
+  "quality_emphasis": [
+    "source-grounded conclusions",
+    "chapter-complete analysis",
+    "reader-useful visuals",
+    "honest residual risks"
+  ],
+  "recommended_cover_preset": "team_review",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

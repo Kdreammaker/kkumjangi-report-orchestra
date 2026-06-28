@@ -22,10 +22,30 @@
     <section id="body">
       <h2>2. 본문 분석</h2>
       <p>{{BODY_SECTION}}</p>
+      <aside class="callout">
+        <p>{{CALLOUT_BODY}}</p>
+      </aside>
     </section>
 
     <section id="visuals">
       <h2>3. 표와 그래프</h2>
+      <table class="report-table">
+        <caption>{{TABLE_CAPTION}}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{{TABLE_HEADER_1}}</th>
+            <th scope="col">{{TABLE_HEADER_2}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{TABLE_CELL_1}}</td>
+            <td>{{TABLE_CELL_2}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="caption">자료: {{TABLE_READER_SOURCE}}. 근거 데이터: {{TABLE_DATA_LABEL}}</p>
+      <!-- data_file: data_sources/{{TABLE_DATA_FILE}} -->
       <figure class="report-figure">
         <img class="static-chart figure-image" src="{{STATIC_CHART_IMAGE}}" alt="{{STATIC_CHART_ALT}}">
         <figcaption>

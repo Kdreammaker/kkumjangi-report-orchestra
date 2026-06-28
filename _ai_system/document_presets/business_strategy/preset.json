@@ -1,0 +1,23 @@
+{
+  "preset_id": "business_strategy",
+  "label_ko": "사업 전략/의사결정 보고서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "mirrors_workspace_domain": "business_strategy",
+  "description": "Decision memo or internal review report for executives and operating teams.",
+  "quality_emphasis": [
+    "clear decision options",
+    "scenario and risk analysis",
+    "data-backed business implications",
+    "actionable recommendations"
+  ],
+  "recommended_cover_preset": "executive_decision",
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

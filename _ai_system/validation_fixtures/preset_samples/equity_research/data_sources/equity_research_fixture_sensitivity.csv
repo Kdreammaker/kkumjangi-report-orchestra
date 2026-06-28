@@ -1,0 +1,4 @@
+scenario,margin_delta,valuation_index,interpretation,as_of
+Downside fixture,-2,8,"tests downside layout only",2026-06-03
+Base fixture,0,11,"tests base-case layout only",2026-06-03
+Upside fixture,2,14,"tests upside layout only",2026-06-03

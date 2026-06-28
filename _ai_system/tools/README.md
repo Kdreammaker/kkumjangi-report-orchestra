@@ -71,6 +71,10 @@ Default operational tools are the tools an AI may normally use during setup, rep
 
 `intake_reference_batch.py` may use Docling to create derived normalized files under `references/normalized/`. Those files are not originals. `build_project_context_db.py` may use DuckDB to build `project_state/context_index.duckdb`, a local cache that can be rebuilt from project files.
 
+Document preset and style profile routing should use compact indexes before opening module folders: `_ai_system/document_presets/INDEX.json`, `_ai_system/document_presets/CODEMAP.md`, `_ai_system/style_profiles/INDEX.json`, and `_ai_system/style_profiles/CODEMAP.md`. These indexes reduce read cost, but they do not replace the selected module's source files when a PRD, stage overlay, or style pass needs them. `query_document_preset.py` exposes `default_artifact_workflow_mode` and `workflow_assets` so AI can read the selected preset's `stage_overlays.md` before compressing or replacing stages; it does not automate writing quality or document approval.
+
+`query_style_profile.py` resolves exact profile aliases first, then uses style-profile cue scoring from `_ai_system/style_profiles/INDEX.json` and `ROUTE_EXAMPLES.md`; when cue confidence is low, close, or register/honorific/user-instructional-only, it returns `ambiguous` with candidates and a short confirmation question instead of selecting a profile. Its payload must keep `automation_status=guidance_only` and `rewrite_automation=not_enabled`.
+
 The project dashboard owns user-facing project profile, report registry, document ledger, and change-log editing. Do not recreate the removed standalone `reference_library_app` or a separate per-project `reference_library/` launcher for new active projects. The old `cover_renderer.py` path was also removed; cover output is produced through the reusable cover component and validated by `validate_cover_render.py`.
 
 ## Routing / Advisory Tools
@@ -85,12 +89,14 @@ These tools are allowed as advisory panels and may also be called by guarded cha
 
 `report_quality_score.py` is a contradiction detector. It caps levels when live chapter hooks, cover render, strict factory/artifact checks, or stage manifests disagree with a readiness claim. It still does not judge legal analysis, business feasibility, or executive persuasiveness.
 
-`validate_reference_register_consistency.py` checks whether `reference_inventory.csv`, `source_link_register.csv`, `source_master_index.md`, and `source_records/*.md` are describing the same sources. It is a source-ledger consistency check, not proof that the source is true or that the report analysis is strong.
+`validate_reference_register_consistency.py` checks whether `reference_inventory.csv`, `source_link_register.csv`, `source_master_index.md`, and `source_records/*.md` are describing the same sources. It is a source-ledger consistency check, not proof that the source is true or that the report analysis is strong. Normal URL source handling is link-first: exact official URL, access date, source locator, and use level. URL fetch/capture helpers are optional manual audit tools, not ordinary production gates.
 
 If any routing/advisory output conflicts with the PRD, chapter workpack, or substantive AI review, resolve the contradiction before reporting readiness.
 
 ## Smoke Tests
 
 Files named `smoke_*.py` are developer release tests for this system core. They are not part of ordinary user operation, OJT, or report production. Run them after changing system tools, skills, package boundaries, or release behavior; otherwise prefer the narrow validator named by the active task.
+
+`smoke_english_language_layer.py` verifies that English output uses the same document presets and style profiles with `language_guidance.md` layered in only for `en` or `mixed`, validates synthetic English fixtures, blocks English labels in Korean/unmarked reports, and keeps automatic translation/rewrite/disclaimer generation disabled.
 
 Private maintainer release helpers should live outside this user-facing tools folder. In particular, public/private package builders, package-boundary validators, and release-only smoke tests should stay out of ordinary report-production tools so they are not mistaken for user operations.

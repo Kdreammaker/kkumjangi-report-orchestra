@@ -3,6 +3,8 @@ AGENTS.md,include,root router
 START_HERE.html,include,human entry point
 _ai_system/governance/,include,system rules
 _ai_system/environment/,include,runtime guidance
+_ai_system/document_presets/,include,document preset modules and codemap
+_ai_system/style_profiles/,include,style profile modules and index
 _ai_system/templates/,include,reusable templates
 _ai_system/tools/,include,durable tools only
 _ai_system/validation_fixtures/,optional,validator fixtures only if generic and intentionally packaged

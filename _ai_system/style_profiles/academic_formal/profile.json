@@ -1,0 +1,12 @@
+{
+  "id": "academic_formal",
+  "profile_id": "academic_formal",
+  "label": "Academic Formal",
+  "label_ko": "논문형/학술 문서",
+  "target_reader": "Academic readers, research reviewers, policy researchers, and method-sensitive expert audiences.",
+  "recommended_document_presets": ["academic_paper", "academic_research", "regulatory_review", "general_report"],
+  "risk_level": "high",
+  "automation_status": "guidance_only",
+  "primary_use": "Formal research prose that foregrounds definitions, method, evidence limits, and citation precision.",
+  "protected_span_priority": "very_high"
+}

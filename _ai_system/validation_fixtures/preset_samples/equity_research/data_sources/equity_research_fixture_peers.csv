@@ -1,0 +1,4 @@
+fixture_peer,coverage_role,revenue_index,margin_index,valuation_index,as_of
+Fixture Peer A,synthetic leader,112,21,14,2026-06-03
+Fixture Peer B,synthetic comparator,106,18,11,2026-06-03
+Fixture Peer C,synthetic laggard,98,16,9,2026-06-03

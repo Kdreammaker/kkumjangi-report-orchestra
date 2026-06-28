@@ -35,17 +35,17 @@ Rules:
 
 ## Original and Derivative Boundary
 
-- A preserved original is the received/downloaded/captured source itself, not an AI summary of it.
+- A preserved original is the user-provided or explicitly approved source file/capture itself, not an AI summary of it.
 - AI-written summaries, reconstructed excerpts, working translations, and analyst notes are derivatives. They may help internal work, but they are not original evidence.
 - Do not store derivatives under `references/received_originals/` unless they are clearly marked as non-original and excluded from report citation.
 - A derivative can support a report only by pointing back to a preserved original or official URL/capture.
 - Do not assign `Tier 1` to a derivative merely because it describes a regulator, statute, filing, or official document.
-- For external research, the AI must first register the exact official link or source locator before summarizing: file/document name when known, publisher, access date, URL status, quote/location status, and use level. File download is not the default proof path.
-- Do not try to preserve external files by repeated AI download attempts. If an exact official URL is usable, record the link and quote/location status. If a file is genuinely needed but cannot be obtained safely by the AI, add it to `references/user_requested_materials.md` with the official link and what the user should provide.
+- For external research, the AI must first register the exact official link or source locator before summarizing: file/document name when known, publisher, access date, URL status, quote/location status, and use level. AI file download is not the proof path.
+- Do not try to preserve external files by AI download attempts. If an exact official URL is usable, record the link and quote/location status. If a file is genuinely needed, add it to `references/user_requested_materials.md` with the official link and what the user should provide.
 - Separate `link confirmed`, `original file/capture preserved`, `quote verified`, and `report_citable`. Do not collapse these into one status.
 - Exact quote verification must use a source-specific passage, not a generic portal title, menu label, or homepage text. A short generic phrase such as a law portal banner, regulator name, or document category is not a valid exact quote.
 - Source title, publisher, URL host, and quoted passage must describe the same original. For example, do not use a generic law portal URL as proof for a party pledge, company report, press release, or survey merely because the URL is reachable.
-- If the needed source is a file and the AI cannot access or download it reliably, do not invent a capture. Record the item in `references/user_requested_materials.md` with the official link, source name, why it is needed, and what the user should provide.
+- If the needed source is a file, do not invent a capture or describe a failed AI download. Record the item in `references/user_requested_materials.md` with the official link, source name, why it is needed, and what the user should provide.
 - Internal strategy decks can be used as evidence of internal thinking, but they do not verify outside facts such as foreign competitor product structure, overseas regulatory approval, market size, or legal status. Those outside facts need separate external source records.
 - Overseas benchmark names in a report, TOC, source record, or claim register require source records for the specific overseas case. A Korean or internal document that only mentions a foreign company is a lead, not verified evidence for that foreign company's product, regulatory status, filing, or legal structure.
 - Do not add benchmark names to a source title or notes to make an unrelated source pass a citation gate. The source title, original file/URL, exact quote location, and source record must describe the same original source.

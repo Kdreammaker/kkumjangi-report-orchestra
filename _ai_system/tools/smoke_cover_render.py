@@ -51,8 +51,41 @@ def main() -> int:
         proc = run(["_ai_system/tools/validate_cover_render.py", "--project", SMOKE_PROJECT, "--write-preview"])
         payload = json.loads(proc.stdout)
         preview = project / str(payload.get("preview", ""))
-        passed = proc.returncode == 0 and payload.get("passed") is True and preview.exists()
-        print(json.dumps({"passed": passed, "exit_code": proc.returncode, "payload": payload}, ensure_ascii=False, indent=2))
+        confidential_passed = proc.returncode == 0 and payload.get("passed") is True and preview.exists()
+
+        sample["confidentiality_status"] = "대외비 아님"
+        sample["is_confidential"] = False
+        sample["security_tag"] = ""
+        sample["confidential_notice"] = ""
+        (project / "reports" / "cover.data.json").write_text(
+            json.dumps(sample, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+            newline="\n",
+        )
+        public_proc = run(["_ai_system/tools/validate_cover_render.py", "--project", SMOKE_PROJECT, "--write-preview"])
+        public_payload = json.loads(public_proc.stdout)
+        public_preview = project / str(public_payload.get("preview", ""))
+        public_html = public_preview.read_text(encoding="utf-8") if public_preview.exists() else ""
+        public_passed = (
+            public_proc.returncode == 0
+            and public_payload.get("passed") is True
+            and public_preview.exists()
+            and 'class="cover-confidential-notice"' not in public_html
+            and 'class="cover-security-tag"' not in public_html
+        )
+
+        passed = confidential_passed and public_passed
+        print(
+            json.dumps(
+                {
+                    "passed": passed,
+                    "confidential": {"exit_code": proc.returncode, "payload": payload},
+                    "not_confidential": {"exit_code": public_proc.returncode, "payload": public_payload},
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return 0 if passed else 1
     finally:
         remove_project(project)

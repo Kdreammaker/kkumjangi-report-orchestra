@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the default writing, layout, and visualization standards for substantial Korean business reports in this workspace.
+This document defines the default writing, layout, and visualization standards for substantial business reports in this workspace. Korean remains the common default, but the PRD may confirm English or mixed-language output.
 
 Design quality matters because it helps readers understand the argument. It must not become a substitute for strong evidence, clear reasoning, useful visuals, and honest residual-risk disclosure.
 
@@ -24,7 +24,11 @@ If a workspace has client-specific or industry-specific design requirements, put
 
 ## Report Language
 
-- Final reports are written in Korean unless the user says otherwise.
+- Final reports use the `output_language` confirmed in the PRD: `ko`, `en`, or `mixed`.
+- Do not infer final output language only from the language of the user's first instruction. The target reader, distribution market, source material, external-sharing risk, and user confirmation may point to a different output language.
+- If `output_language` is `undecided`, do not draft. Resolve it through safe inference when the request is clear, or ask before drafting when external sharing, investor, partner, legal/regulatory, securities, jurisdiction, or distribution-market risk is present.
+- Do not create separate English design or document preset copies. Layer language, region, notation, caption, citation, and disclaimer guidance over the same preset/profile.
+- Language guidance does not perform automatic translation, automatic polishing, or jurisdiction-specific legal/securities disclaimer generation.
 - English source titles, company/product names, laws, and technical terms may appear in parentheses where needed.
 - Foreign-language legal or product terms must keep original wording in source records and key appendices.
 - Difficult legal, financial, technical, or foreign terms should be collected in a report appendix.
@@ -101,6 +105,14 @@ Use a restrained, report-neutral palette unless a project-specific design system
 - Do not soften confirmed risks. If a risk is material, state it directly and then explain mitigation options.
 - Avoid ambiguous subjects. Make clear whether the actor is a company, regulator, investor, customer, partner, platform, or internal team.
 
+## Style Profile Guidance
+
+Use `_ai_system/style_profiles/` when the PRD or review stage needs reader-specific tone calibration, such as internal executive summary, partner business, child education, press/public, or academic formal prose.
+
+Style profiles are guidance-only. They do not replace the report PRD, document preset, evidence rules, claim register, approval review, or export validation.
+
+Before any profile-based rewrite, protect direct quotes, numbers, units, dates, law names, proper nouns, source-backed claims, approved public text, contract-like wording, disclaimers, and approval wording. A profile pass may adjust sentence rhythm, clarity, and reader fit only where meaning, evidence status, source attribution, and approval status remain unchanged.
+
 ## Expression Calibration
 
 Use the following as style examples, not substantive conclusions.
@@ -171,6 +183,8 @@ Appendices may include:
 - Use print-aware CSS and A4-friendly layout constraints.
 - Put chart/table source notes directly below the relevant figure/table.
 - Keep the report readable if copied into a document editor.
+- Preserve semantic HTML for report components: use `aside` for callouts, `table` with `caption`/`thead`/`tbody` for tabular evidence, and `figure` with `figcaption` for charts, diagrams, screenshots, and other visual material.
+- Avoid generic `div` wrappers when the content has a document meaning that a word processor or PDF converter can preserve.
 
 ## DOCX-Conversion Friendly Contract
 
@@ -178,18 +192,23 @@ The report does not need to look like an A4 paper sheet on screen, but its conte
 
 - Use the reusable report CSS page tokens for width and margins instead of ad hoc full-viewport layouts.
 - Keep material content inside the report content width. Wide tables should be split, summarized, or moved to an appendix.
+- Do not use global `word-break: break-all` or page-wide aggressive wrapping. Keep Korean prose readable, and scope `overflow-wrap`/long-token handling to URLs, file paths, code snippets, identifiers, and table cells that genuinely need it.
 - Use `h1`, `h2`, `h3`, and optional `h4` in the same hierarchy as the detailed TOC. Do not simulate headings with bold paragraphs.
 - Use normal `ul`/`ol` lists for enumerated issues, options, and decision criteria.
 - Final report charts should be static SVG/PNG or inline SVG generated from the project data files. ECharts may be used locally to render the chart, but the assembled report should not require JavaScript to display it.
 - If a chart data file changes, regenerate the static chart artifact and rerun the visual review before assembly.
 - Do not promise that DOCX charts will remain editable as native Word charts unless a separate export workflow has explicitly created them that way.
+- Leave Word field codes, automatic SEQ captions, and landscape-section automation as separate export PoC tasks until that workflow has dedicated implementation and verification.
 
 ## Citation and Source Display
 
 - Body text should use numbered footnotes/endnotes or another reader-facing citation style chosen in the PRD.
-- Tables and figures should display `주:`, `자료:`, and `근거 데이터:` where relevant.
+- Tables and figures should display source and data-basis labels in the PRD-confirmed display language.
+- Korean reports should display `주:`, `자료:`, and `근거 데이터:` where relevant.
+- English reports may display `Note:`, `Source:`, `Underlying data:`, or `Data basis:` where relevant, but only when the HTML or PRD explicitly marks English output.
 - `자료:` names original sources or publishers.
 - `근거 데이터:` names the local dataset or auditable artifact used to reproduce the visual.
+- `Source:` names original sources or publishers. `Underlying data:` and `Data basis:` name the local dataset or auditable artifact used to reproduce the visual.
 - Do not show internal source ids in visible prose unless the report itself is a methodology document.
 - Preserve exact internal ids and local paths in comments, data indexes, or appendices.
 

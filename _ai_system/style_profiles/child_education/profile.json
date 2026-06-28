@@ -1,0 +1,12 @@
+{
+  "id": "child_education",
+  "profile_id": "child_education",
+  "label": "Child Education",
+  "label_ko": "어린이/초보 학습자 교육자료",
+  "target_reader": "Children, beginner learners, or readers with low prior knowledge.",
+  "recommended_document_presets": ["education_curriculum", "product_manual", "general_report"],
+  "risk_level": "medium",
+  "automation_status": "guidance_only",
+  "primary_use": "Simple, concrete, example-centered explanations that preserve factual accuracy and avoid fear-based wording.",
+  "protected_span_priority": "high"
+}

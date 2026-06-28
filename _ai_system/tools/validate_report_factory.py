@@ -16,6 +16,14 @@ PROJECT_ROOT = Path("00_사용자_작업공간")
 DATA_SUFFIXES = {".csv", ".xlsx", ".xls", ".tsv"}
 PLAN_DATA_FILENAMES = {"visual_plan.csv"}
 REQUIRED_VISUAL_COLUMNS = {"visual_id", "chapter", "visual_type", "purpose", "decision_use", "status"}
+INACTIVE_PRESET_VALUES = {"", "undecided", "none", "n/a", "na", "null", "-"}
+EXTERNAL_SCRIPT_RE = re.compile(r"<script\b[^>]*\bsrc=[\"']https?://", flags=re.I)
+
+
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
+
+
 def read_csv(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
@@ -57,6 +65,49 @@ def is_substantial_project(project: Path) -> bool:
     combined = (prd_text + " " + toc_text).lower()
     return any(marker.lower() in combined for marker in markers)
 
+
+def supported_preset_ids() -> set[str]:
+    index_path = Path("_ai_system") / "document_presets" / "INDEX.json"
+    payload = read_json(index_path)
+    presets = payload.get("presets", [])
+    if not isinstance(presets, list):
+        return set()
+    ids: set[str] = set()
+    for entry in presets:
+        if isinstance(entry, dict):
+            preset_id = str(entry.get("preset_id", "")).strip()
+            if preset_id:
+                ids.add(preset_id)
+    return ids
+
+
+def extract_markdown_field_values(text: str, field: str) -> list[str]:
+    values: list[str] = []
+    pattern = re.compile(
+        rf"(?im)^\s*(?:[-*]\s*)?`?{re.escape(field)}`?\s*[:：]\s*`?([A-Za-z0-9_.-]+)`?"
+    )
+    for match in pattern.finditer(text):
+        value = match.group(1).strip().strip("`")
+        if value:
+            values.append(value)
+    return values
+
+
+def prd_field_values(project: Path, field: str) -> list[str]:
+    values: list[str] = []
+    for path in sorted((project / "report_prd").glob("*.md")):
+        values.extend(extract_markdown_field_values(read_text(path), field))
+    return values
+
+
+def external_script_hits(paths: list[Path], project: Path) -> list[str]:
+    hits: list[str] = []
+    for path in paths:
+        text = read_text(path)
+        if EXTERNAL_SCRIPT_RE.search(text):
+            hits.append(rel(path, project))
+    return hits
+
 def validate_project(project: Path, strict: bool, enforce_modern: bool) -> dict[str, object]:
     config = load_config()
     errors: list[str] = []
@@ -85,6 +136,8 @@ def validate_project(project: Path, strict: bool, enforce_modern: bool) -> dict[
     workpacks = sorted(workpack_dir.glob("ch*_workpack.md")) if workpack_dir.exists() else []
     chapters = sorted(chapter_dir.glob("ch*.html")) if chapter_dir.exists() else []
     cover_data = project / "reports" / "cover.data.json"
+    cover_payload = read_json(cover_data)
+    current_pointer = read_json(project / "reports" / "current" / "version_pointer.json")
     visual_review_note = project / "reports" / "visual_review.md"
     visual_pass_manifest = project / "reports" / "visual_pass_manifest.json"
     assembly_manifest_path = project / "reports" / "report_assembly_manifest.json"
@@ -100,6 +153,22 @@ def validate_project(project: Path, strict: bool, enforce_modern: bool) -> dict[
 
     if substantial and not report_prd:
         factory_gap("substantial report factory requires a report PRD under report_prd/")
+    if report_prd:
+        supported_ids = supported_preset_ids()
+        preset_values = prd_field_values(project, "document_type_preset")
+        invalid_presets = sorted(
+            {
+                value
+                for value in preset_values
+                if value.strip().lower() not in INACTIVE_PRESET_VALUES and supported_ids and value not in supported_ids
+            }
+        )
+        if invalid_presets:
+            factory_gap(
+                "report PRD contains unsupported document_type_preset id(s): "
+                + ", ".join(invalid_presets)
+                + "; use an indexed preset_id from _ai_system/document_presets/INDEX.json or undecided"
+            )
     if substantial and not detailed_toc:
         factory_gap("substantial report factory requires a detailed TOC under drafts/")
     if substantial and strict and not skeleton:
@@ -129,9 +198,25 @@ def validate_project(project: Path, strict: bool, enforce_modern: bool) -> dict[
         factory_gap("strict report factory requires chapter fragments under reports/chapters/ch*.html")
     if substantial and strict and not cover_data.exists():
         factory_gap("strict report factory requires reports/cover.data.json for the reusable cover component")
+    if strict and assembled_reports:
+        pointer_version = str(current_pointer.get("version", "") or "").strip()
+        pointer_key = str(current_pointer.get("version_key", "") or "").strip()
+        cover_version = str(cover_payload.get("version", "") or "").strip()
+        if pointer_version and cover_version and cover_version not in {pointer_version, pointer_key}:
+            factory_gap(
+                "reader-facing cover version is stale: "
+                f"reports/cover.data.json version={cover_version}, current pointer={pointer_version}/{pointer_key}"
+            )
     if assembled_reports and not chapters:
         factory_gap("assembled report exists but no source chapter fragments were found")
     if strict and assembled_reports:
+        cdn_hits = external_script_hits([*assembled_reports, *chapters], project)
+        if cdn_hits:
+            factory_gap(
+                "strict/versioned report HTML must not depend on external script/CDN assets; "
+                "use local ECharts as a render aid or static SVG/PNG before assembly: "
+                + ", ".join(cdn_hits[:8])
+            )
         if not assembly_manifest_path.exists():
             factory_gap("assembled report exists but reports/report_assembly_manifest.json is missing")
         elif assembly_manifest.get("assembly_mode") != "concatenate_only_no_rewrite":

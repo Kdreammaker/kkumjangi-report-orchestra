@@ -19,6 +19,13 @@ TEMPLATE_ROOT = Path("_ai_system") / "templates" / "report_html"
 COVER_ROOT = TEMPLATE_ROOT / "cover"
 DEFAULT_OUTPUT = Path("reports") / "internal_review_report.html"
 RUNTIME_ROOT = Path("_ai_system") / "runtime"
+STYLE_PASS_REQUIRED = [
+    "style_risk_findings.json",
+    "protected_spans.json",
+    "style_rewrite_diff.md",
+    "style_fidelity_review.md",
+    "style_naturalness_review.md",
+]
 
 
 def read_text(path: Path) -> str:
@@ -50,6 +57,19 @@ def confidential_from_cover_data(data: dict[str, object]) -> bool:
     return bool(data.get("is_confidential")) or any("대외비" in str(value) or truthy(value) for value in fields)
 
 
+def display_classification(value: object) -> str:
+    text = str(value).strip()
+    if not text:
+        return ""
+    text = text.strip("[] ")
+    text = re.sub(r"(?i)\bconfidential\b", "", text)
+    text = text.replace("대외비", "").replace("기밀", "")
+    text = re.sub(r"\s*(/|\\|\||·|-)+\s*", " / ", text)
+    text = re.sub(r"^(?:/|\\|\||·|-|\s)+|(?:/|\\|\||·|-|\s)+$", "", text)
+    text = re.sub(r"\s{2,}", " ", text).strip()
+    return text
+
+
 def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     logo_path = str(data.get("logo_path", "")).strip()
     logo_alt = str(data.get("logo_alt", "회사 로고")).strip() or "회사 로고"
@@ -63,8 +83,9 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     security_tag = str(data.get("security_tag", "")).strip()
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
+    tag_class = "cover-security-tag" if is_confidential else "cover-status-tag"
     security_tag_html = (
-        f'<span class="cover-security-tag">{html.escape(security_tag, quote=False)}</span>' if is_confidential else ""
+        f'<span class="{tag_class}">{html.escape(security_tag, quote=False)}</span>' if security_tag else ""
     )
     notice = str(data.get("confidential_notice", "")).strip()
     if is_confidential and not notice:
@@ -165,6 +186,7 @@ def render_cover(data: dict[str, object]) -> str:
         "meta_table_html": render_meta_table(data, preset),
         "approval_html": render_approval(data, preset),
     }
+    tokens["classification"] = display_classification(tokens.get("classification", ""))
     for key, value in tokens.items():
         if key.endswith("_html"):
             template = template.replace("{{" + key + "}}", str(value))
@@ -231,7 +253,7 @@ def visual_data_labels(project: Path) -> dict[str, str]:
 def build_reference_appendices(project: Path) -> str:
     sections: list[str] = []
     source_rows = read_csv_rows(project / "references" / "source_link_register.csv")
-    source_rows = [row for row in source_rows if (row.get("title") or row.get("url") or row.get("publisher"))]
+    source_rows = [row for row in source_rows if (row.get("title") or row.get("official_url") or row.get("url") or row.get("publisher"))]
     if source_rows:
         rows_html = []
         for index, row in enumerate(source_rows, start=1):
@@ -240,7 +262,7 @@ def build_reference_appendices(project: Path) -> str:
                 f"<td>{index}</td>"
                 f"<td>{html.escape(row.get('title', ''), quote=False)}</td>"
                 f"<td>{html.escape(row.get('publisher', ''), quote=False)}</td>"
-                f"<td>{link_label(row.get('url', ''))}</td>"
+                f"<td>{link_label(row.get('official_url') or row.get('url', ''))}</td>"
                 "</tr>"
             )
         sections.append(
@@ -384,12 +406,19 @@ def update_active_report(project: Path, output_rel: str, chapters: list[Path], o
     assembly_manifest["runtime_assets"] = copy_runtime_assets(project)
     visual_pass = project / "reports" / "visual_pass_manifest.json"
     visual_review = project / "reports" / "visual_review.md"
+    style_pass_dir = project / "reports" / "style_pass"
+    style_pass_artifacts = [
+        file_integrity(style_pass_dir / filename, project)
+        for filename in STYLE_PASS_REQUIRED
+        if (style_pass_dir / filename).exists()
+    ]
     assembly_manifest["visual_pass_manifest"] = (
         visual_pass.relative_to(project).as_posix() if visual_pass.exists() else ""
     )
     assembly_manifest["visual_review_note"] = (
         visual_review.relative_to(project).as_posix() if visual_review.exists() else ""
     )
+    assembly_manifest["style_pass_artifacts"] = style_pass_artifacts
     write_json(assembly_manifest_path, assembly_manifest)
 
     stage_manifest_path = project / "project_state" / "report_stage_manifest.json"

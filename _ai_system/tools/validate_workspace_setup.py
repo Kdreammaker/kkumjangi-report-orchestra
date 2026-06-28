@@ -75,6 +75,11 @@ EXCLUDED_SCAN_PARTS = {
 EXCLUDED_SCAN_MARKERS = {
     "/archive/",
 }
+PRIVATE_REPO_SLUG = "Kdreammaker/kkumjangi-report-orchestra"
+PRIVATE_REPO_URL = "https://github.com/Kdreammaker/kkumjangi-report-orchestra"
+PUBLIC_REPO_SLUG_RE = re.compile(r"Kdreammaker/kkumjangi-report-orchestra(?!-private)")
+PUBLIC_REPO_URL_RE = re.compile(r"https://github\.com/Kdreammaker/kkumjangi-report-orchestra(?!-private)(?:\.git)?")
+PUBLIC_INSTALL_DIR_RE = re.compile(r"\bcd\s+kkumjangi-report-orchestra(?!-private)\b")
 
 
 def should_skip_scan_path(path: Path, root: Path) -> bool:
@@ -169,6 +174,74 @@ def check_local_runtime() -> dict[str, object]:
         "duckdb_smoke": duckdb_smoke,
         "docling_smoke": docling_smoke,
         "runtime_assets": runtime_assets,
+    }
+
+
+def git_origin_url(root: Path) -> str:
+    try:
+        proc = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            cwd=root,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except FileNotFoundError:
+        return ""
+    return proc.stdout.strip() if proc.returncode == 0 else ""
+
+
+def load_version_payload(root: Path) -> dict[str, object]:
+    path = root / "VERSION.json"
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {"error": "invalid_VERSION_json"}
+    return payload if isinstance(payload, dict) else {"error": "VERSION_json_must_be_object"}
+
+
+def check_install_source(root: Path, expected_channel: str) -> dict[str, object]:
+    version_payload = load_version_payload(root)
+    channel = str(version_payload.get("channel", "")).strip()
+    origin_url = git_origin_url(root)
+    install_text = (root / "INSTALL.md").read_text(encoding="utf-8", errors="replace") if (root / "INSTALL.md").exists() else ""
+    readme_text = (root / "README.md").read_text(encoding="utf-8", errors="replace") if (root / "README.md").exists() else ""
+    errors: list[str] = []
+    public_hits: list[str] = []
+
+    if expected_channel and expected_channel != "any" and channel != expected_channel:
+        errors.append(f"expected VERSION.json channel={expected_channel}, found {channel or 'missing'}")
+
+    private_expected = expected_channel == "main" or channel == "main"
+    if private_expected:
+        if PRIVATE_REPO_SLUG not in install_text and PRIVATE_REPO_URL not in install_text:
+            errors.append("private install source requires INSTALL.md to point to the private repository")
+        if origin_url and PRIVATE_REPO_SLUG not in origin_url and PRIVATE_REPO_URL not in origin_url:
+            errors.append(f"private install source requires origin to be private, found {origin_url}")
+        for label, text in [("INSTALL.md", install_text), ("README.md", readme_text)]:
+            if PUBLIC_REPO_URL_RE.search(text):
+                public_hits.append(f"{label}: public GitHub URL")
+            if PUBLIC_REPO_SLUG_RE.search(text):
+                public_hits.append(f"{label}: public repository slug")
+            if label == "INSTALL.md" and PUBLIC_INSTALL_DIR_RE.search(text):
+                public_hits.append(f"{label}: public install directory")
+        if public_hits:
+            errors.append("private install source docs point to public repository: " + " | ".join(public_hits[:8]))
+
+    return {
+        "expected_channel": expected_channel or "not_specified",
+        "version": version_payload.get("version", ""),
+        "release_date": version_payload.get("release_date", ""),
+        "channel": channel,
+        "origin_url": origin_url,
+        "private_expected": private_expected,
+        "public_repo_hits": public_hits,
+        "errors": errors,
     }
 
 
@@ -416,10 +489,15 @@ def check_reference_user_flow(root: Path, project_dir: Path, base_port: int) -> 
         result["launcher_returncode"] = launcher.returncode
         result["launcher_ok"] = launcher.returncode == 0
         result["browser_suppressed"] = True
-        for _ in range(50):
+        deadline = time.monotonic() + 12.0
+        probes = 0
+        while time.monotonic() < deadline:
             for port in range(8895, 8916):
+                if time.monotonic() >= deadline:
+                    break
+                probes += 1
                 try:
-                    with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/references", timeout=0.5) as resp:
+                    with urllib.request.urlopen(f"http://127.0.0.1:{port}/api/references", timeout=0.1) as resp:
                         data = json.loads(resp.read().decode("utf-8"))
                     if int(data.get("count", -1)) >= 0:
                         result["api_ok"] = True
@@ -432,11 +510,14 @@ def check_reference_user_flow(root: Path, project_dir: Path, base_port: int) -> 
                             and "referenceTable" in html
                             and ("list-card" in html or "<table" in html)
                         )
+                        result["probe_count"] = probes
                         return result
                 except Exception:
                     pass
             time.sleep(0.1)
         result["error"] = "launched_but_api_not_found"
+        result["probe_count"] = probes
+        result["probe_timeout_seconds"] = 12
         return result
     except Exception as exc:  # noqa: BLE001
         result["error"] = str(exc)
@@ -453,6 +534,12 @@ def main() -> int:
         action="store_true",
         help="Also run VBS/BAT launcher checks and verify the served reference-library UI HTML.",
     )
+    parser.add_argument(
+        "--expect-channel",
+        choices=["main", "public", "any"],
+        default="any",
+        help="Require VERSION.json channel to match. Private install tests should use --expect-channel main.",
+    )
     args = parser.parse_args()
 
     root = Path.cwd().resolve()
@@ -463,6 +550,7 @@ def main() -> int:
     results["root_missing_items"] = sorted(ROOT_REQUIRED - root_items)
     results["root_missing_paths"] = sorted(path for path in ROOT_REQUIRED_PATHS if not (root / path).exists())
     results["root_project_like_items"] = detect_root_project_like_items(root)
+    results["install_source"] = check_install_source(root, args.expect_channel)
 
     projects_root = root / PROJECT_ROOT
     project_dirs = sorted([p for p in projects_root.iterdir() if p.is_dir() and not is_smoke_project(p)]) if projects_root.exists() else []
@@ -546,6 +634,7 @@ def main() -> int:
         or results["root_missing_items"]
         or results["root_missing_paths"]
         or results["root_project_like_items"]
+        or results["install_source"]["errors"]
         or results["absolute_path_hits"]
         or results["root_runtime_leftovers"]
         or results["pycache_count"]
