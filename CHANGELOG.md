@@ -1,10 +1,10 @@
 # Changelog
 
-## 1.0.3 - 2026-06-28
+## 1.0.4 - 2026-06-28
 
-- Improved README onboarding with suitable document types, sample topics, and benefits-oriented positioning for first users.
-- Updated START_HERE guidance so users can see the draft, review/cross-check, approved enhancement, and optional export/share loop.
-- Expanded install-completion next steps to point to the installed START_HERE.html path and suggest first report topics.
-- Included modular document presets, guidance-only style profiles, English/mixed language guidance boundaries, and Korean style-pass artifacts without enabling automatic rewrite, humanizer, or naturalness scoring.
-- Kept DOCX/PDF conversion PoCs, Word field/style mapping, and preset-specific design fixture upgrades as pending follow-up work.
-- Preserved the local-first, no-cloud-upload-by-default guidance and public issue privacy warnings.
+- Changed report design guidance, report HTML templates, chapter fragments, and reusable cover rendering to an inline-first authoring policy for DOCX/Google Docs compatibility-minded import tests.
+- Added shared inline style helpers for generated cover metadata, approval blocks, reference appendices, and data appendices so core typography, color, border, and spacing are not class-only.
+- Kept CSS as browser preview, print, and fallback support for page rules, print behavior, font fallback, and long-token handling rather than treating CSS as the only source of report styling.
+- Tightened export/report-factory guidance around class-only/CSS-variable-only styling, grid/flex-only cover metadata, `nth-child`, `@font-face`-only typography, and background-heavy effects.
+- Fixed non-confidential cover/report validation handling so `대외비 아님` is not treated as a confidential signal.
+- Compatibility remains export-verification-first; this release does not claim full DOCX or Google Docs rendering parity.

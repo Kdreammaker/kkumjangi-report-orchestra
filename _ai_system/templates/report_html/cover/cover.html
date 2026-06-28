@@ -1,23 +1,23 @@
-<section class="cover-page" data-cover-component="report-cover-v1">
-  <div class="cover-topline">
-    <div class="cover-classification-group">
-      <span class="classification">{{classification}}</span>
+<section class="cover-page" data-cover-component="report-cover-v1"{{cover_page_style_attr}}>
+  <div class="cover-topline"{{cover_topline_style_attr}}>
+    <div class="cover-classification-group"{{cover_classification_group_style_attr}}>
+      <span class="classification"{{classification_style_attr}}>{{classification}}</span>
       {{security_tag_html}}
     </div>
-    <span class="report-type">{{report_type}}</span>
+    <span class="report-type"{{report_type_style_attr}}>{{report_type}}</span>
   </div>
 
   {{logo_html}}
 
-  <div class="cover-hero">
-    <p class="kicker">{{kicker}}</p>
-    <h1>{{report_title}}</h1>
-    <p class="subtitle">{{subtitle}}</p>
+  <div class="cover-hero"{{cover_hero_style_attr}}>
+    <p class="kicker"{{kicker_style_attr}}>{{kicker}}</p>
+    <h1{{cover_title_style_attr}}>{{report_title}}</h1>
+    <p class="subtitle"{{subtitle_style_attr}}>{{subtitle}}</p>
   </div>
 
   {{meta_table_html}}
   {{approval_html}}
 
-  <p class="cover-purpose">{{purpose}}</p>
+  <p class="cover-purpose"{{cover_purpose_style_attr}}>{{purpose}}</p>
   {{confidential_notice_html}}
 </section>

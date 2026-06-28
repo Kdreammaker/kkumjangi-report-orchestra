@@ -11,6 +11,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from report_inline_styles import REPORT_INLINE_STYLES, cover_styles, style_attr
 from workspace_config import active_domain_preset, css_variable_block, get_path, load_config
 
 
@@ -48,13 +49,20 @@ def truthy(value: object) -> bool:
 
 
 def confidential_from_cover_data(data: dict[str, object]) -> bool:
-    fields = [
-        data.get("confidentiality_status", ""),
-        data.get("classification", ""),
-        data.get("security_level", ""),
-        data.get("security_tag", ""),
-    ]
-    return bool(data.get("is_confidential")) or any("대외비" in str(value) or truthy(value) for value in fields)
+    explicit = data.get("is_confidential")
+    if isinstance(explicit, bool):
+        return explicit
+    if truthy(explicit):
+        return True
+
+    status = str(data.get("confidentiality_status", "")).strip().lower()
+    if status in {"대외비", "confidential"}:
+        return True
+    if status in {"대외비 아님", "not_confidential", "not confidential", "public", "공개", ""}:
+        return False
+
+    fields = [data.get("security_level", ""), data.get("security_tag", "")]
+    return any(truthy(value) for value in fields)
 
 
 def display_classification(value: object) -> str:
@@ -70,12 +78,14 @@ def display_classification(value: object) -> str:
     return text
 
 
-def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
+def optional_cover_tokens(data: dict[str, object], preset: dict[str, object]) -> dict[str, str]:
+    styles = cover_styles(preset)
     logo_path = str(data.get("logo_path", "")).strip()
     logo_alt = str(data.get("logo_alt", "회사 로고")).strip() or "회사 로고"
     logo_html = (
-        f'<div class="cover-logo"><img src="{html.escape(logo_path, quote=True)}" '
-        f'alt="{html.escape(logo_alt, quote=True)}"></div>'
+        f'<div class="cover-logo"{style_attr(styles["cover_logo"])}>'
+        f'<img class="cover-logo-image" src="{html.escape(logo_path, quote=True)}" '
+        f'alt="{html.escape(logo_alt, quote=True)}"{style_attr(styles["cover_logo_img"])}></div>'
         if logo_path
         else ""
     )
@@ -84,14 +94,20 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
     tag_class = "cover-security-tag" if is_confidential else "cover-status-tag"
+    tag_style = styles["cover_security_tag"] if is_confidential else styles["cover_status_tag"]
     security_tag_html = (
-        f'<span class="{tag_class}">{html.escape(security_tag, quote=False)}</span>' if security_tag else ""
+        f'<span class="{tag_class}"{style_attr(tag_style)}>{html.escape(security_tag, quote=False)}</span>'
+        if security_tag
+        else ""
     )
     notice = str(data.get("confidential_notice", "")).strip()
     if is_confidential and not notice:
         notice = DEFAULT_CONFIDENTIAL_NOTICE
     confidential_notice_html = (
-        f'<p class="cover-confidential-notice">{html.escape(notice, quote=False)}</p>' if notice else ""
+        f'<p class="cover-confidential-notice"{style_attr(styles["confidential_notice"])}>'
+        f'{html.escape(notice, quote=False)}</p>'
+        if notice
+        else ""
     )
     return {
         "logo_html": logo_html,
@@ -122,6 +138,7 @@ def cover_field(data: dict[str, object], preset: dict[str, object], field: str) 
 
 
 def render_meta_table(data: dict[str, object], preset: dict[str, object]) -> str:
+    styles = cover_styles(preset)
     rows = preset.get("meta_rows")
     if not isinstance(rows, list) or not rows:
         rows = [
@@ -143,17 +160,26 @@ def render_meta_table(data: dict[str, object], preset: dict[str, object]) -> str
             value = cover_field(data, preset, field)
             if not label or not value:
                 continue
-            cells.append(f"<th>{html.escape(label)}</th><td>{html.escape(value, quote=False)}</td>")
+            cells.append(
+                f"<th{style_attr(styles['meta_th'])}>{html.escape(label)}</th>"
+                f"<td{style_attr(styles['meta_td'])}>{html.escape(value, quote=False)}</td>"
+            )
         if cells:
             if len(cells) == 1:
-                cells[0] = cells[0].replace("<td>", '<td colspan="3">', 1)
+                cells[0] = cells[0].replace("<td", '<td colspan="3"', 1)
             html_rows.append("<tr>" + "".join(cells) + "</tr>")
     if not html_rows:
         return ""
-    return '<table class="cover-meta-table" aria-label="문서 관리 정보"><tbody>' + "".join(html_rows) + "</tbody></table>"
+    return (
+        f'<table class="cover-meta-table" aria-label="문서 관리 정보"{style_attr(styles["meta_table"])}>'
+        "<tbody>"
+        + "".join(html_rows)
+        + "</tbody></table>"
+    )
 
 
 def render_approval(data: dict[str, object], preset: dict[str, object]) -> str:
+    styles = cover_styles(preset)
     slots = preset.get("approval_slots")
     if not isinstance(slots, list):
         slots = [
@@ -169,22 +195,34 @@ def render_approval(data: dict[str, object], preset: dict[str, object]) -> str:
         field = str(slot.get("field", "")).strip()
         value = cover_field(data, preset, field)
         if label and value:
-            cards.append(f"<div><span>{html.escape(label)}</span><strong>{html.escape(value, quote=False)}</strong></div>")
+            cards.append(
+                f"<td{style_attr(styles['approval_card'])}>"
+                f"<span{style_attr(styles['approval_label'])}>{html.escape(label)}</span>"
+                f"<strong{style_attr(styles['approval_name'])}>{html.escape(value, quote=False)}</strong>"
+                "</td>"
+            )
     if not cards:
         return ""
-    return f'<div class="cover-approval cover-approval-{len(cards)}">' + "".join(cards) + "</div>"
+    return (
+        f'<table class="cover-approval cover-approval-{len(cards)}" aria-label="검토 및 승인"'
+        f'{style_attr(styles["approval_table"])}><tbody><tr>'
+        + "".join(cards)
+        + "</tr></tbody></table>"
+    )
 
 
 def render_cover(data: dict[str, object]) -> str:
     template = read_text(COVER_ROOT / "cover.html")
     preset = load_cover_preset(data)
     defaults = preset.get("defaults", {}) if isinstance(preset.get("defaults"), dict) else {}
+    styles = cover_styles(preset)
     tokens: dict[str, object] = {
         **defaults,
         **data,
-        **optional_cover_tokens(data),
+        **optional_cover_tokens(data, preset),
         "meta_table_html": render_meta_table(data, preset),
         "approval_html": render_approval(data, preset),
+        **{f"{key}_style_attr": style_attr(value) for key, value in styles.items()},
     }
     tokens["classification"] = display_classification(tokens.get("classification", ""))
     for key, value in tokens.items():
@@ -195,9 +233,9 @@ def render_cover(data: dict[str, object]) -> str:
     missing = sorted(set(re.findall(r"{{([a-zA-Z0-9_]+)}}", template)))
     if missing:
         raise ValueError("cover data is missing required field(s): " + ", ".join(missing))
-    template = re.sub(r"<p class=\"kicker\">\s*</p>\s*", "", template)
-    template = re.sub(r"<p class=\"subtitle\">\s*</p>\s*", "", template)
-    template = re.sub(r"<p class=\"cover-purpose\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"kicker\"[^>]*>\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"subtitle\"[^>]*>\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"cover-purpose\"[^>]*>\s*</p>\s*", "", template)
     return template
 
 
@@ -251,6 +289,7 @@ def visual_data_labels(project: Path) -> dict[str, str]:
 
 
 def build_reference_appendices(project: Path) -> str:
+    styles = REPORT_INLINE_STYLES
     sections: list[str] = []
     source_rows = read_csv_rows(project / "references" / "source_link_register.csv")
     source_rows = [row for row in source_rows if (row.get("title") or row.get("official_url") or row.get("url") or row.get("publisher"))]
@@ -259,26 +298,26 @@ def build_reference_appendices(project: Path) -> str:
         for index, row in enumerate(source_rows, start=1):
             rows_html.append(
                 "<tr>"
-                f"<td>{index}</td>"
-                f"<td>{html.escape(row.get('title', ''), quote=False)}</td>"
-                f"<td>{html.escape(row.get('publisher', ''), quote=False)}</td>"
-                f"<td>{link_label(row.get('official_url') or row.get('url', ''))}</td>"
+                f"<td{style_attr(styles['td'])}>{index}</td>"
+                f"<td{style_attr(styles['td'])}>{html.escape(row.get('title', ''), quote=False)}</td>"
+                f"<td{style_attr(styles['td'])}>{html.escape(row.get('publisher', ''), quote=False)}</td>"
+                f"<td{style_attr(styles['td'])}>{link_label(row.get('official_url') or row.get('url', ''))}</td>"
                 "</tr>"
             )
         sections.append(
-            """
+            f"""
 <section id="report-references" class="report-references">
-  <h1>참고자료</h1>
-  <p class="appendix-note">아래 목록은 독자가 원자료를 따라갈 수 있도록 정리한 reader-facing 참고자료입니다. 내부 source_id, 접근일, 사용 수준, 로컬 캡처 경로는 추적용 register에 보관합니다.</p>
-  <table class="report-table appendix-table" aria-label="참고자료 목록">
-    <thead><tr><th>No.</th><th>자료명</th><th>발행기관</th><th>원문</th></tr></thead>
+  <h1{style_attr(styles["h1"])}>참고자료</h1>
+  <p class="appendix-note"{style_attr(styles["appendix_note"])}>아래 목록은 독자가 원자료를 따라갈 수 있도록 정리한 reader-facing 참고자료입니다. 내부 추적 번호, 접근일, 사용 수준, 로컬 캡처 경로는 추적용 register에 보관합니다.</p>
+  <table class="report-table appendix-table" aria-label="참고자료 목록"{style_attr(styles["table"])}>
+    <thead><tr><th{style_attr(styles["th"])}>No.</th><th{style_attr(styles["th"])}>자료명</th><th{style_attr(styles["th"])}>발행기관</th><th{style_attr(styles["th"])}>원문</th></tr></thead>
     <tbody>
 """
             + "\n".join(rows_html)
-            + """
+            + f"""
     </tbody>
   </table>
-  <p class="caption">자료: 출처 링크 등록표와 source records. 근거 데이터: 참고자료 목록.</p>
+  <p class="caption"{style_attr(styles["caption"])}>자료: 출처 링크 등록표와 source records. 근거 데이터: 참고자료 목록.</p>
 </section>
 """
         )
@@ -299,26 +338,26 @@ def build_reference_appendices(project: Path) -> str:
             label = labels.get(path.name) or path.stem.replace("_", " ")
             rows_html.append(
                 "<tr>"
-                f"<td>{index}</td>"
-                f"<td>{html.escape(label, quote=False)}</td>"
-                f"<td>{html.escape(path.name, quote=False)}<!-- {html.escape(path.relative_to(project).as_posix(), quote=False)} --></td>"
-                f"<td>{path.stat().st_size}</td>"
+                f"<td{style_attr(styles['td'])}>{index}</td>"
+                f"<td{style_attr(styles['td'])}>{html.escape(label, quote=False)}</td>"
+                f"<td{style_attr(styles['td'])}>{html.escape(path.name, quote=False)}<!-- {html.escape(path.relative_to(project).as_posix(), quote=False)} --></td>"
+                f"<td{style_attr(styles['td'])}>{path.stat().st_size}</td>"
                 "</tr>"
             )
         sections.append(
-            """
+            f"""
 <section id="appendix-data-artifacts" class="appendix report-appendix">
-  <h1>부록. 분석 데이터 목록</h1>
-  <p class="appendix-note">아래 파일은 표·그래프·다이어그램을 재현하거나 검토하기 위한 로컬 분석 데이터입니다. 원문 출처를 대체하지 않습니다.</p>
-  <table class="report-table appendix-table" aria-label="분석 데이터 목록">
-    <thead><tr><th>No.</th><th>데이터셋</th><th>파일명</th><th>크기(bytes)</th></tr></thead>
+  <h1{style_attr(styles["h1"])}>부록. 분석 데이터 목록</h1>
+  <p class="appendix-note"{style_attr(styles["appendix_note"])}>아래 파일은 표·그래프·다이어그램을 재현하거나 검토하기 위한 로컬 분석 데이터입니다. 원문 출처를 대체하지 않습니다.</p>
+  <table class="report-table appendix-table" aria-label="분석 데이터 목록"{style_attr(styles["table"])}>
+    <thead><tr><th{style_attr(styles["th"])}>No.</th><th{style_attr(styles["th"])}>데이터셋</th><th{style_attr(styles["th"])}>파일명</th><th{style_attr(styles["th"])}>크기(bytes)</th></tr></thead>
     <tbody>
 """
             + "\n".join(rows_html)
-            + """
+            + f"""
     </tbody>
   </table>
-  <p class="caption">자료: visual plan과 data_sources 등록 파일. 근거 데이터: 분석 데이터 목록.</p>
+  <p class="caption"{style_attr(styles["caption"])}>자료: visual plan과 data_sources 등록 파일. 근거 데이터: 분석 데이터 목록.</p>
 </section>
 """
         )

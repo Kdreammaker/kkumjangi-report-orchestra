@@ -1,6 +1,6 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "release_date": "2026-06-28",
   "channel": "public",
-  "summary": "Public onboarding, document preset, and guidance-only style profile update with clearer first-use guidance, modular preset assets, language guidance boundaries, and review-first report workflow."
+  "summary": "Changed report HTML authoring guidance and templates to inline-first output for DOCX/Google Docs compatibility-minded import tests, with CSS kept as preview, print, and fallback support."
 }

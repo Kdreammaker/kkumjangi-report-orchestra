@@ -7,64 +7,64 @@
   <link rel="stylesheet" href="../../../_ai_system/templates/report_html/report.css">
 </head>
 <body>
-  <main class="report-page report-template">
-    <header class="report-cover">
-      <p class="report-label">{{REPORT_LABEL}}</p>
-      <h1>{{REPORT_TITLE}}</h1>
-      <p class="lead">{{REPORT_SUBTITLE}}</p>
+  <main class="report-page report-template" style="box-sizing: border-box; max-width: 210mm; margin: 0 auto; padding: 24mm 18mm 28mm; background: #FFFFFF; color: #1f2933; font-family: &quot;Pretendard&quot;, &quot;Malgun Gothic&quot;, &quot;Noto Sans KR&quot;, Arial, sans-serif; font-size: 16px; line-height: 1.82; word-break: keep-all; overflow-wrap: normal;">
+    <header class="report-cover" style="border-bottom: 3px solid #172033; margin-bottom: 28px; padding-bottom: 24px;">
+      <p class="report-label" style="color: #1F6FEB; font-size: 14px; font-weight: 700; margin: 0 0 8px;">{{REPORT_LABEL}}</p>
+      <h1 style="color: #172033; font-size: 30px; font-weight: 800; line-height: 1.35; letter-spacing: 0; margin: 54px 0 18px; overflow-wrap: break-word; page-break-after: avoid;">{{REPORT_TITLE}}</h1>
+      <p class="lead" style="color: #344054; font-size: 16px; font-weight: 500; line-height: 1.7; margin: 12px 0; max-width: 174mm;">{{REPORT_SUBTITLE}}</p>
     </header>
 
     <section id="method">
-      <h2>1. 검토 범위와 방법론</h2>
-      <p>{{METHOD_BODY}}</p>
+      <h2 style="border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 22px; font-weight: 800; line-height: 1.35; margin: 38px 0 16px; padding-bottom: 8px; overflow-wrap: break-word; page-break-after: avoid;">1. 검토 범위와 방법론</h2>
+      <p style="margin: 12px 0; max-width: 174mm;">{{METHOD_BODY}}</p>
     </section>
 
     <section id="body">
-      <h2>2. 본문 분석</h2>
-      <p>{{BODY_SECTION}}</p>
-      <aside class="callout">
-        <p>{{CALLOUT_BODY}}</p>
+      <h2 style="border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 22px; font-weight: 800; line-height: 1.35; margin: 38px 0 16px; padding-bottom: 8px; overflow-wrap: break-word; page-break-after: avoid;">2. 본문 분석</h2>
+      <p style="margin: 12px 0; max-width: 174mm;">{{BODY_SECTION}}</p>
+      <aside class="callout" style="background: #FFFFFF; border-left: 4px solid #1F6FEB; margin: 18px 0; padding: 13px 15px; break-inside: avoid; page-break-inside: avoid;">
+        <p style="margin: 0; max-width: 174mm;">{{CALLOUT_BODY}}</p>
       </aside>
     </section>
 
     <section id="visuals">
-      <h2>3. 표와 그래프</h2>
-      <table class="report-table">
-        <caption>{{TABLE_CAPTION}}</caption>
+      <h2 style="border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 22px; font-weight: 800; line-height: 1.35; margin: 38px 0 16px; padding-bottom: 8px; overflow-wrap: break-word; page-break-after: avoid;">3. 표와 그래프</h2>
+      <table class="report-table" style="background: #FFFFFF; border-collapse: collapse; border-top: 2px solid #172033; margin: 12px 0 6px; max-width: 174mm; width: 100%; break-inside: avoid; page-break-inside: avoid;">
+        <caption style="color: #172033; font-size: 15px; font-weight: 700; margin-bottom: 8px; text-align: left;">{{TABLE_CAPTION}}</caption>
         <thead>
           <tr>
-            <th scope="col">{{TABLE_HEADER_1}}</th>
-            <th scope="col">{{TABLE_HEADER_2}}</th>
+            <th scope="col" style="background: #EDF3FA; border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 13.5px; font-weight: 700; line-height: 1.55; overflow-wrap: break-word; padding: 10px 12px; text-align: left; vertical-align: top; word-break: normal;">{{TABLE_HEADER_1}}</th>
+            <th scope="col" style="background: #EDF3FA; border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 13.5px; font-weight: 700; line-height: 1.55; overflow-wrap: break-word; padding: 10px 12px; text-align: left; vertical-align: top; word-break: normal;">{{TABLE_HEADER_2}}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{TABLE_CELL_1}}</td>
-            <td>{{TABLE_CELL_2}}</td>
+            <td style="border-bottom: 1px solid #CFD0D3; color: #1f2933; font-size: 13.5px; line-height: 1.55; overflow-wrap: break-word; padding: 10px 12px; text-align: left; vertical-align: top; word-break: normal;">{{TABLE_CELL_1}}</td>
+            <td style="border-bottom: 1px solid #CFD0D3; color: #1f2933; font-size: 13.5px; line-height: 1.55; overflow-wrap: break-word; padding: 10px 12px; text-align: left; vertical-align: top; word-break: normal;">{{TABLE_CELL_2}}</td>
           </tr>
         </tbody>
       </table>
-      <p class="caption">자료: {{TABLE_READER_SOURCE}}. 근거 데이터: {{TABLE_DATA_LABEL}}</p>
+      <p class="caption" style="color: #616670; font-size: 12.5px; line-height: 1.55; margin: 10px 0 0; max-width: 174mm;">자료: {{TABLE_READER_SOURCE}}. 근거 데이터: {{TABLE_DATA_LABEL}}</p>
       <!-- data_file: data_sources/{{TABLE_DATA_FILE}} -->
-      <figure class="report-figure">
-        <img class="static-chart figure-image" src="{{STATIC_CHART_IMAGE}}" alt="{{STATIC_CHART_ALT}}">
-        <figcaption>
-          <span class="caption-source">자료: {{READER_SOURCE}}</span>
-          <span class="caption-data">근거 데이터: {{DATA_LABEL}}</span>
+      <figure class="report-figure" style="background: #FFFFFF; border: 1px solid #D8E0EB; border-radius: 8px; margin: 26px 0; max-width: 174mm; padding: 18px 18px 14px; break-inside: avoid; page-break-inside: avoid;">
+        <img class="static-chart figure-image" src="{{STATIC_CHART_IMAGE}}" alt="{{STATIC_CHART_ALT}}" style="display: block; height: auto; max-width: 100%; width: 100%;">
+        <figcaption style="color: #344054; font-size: 14px; font-weight: 700; line-height: 1.58; margin: 0 0 10px;">
+          <span class="caption-source" style="display: block;">자료: {{READER_SOURCE}}</span>
+          <span class="caption-data" style="display: block; color: #616670; font-size: 12.5px; font-weight: 500;">근거 데이터: {{DATA_LABEL}}</span>
         </figcaption>
         <!-- data_file: data_sources/{{DATA_FILE}} -->
       </figure>
     </section>
 
     <section id="appendix" class="appendix">
-      <h2>부록</h2>
-      <p>{{APPENDIX_BODY}}</p>
+      <h2 style="border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 22px; font-weight: 800; line-height: 1.35; margin: 38px 0 16px; padding-bottom: 8px; overflow-wrap: break-word; page-break-after: avoid;">부록</h2>
+      <p style="margin: 12px 0; max-width: 174mm;">{{APPENDIX_BODY}}</p>
     </section>
 
     <section id="footnotes" class="footnotes">
-      <h2>주석</h2>
+      <h2 style="border-bottom: 1px solid #CFD0D3; color: #172033; font-size: 22px; font-weight: 800; line-height: 1.35; margin: 38px 0 16px; padding-bottom: 8px; overflow-wrap: break-word; page-break-after: avoid;">주석</h2>
       <ol>
-        <li>{{FOOTNOTE}}</li>
+        <li style="margin: 4px 0;">{{FOOTNOTE}}</li>
       </ol>
     </section>
   </main>

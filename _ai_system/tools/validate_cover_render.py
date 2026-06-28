@@ -8,6 +8,8 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from report_inline_styles import cover_styles, style_attr
+
 
 PROJECT_ROOT = Path("00_사용자_작업공간")
 COVER_ROOT = Path("_ai_system") / "templates" / "report_html" / "cover"
@@ -77,12 +79,14 @@ def display_classification(value: object) -> str:
     return text
 
 
-def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
+def optional_cover_tokens(data: dict[str, object], preset: dict[str, object]) -> dict[str, str]:
+    styles = cover_styles(preset)
     logo_path = str(data.get("logo_path", "")).strip()
     logo_alt = str(data.get("logo_alt", "회사 로고")).strip() or "회사 로고"
     logo_html = (
-        f'<div class="cover-logo"><img src="{html.escape(logo_path, quote=True)}" '
-        f'alt="{html.escape(logo_alt, quote=True)}"></div>'
+        f'<div class="cover-logo"{style_attr(styles["cover_logo"])}>'
+        f'<img class="cover-logo-image" src="{html.escape(logo_path, quote=True)}" '
+        f'alt="{html.escape(logo_alt, quote=True)}"{style_attr(styles["cover_logo_img"])}></div>'
         if logo_path
         else ""
     )
@@ -91,8 +95,9 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     if is_confidential and not security_tag:
         security_tag = "대외비 / Confidential"
     tag_class = "cover-security-tag" if is_confidential else "cover-status-tag"
+    tag_style = styles["cover_security_tag"] if is_confidential else styles["cover_status_tag"]
     security_tag_html = (
-        f'<span class="{tag_class}">{html.escape(security_tag, quote=False)}</span>'
+        f'<span class="{tag_class}"{style_attr(tag_style)}>{html.escape(security_tag, quote=False)}</span>'
         if security_tag
         else ""
     )
@@ -100,7 +105,10 @@ def optional_cover_tokens(data: dict[str, object]) -> dict[str, str]:
     if is_confidential and not notice:
         notice = DEFAULT_CONFIDENTIAL_NOTICE
     confidential_notice_html = (
-        f'<p class="cover-confidential-notice">{html.escape(notice, quote=False)}</p>' if notice else ""
+        f'<p class="cover-confidential-notice"{style_attr(styles["confidential_notice"])}>'
+        f'{html.escape(notice, quote=False)}</p>'
+        if notice
+        else ""
     )
     return {
         "logo_html": logo_html,
@@ -131,6 +139,7 @@ def cover_field(data: dict[str, object], preset: dict[str, object], field: str) 
 
 
 def render_meta_table(data: dict[str, object], preset: dict[str, object]) -> str:
+    styles = cover_styles(preset)
     rows = preset.get("meta_rows")
     if not isinstance(rows, list) or not rows:
         rows = [
@@ -152,17 +161,26 @@ def render_meta_table(data: dict[str, object], preset: dict[str, object]) -> str
             value = cover_field(data, preset, field)
             if not label or not value:
                 continue
-            cells.append(f"<th>{html.escape(label)}</th><td>{html.escape(value, quote=False)}</td>")
+            cells.append(
+                f"<th{style_attr(styles['meta_th'])}>{html.escape(label)}</th>"
+                f"<td{style_attr(styles['meta_td'])}>{html.escape(value, quote=False)}</td>"
+            )
         if cells:
             if len(cells) == 1:
-                cells[0] = cells[0].replace("<td>", '<td colspan="3">', 1)
+                cells[0] = cells[0].replace("<td", '<td colspan="3"', 1)
             html_rows.append("<tr>" + "".join(cells) + "</tr>")
     if not html_rows:
         return ""
-    return '<table class="cover-meta-table" aria-label="문서 관리 정보"><tbody>' + "".join(html_rows) + "</tbody></table>"
+    return (
+        f'<table class="cover-meta-table" aria-label="문서 관리 정보"{style_attr(styles["meta_table"])}>'
+        "<tbody>"
+        + "".join(html_rows)
+        + "</tbody></table>"
+    )
 
 
 def render_approval(data: dict[str, object], preset: dict[str, object]) -> str:
+    styles = cover_styles(preset)
     slots = preset.get("approval_slots")
     if not isinstance(slots, list):
         slots = [
@@ -178,10 +196,20 @@ def render_approval(data: dict[str, object], preset: dict[str, object]) -> str:
         field = str(slot.get("field", "")).strip()
         value = cover_field(data, preset, field)
         if label and value:
-            cards.append(f"<div><span>{html.escape(label)}</span><strong>{html.escape(value, quote=False)}</strong></div>")
+            cards.append(
+                f"<td{style_attr(styles['approval_card'])}>"
+                f"<span{style_attr(styles['approval_label'])}>{html.escape(label)}</span>"
+                f"<strong{style_attr(styles['approval_name'])}>{html.escape(value, quote=False)}</strong>"
+                "</td>"
+            )
     if not cards:
         return ""
-    return f'<div class="cover-approval cover-approval-{len(cards)}">' + "".join(cards) + "</div>"
+    return (
+        f'<table class="cover-approval cover-approval-{len(cards)}" aria-label="검토 및 승인"'
+        f'{style_attr(styles["approval_table"])}><tbody><tr>'
+        + "".join(cards)
+        + "</tr></tbody></table>"
+    )
 
 
 def now_kst() -> str:
@@ -192,12 +220,14 @@ def render_cover(data: dict[str, object]) -> tuple[str, list[str]]:
     template = read_text(COVER_ROOT / "cover.html")
     preset = load_cover_preset(data)
     defaults = preset.get("defaults", {}) if isinstance(preset.get("defaults"), dict) else {}
+    styles = cover_styles(preset)
     tokens: dict[str, object] = {
         **defaults,
         **data,
-        **optional_cover_tokens(data),
+        **optional_cover_tokens(data, preset),
         "meta_table_html": render_meta_table(data, preset),
         "approval_html": render_approval(data, preset),
+        **{f"{key}_style_attr": style_attr(value) for key, value in styles.items()},
     }
     tokens["classification"] = display_classification(tokens.get("classification", ""))
     for key, value in tokens.items():
@@ -206,9 +236,9 @@ def render_cover(data: dict[str, object]) -> tuple[str, list[str]]:
         else:
             template = template.replace("{{" + key + "}}", escape_value(value))
     missing_tokens = sorted(set(re.findall(r"{{([a-zA-Z0-9_]+)}}", template)))
-    template = re.sub(r"<p class=\"kicker\">\s*</p>\s*", "", template)
-    template = re.sub(r"<p class=\"subtitle\">\s*</p>\s*", "", template)
-    template = re.sub(r"<p class=\"cover-purpose\">\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"kicker\"[^>]*>\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"subtitle\"[^>]*>\s*</p>\s*", "", template)
+    template = re.sub(r"<p class=\"cover-purpose\"[^>]*>\s*</p>\s*", "", template)
     return template, missing_tokens
 
 

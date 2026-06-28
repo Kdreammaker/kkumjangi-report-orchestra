@@ -19,6 +19,17 @@ Use this file as `reports/report_design.md` for substantial reports.
 - Avoid: viewport-height covers, double margin layers, and background-heavy cover effects that become unstable in DOCX/PDF conversion
 - Long text wrapping: do not use global `word-break: break-all`; scope `overflow-wrap`/long-token handling to URLs, local path labels, identifiers, code snippets, and table cells only
 
+## Inline-first DOCX/Google Docs Compatibility
+
+- Default authoring mode: inline-first HTML. Unless the user asks for a browser-only design, core visual information should be written directly on the element with `style=""` at the template/chapter/cover stage, not added only by a final CSS inlining pass.
+- Priority elements for inline styles: cover badges, cover title/subtitle, cover meta table, approval block, `h1`-`h3`, paragraphs, callouts, material tables, `caption`, `figure`, `figcaption`, source/data notes, and appendix tables.
+- Class usage: keep classes as semantic markers for validators, structure identification, preview fallback, and print helpers. Do not make class/CSS variables the only source of color, border, font, spacing, or caption styling for reader-facing content.
+- CSS variable dependency: record actual colors, font stacks, border widths, spacing, and table styles as literal inline values where practical. CSS variables may remain in shared CSS as browser-preview fallback.
+- Avoid for export-oriented reports: complex grid/flex as the only layout, `@font-face` as the only font path, `nth-child`-dependent table styling, CSS-only visuals, background-heavy effects, viewport-dependent sizing, and canvas/JavaScript-only charts.
+- Tables and approval blocks: prefer semantic tables with inline cell borders/backgrounds for conversion stability. Avoid relying on zebra striping or CSS-only header styling to carry meaning.
+- Print/page rules: keep `@page`, page-break helpers, print color adjustment, and global fallback styles in CSS because they cannot be fully expressed inline. Treat these as compatibility aids, not proof of DOCX/Google Docs fidelity.
+- Claim language: describe the output as "DOCX/Google Docs compatibility-first" or "export-friendly pending verification"; do not claim full Word/Google Docs compatibility until actual export/render checks are recorded.
+
 ## Typography
 
 - Body font:

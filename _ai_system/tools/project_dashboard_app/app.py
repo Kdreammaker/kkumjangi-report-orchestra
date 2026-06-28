@@ -1482,7 +1482,7 @@ const labels = {{
 const primaryFields = ['title','file_type','material_origin_ko','visibility_ko','notes'];
 const systemFields = ['reference_id','source_tier','intake_status','parse_status','ocr_status','normalized_status','context_index_status','source_id','sha256','file_size_bytes','last_modified_kst','original_path','open_path','source_record_path','derived_text_path','normalized_text_path','normalized_manifest_path','normalized_unit_index_path'];
 const options = {{
-  material_origin_ko:[{value:'',label:'선택'},{value:'사용자 제공',label:'사용자 제공'},{value:'AI 수집 후보',label:'링크 확인 후보'},{value:'외부',label:'외부 링크'},{value:'공식 공개자료',label:'공식 공개자료'},{value:'언론/보조자료',label:'언론/보조자료'}],
+  material_origin_ko:[{{value:'',label:'선택'}},{{value:'사용자 제공',label:'사용자 제공'}},{{value:'AI 수집 후보',label:'링크 확인 후보'}},{{value:'외부',label:'외부 링크'}},{{value:'공식 공개자료',label:'공식 공개자료'}},{{value:'언론/보조자료',label:'언론/보조자료'}}],
   visibility_ko:['','내부','대외비','공개','공개 가능','확인 필요'],
   source_tier:[{{value:'',label:'선택'}},{{value:'Tier 1 - Primary official',label:'공식 원출처'}},{{value:'Tier 1 - Primary legal/regulatory',label:'법령·금융당국 원출처'}},{{value:'Tier 2 - Primary commercial/issuer',label:'기업·기관 공식자료'}},{{value:'Tier 2 - Primary organization',label:'정당·기관 공식자료'}},{{value:'secondary',label:'보조자료'}},{{value:'unknown',label:'검토 필요'}}],
   intake_status:[{{value:'',label:'선택'}},{{value:'manual_lead',label:'수동 등록'}},{{value:'received',label:'자료 접수'}},{{value:'inventoried',label:'대장 등록'}},{{value:'blocked',label:'확인 필요'}},{{value:'needs_ai_intake',label:'정리 필요'}}],

@@ -1,3 +1,7 @@
+/* Browser preview, print, and fallback styles.
+   Report-ready HTML should be authored inline-first for DOCX/Google Docs
+   compatibility; do not make this file the only source of core visual styling. */
+
 @font-face {
   font-family: "Pretendard";
   font-style: normal;
@@ -264,10 +268,6 @@ th {
   font-weight: 700;
 }
 
-tbody tr:nth-child(even) td {
-  background: #fafcff;
-}
-
 ul,
 ol {
   margin: 10px 0 14px 22px;
@@ -285,23 +285,22 @@ li::marker {
 }
 
 .chart-bars {
-  display: grid;
-  gap: 8px;
   margin: 10px 0;
 }
 
 .chart-row {
-  align-items: center;
-  display: grid;
-  gap: 10px;
-  grid-template-columns: minmax(100px, 170px) 1fr minmax(70px, auto);
+  display: table;
+  margin: 8px 0;
+  table-layout: fixed;
+  width: 100%;
 }
 
 .chart-bar {
   background: var(--rf-soft);
   border: 1px solid #d9e7f6;
+  display: block;
   height: 18px;
-  position: relative;
+  margin: 4px 0;
 }
 
 .chart-bar > span {

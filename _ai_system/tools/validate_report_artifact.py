@@ -84,8 +84,19 @@ class TextExtractor(html.parser.HTMLParser):
     def __init__(self) -> None:
         super().__init__()
         self.text: list[str] = []
+        self._skip_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() in {"script", "style"}:
+            self._skip_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() in {"script", "style"} and self._skip_depth:
+            self._skip_depth -= 1
 
     def handle_data(self, data: str) -> None:
+        if self._skip_depth:
+            return
         self.text.append(data)
 
     def visible_text(self) -> str:
@@ -134,6 +145,16 @@ def strip_cover_component(text: str) -> str:
         text,
         flags=re.I | re.S,
     )
+
+
+def has_confidentiality_signal(text: str) -> bool:
+    normalized = re.sub(
+        r"(대외비\s*아님|not[_\s-]*confidential|non[_\s-]*confidential|public|공개)",
+        "",
+        text,
+        flags=re.I,
+    )
+    return bool(re.search(r"대외비|confidential", normalized, flags=re.I))
 
 
 def source_ids_from_index(project: Path) -> set[str]:
@@ -212,7 +233,7 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
     chapter_fragments = sorted(chapter_dir.glob("ch*.html")) if chapter_dir.exists() else []
     substantial = substantial or bool(chapter_fragments) or assembled_report
     cover_component = "data-cover-component=\"report-cover-v1\"" in raw or "class=\"cover-page\"" in raw
-    confidentiality_signal = bool(re.search(r"대외비|confidential", visible_text, flags=re.I))
+    confidentiality_signal = has_confidentiality_signal(visible_text)
 
     if re.search(r"\b(source_id|claim_id|assumption_id|data_file_id)\b", visible_text, flags=re.I):
         errors.append("internal audit identifiers are visible in reader-facing text")

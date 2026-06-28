@@ -85,6 +85,7 @@ For broad or substantial internal review reports and other `artifact_workflow_mo
    - The PRD decides purpose, reader, document classification, confidentiality, evidence bar, and distribution boundary.
    - The PRD also records `document_type_preset`, `output_language`, `language_variant`, `citation_display_language`, `caption_label_profile`, `style_profile`, `target_reader_tone`, and `protected_spans_policy`.
    - The design file decides A4 margins, typography, palette, cover preset, logo priority, table/chart style, and confidentiality warning placement.
+   - The design file should record inline-first DOCX/Google Docs compatibility decisions. Core visual styling for headings, tables, captions, figures, callouts, cover badges, cover metadata, and approval blocks should be available as literal inline `style=""` values in authored fragments or generated components, with CSS kept as preview/print/fallback support.
    - Do not use project-level defaults for document classification or confidentiality. Confirm them in the PRD for each report.
 3. Detailed TOC.
 4. TOC self-review and user approval for substantial reports.
@@ -95,6 +96,7 @@ For broad or substantial internal review reports and other `artifact_workflow_mo
 9. Chapter-by-chapter full prose fragments.
    - Each 대목차 in the detailed TOC must have one matching source chapter fragment. The chapter fragment is the master prose file for that 대목차.
    - Each 중목차/소목차 written in the detailed TOC must be preserved as visible headings in the matching chapter fragment. Do not collapse them into a summary table or a few paragraphs.
+   - Unless the user requests a browser-only artifact, chapter fragments should be authored inline-first. Use classes as structure/validator markers, but put essential heading, paragraph, table, figure, caption, and callout styling directly on the element.
 10. Chapter-quality hook and AI review/revision.
    - Run `_ai_system/tools/report_chapter_quality_coach.py --project <project_name> --write-status`.
    - Treat the hook as a router, not a judge: if it reports `needs_attention`, use the `report_reviewer` skill to review the chapter against the PRD, TOC, workpack, evidence, reader decision, and residual risks.
@@ -111,6 +113,7 @@ For broad or substantial internal review reports and other `artifact_workflow_mo
 13. Assemble cover + chapter fragments without rewriting prose.
     - Assembly must include reader-facing appendices for the reference list and local data artifacts when the project has registered sources or visual data.
     - The appendix should show accessible official links and Korean access dates. It should not expose internal ids as the primary reader-facing reference format.
+    - Assembly preserves inline-first chapter and cover styling. It may add inline styles to assembler-generated cover, reference, and data-appendix elements, but it must not rewrite chapter prose or rely on final CSS inlining as the primary compatibility strategy.
 14. Run review-candidate gates.
     - These gates include live chapter-quality routing, cover-render validation, strict factory validation, reference-register consistency, strict artifact validation, and the quality score contradiction check.
 15. Optional DOCX/PDF export and render verification.

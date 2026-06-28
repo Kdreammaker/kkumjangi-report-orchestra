@@ -1,3 +1,7 @@
+/* Cover browser preview, print, and fallback styles.
+   The reusable cover renderer should emit essential colors, spacing, borders,
+   and typography inline so DOCX/Google Docs imports are not class-only. */
+
 .cover-page {
   --cover-ink: var(--cw-ink, #1f2933);
   --cover-muted: var(--cw-muted, #616670);
@@ -17,13 +21,11 @@
 }
 
 .cover-topline {
-  align-items: center;
   border-bottom: 2px solid var(--cover-dark);
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
+  display: table;
   min-height: 36px;
   padding-bottom: 14px;
+  width: 100%;
 }
 
 .classification,
@@ -39,10 +41,9 @@
 }
 
 .cover-classification-group {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .classification {
@@ -55,7 +56,7 @@
   background: #fff5f5;
   border: 2px solid #dc2626;
   color: #b91c1c;
-  display: inline-flex;
+  display: inline-block;
   font-size: 12.5px;
   font-weight: 900;
   letter-spacing: 0;
@@ -66,13 +67,16 @@
   background: #f8fafc;
   border-color: var(--cover-line);
   color: var(--cover-muted);
-  display: inline-flex;
+  display: inline-block;
   font-size: 12.5px;
   font-weight: 800;
 }
 
 .report-type {
   background: rgba(255, 255, 255, 0.74);
+  display: table-cell;
+  text-align: right;
+  vertical-align: middle;
 }
 
 .cover-hero {
@@ -81,10 +85,10 @@
 }
 
 .cover-logo {
-  align-self: start;
-  justify-self: end;
+  display: block;
   margin-top: 22px;
   max-width: 220px;
+  text-align: right;
 }
 
 .cover-logo img {
@@ -149,20 +153,13 @@
 }
 
 .cover-approval {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border-collapse: separate;
+  border-spacing: 10px 0;
   margin: 20px 0 24px;
+  width: 100%;
 }
 
-.cover-approval-1 {
-  grid-template-columns: minmax(180px, 320px);
-}
-
-.cover-approval-2 {
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-}
-
+.cover-approval td,
 .cover-approval div {
   background: var(--cover-paper);
   border: 1px solid var(--cover-line);

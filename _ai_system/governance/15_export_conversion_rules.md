@@ -40,6 +40,8 @@ DOCX readiness should preserve design quality. Do not flatten a premium HTML rep
 
 Readiness is not native Word automation support. Presets, design guidance, or validation notes may require conversion-friendly structure, but they must not be read as proof that advanced Word field, numbering, section, or chart-editing features are implemented.
 
+Default report HTML should be authored inline-first for DOCX/Google Docs compatibility. This means the report templates, cover renderer, chapter fragments, and report design file should put essential visual styling directly on reader-facing elements with `style=""` wherever practical. This is different from relying on a final post-processing step that converts CSS to inline styles after the report is already written.
+
 Prefer:
 
 - semantic HTML,
@@ -47,7 +49,8 @@ Prefer:
 - plain-text captions,
 - conversion-friendly tables,
 - reusable cover component,
-- local CSS with print rules.
+- inline-styled headings, paragraphs, captions, tables, callouts, figures, cover badges, cover metadata, and approval blocks,
+- local CSS as preview/print/fallback support,
 - report-width and margin tokens shared by cover and body,
 - stable heading hierarchy (`h1`, `h2`, `h3`) that matches the PRD/design file,
 - cover metadata modules that avoid duplicate document classification/confidentiality labels.
@@ -57,9 +60,15 @@ Avoid:
 - remote fonts,
 - interactive charts as the only material visual,
 - CSS-only evidence graphics,
-- absolute local paths in reader-facing text.
+- absolute local paths in reader-facing text,
+- class-only or CSS-variable-only styling for material visual information,
+- `nth-child` styling as the only way to distinguish table rows/cells,
+- grid/flex-only layouts for cover metadata or approval blocks,
+- `@font-face` as the only readable font path,
 - viewport-height cover sizing that consumes a second margin layer during DOCX/PDF conversion,
 - background-heavy cover effects that become large images or unstable blocks in word processors.
+
+CSS fallback may still carry `@page`, page-break helpers, print color adjustment, long-token handling, and browser preview defaults. These are compatibility aids. They do not prove Word or Google Docs import fidelity without export/render evidence.
 
 ## Current Export Support
 
