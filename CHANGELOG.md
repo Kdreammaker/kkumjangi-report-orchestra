@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.1 - 2026-06-28
+## 1.0.3 - 2026-06-28
 
 - Improved README onboarding with suitable document types, sample topics, and benefits-oriented positioning for first users.
 - Updated START_HERE guidance so users can see the draft, review/cross-check, approved enhancement, and optional export/share loop.
