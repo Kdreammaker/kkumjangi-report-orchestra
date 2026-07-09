@@ -89,7 +89,7 @@ Use `_ai_system/tools/validate_style_profiles.py` to verify aliases, `read_first
 | Tool | Path | Use |
 |---|---|---|
 | Runtime dependency installer | `_ai_system/tools/install_runtime_dependencies.py` | Install/verify Python packages and local ECharts/Pretendard runtime assets. |
-| Local runtime validator | `_ai_system/tools/validate_local_runtime.py` | Check Python, pypdf, Docling, DuckDB, ECharts, and Pretendard. |
+| Local runtime validator | `_ai_system/tools/validate_local_runtime.py` | Check Python, pypdf, Docling, DuckDB, python-docx, ECharts, and Pretendard. |
 | Workspace bootstrap | `_ai_system/tools/bootstrap_workspace.py` | Create initial `00_사용자_작업공간/` if absent. |
 | Workspace validator | `_ai_system/tools/validate_workspace_setup.py` | Validate root, runtime, projects, HTML, API/UI flow, snapshots, and local leftovers. |
 | Core worktree guard | `_ai_system/tools/validate_core_worktree_clean.py` | Detect accidental system-core edits during ordinary project/report workflows. |

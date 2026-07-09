@@ -6,7 +6,7 @@ AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목�
 
 ## 📌 버전
 
-- 공개 버전: `1.0.5`
+- 공개 버전: `1.0.6`
 - 배포일: `2026-07-09`
 - 채널: `public`
 - 전체 변경 이력: `CHANGELOG.md`
@@ -49,8 +49,7 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 - 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
 - 품질 루프: 첫 초안을 최종본으로 보지 않고, 검수/교차검증 결과를 바탕으로 승인된 고도화를 진행합니다.
 - 프리셋/문체 경계: 문서 유형 프리셋은 구조·근거·시각자료 기준을, style profile은 독자 적합 문체와 보호 span 검토를 안내합니다. 자동 번역, 자동 rewrite, 자동 humanizer, 자동 naturalness scoring은 켜져 있지 않습니다.
-- 내보내기 준비: 기본 문서는 DOCX/HWPX-compatible import를 염두에 두고 inline-first 구조, 안정적인 표/목록, 정적 이미지, target-format font fallback을 기록하도록 안내합니다.
-- 보류 항목: native HWPX export, HWP-to-HWPX conversion, arbitrary HTML-to-HWPX conversion, automated HWPX visual diffing, Word field code, SEQ 캡션, landscape section 변환은 별도 후속 과제입니다.
+- export 경계: native DOCX exporter는 로컬 `python-docx` 기반으로 동작하며, DOCX-compatible HTML과 HWPX-compatible HTML은 각각 다른 작성/가져오기 기준입니다. HWP/HWPX 변환, 임의 HTML-to-HWPX 변환, 자동 HWPX 시각 diff는 별도 후속 과제입니다.
 
 자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
 
@@ -59,6 +58,7 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 이 시스템 코어는 Apache License 2.0으로 배포됩니다. 사용, 복제, 클론, 포크, 수정, 재배포, 파생 작업은 Apache License 2.0 조건에 따라 허용됩니다. 단, 원 저작권 고지, `LICENSE`, `docs/NOTICE`, 필요한 변경 표시를 유지해야 합니다.
 
 쉬운 설명은 `docs/USAGE_AND_PERMISSIONS.md`, 보안/기여 안내는 `docs/SECURITY.md`와 `docs/CONTRIBUTING.md`를 확인하세요.
+
 ## 🧩 설치 시 함께 준비되는 오픈소스
 
 설치 과정에서는 로컬 문서 처리와 보고서 렌더링을 위해 아래 구성요소를 설치하거나 내려받습니다.
@@ -68,6 +68,7 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 | pypdf | PDF 텍스트/메타데이터 처리 | BSD-style |
 | Docling | PDF, PPTX, DOCX, XLSX, PNG, JPG 등 로컬 문서 정규화 | MIT |
 | DuckDB | 프로젝트 문서 대장, 변환 요약, 주장/챕터 자료 로컬 색인 | MIT |
+| python-docx | native DOCX export 패키지 생성 | MIT |
 | Apache ECharts | 로컬 차트 렌더링 | Apache License 2.0 |
 | Pretendard | 한글 UI/보고서 폰트 | SIL Open Font License 1.1 |
 

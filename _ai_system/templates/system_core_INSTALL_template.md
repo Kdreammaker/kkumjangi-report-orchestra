@@ -19,7 +19,7 @@ Python 3.11 이상이 있는지 확인한 뒤 로컬 문서 처리와 보고서 
 python _ai_system/tools/install_runtime_dependencies.py
 ```
 
-이 단계는 `pypdf`, `docling`, `duckdb`, Apache ECharts, Pretendard를 준비합니다.
+이 단계는 `pypdf`, `docling`, `duckdb`, `python-docx`, Apache ECharts, Pretendard를 준비합니다.
 
 ## 3. 사용자 작업공간 만들기
 
@@ -40,7 +40,7 @@ python _ai_system/tools/validate_workspace_setup.py --include-user-flow
 설치 완료 보고는 설치 위치, 작업공간 생성 여부, 검증 결과, 저장소/channel, Python/필수 패키지 상태, 시스템 버전만 짧게 요약하세요. 또한 아래 로컬 구성 고지문과 `다음 단계` 블록을 채팅 마지막에 별도 제목으로 출력하세요. 문서 유형 목록, 샘플 주제, style profile, 내부 workflow 설명은 설치 완료 채팅에 길게 쓰지 않습니다.
 
 ```text
-로컬 구성 고지: Python 패키지(pypdf, docling, duckdb)와 로컬 asset(Apache ECharts, Pretendard)을 설치/검증했습니다. 이 구성은 사용자 PC 안에서 참고자료 정리, 로컬 색인, 차트 렌더링, 한글 표시를 돕는 용도이며 상시 백그라운드로 실행되지 않습니다. 오픈소스 라이선스와 고지는 docs/THIRD_PARTY_NOTICES.md에서 확인할 수 있습니다.
+로컬 구성 고지: Python 패키지(pypdf, docling, duckdb, python-docx)와 로컬 asset(Apache ECharts, Pretendard)을 설치/검증했습니다. 이 구성은 사용자 PC 안에서 참고자료 정리, 로컬 색인, DOCX export, 차트 렌더링, 한글 표시를 돕는 용도이며 상시 백그라운드로 실행되지 않습니다. 오픈소스 라이선스와 고지는 docs/THIRD_PARTY_NOTICES.md에서 확인할 수 있습니다.
 ```
 
 ```text

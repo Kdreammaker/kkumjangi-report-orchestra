@@ -7,6 +7,7 @@ This project installs or uses the following third-party components for local-onl
 | pypdf | PDF text and metadata handling | BSD-style license | https://github.com/py-pdf/pypdf |
 | Docling | Local document conversion and structure extraction | MIT License | https://github.com/docling-project/docling |
 | DuckDB | Local project context and ledger indexing | MIT License | https://github.com/duckdb/duckdb |
+| python-docx | Native DOCX package generation for report exports | MIT License | https://github.com/python-openxml/python-docx |
 | Apache ECharts | Local business chart rendering | Apache License 2.0 | https://github.com/apache/echarts |
 | Pretendard | Korean UI/report font | SIL Open Font License 1.1 | https://github.com/orioncactus/pretendard |
 

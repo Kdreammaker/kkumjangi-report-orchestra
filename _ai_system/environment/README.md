@@ -24,6 +24,7 @@ Current required packages:
 - `pypdf`: PDF text extraction for reference intake.
 - `docling`: local normalization for supported reference files such as PDF, PPTX, DOCX, XLSX, PNG, and JPG.
 - `duckdb`: local project context indexing and focused lookup over inventories, normalized units, claims, and workpacks.
+- `python-docx`: native DOCX package generation for report exports.
 
 Local runtime assets installed by the same installer:
 
@@ -46,7 +47,7 @@ Do not install undocumented packages as a hidden dependency.
 
 ## Local Processing Boundary
 
-Docling, DuckDB, Apache ECharts, and Pretendard are used as local tools/assets. Reference originals stay in the project folder, Docling writes derived normalized files under `references/normalized/`, DuckDB writes a local index under `project_state/context_index.duckdb`, ECharts renders charts without a CDN call, and Pretendard is served from the local runtime folder.
+Docling, DuckDB, python-docx, Apache ECharts, and Pretendard are used as local tools/assets. Reference originals stay in the project folder, Docling writes derived normalized files under `references/normalized/`, DuckDB writes a local index under `project_state/context_index.duckdb`, python-docx writes local DOCX packages during export, ECharts renders charts without a CDN call, and Pretendard is served from the local runtime folder.
 
 These derived files help the AI read less context, but they do not replace the original-file ledger in `references/reference_inventory.csv`. External OCR, cloud upload, or external VLM/image-description workflows are outside the default boundary and require explicit user approval.
 

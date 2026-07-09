@@ -11,6 +11,7 @@ REQUIRED_PACKAGES = {
     "pypdf": "pypdf",
     "docling": "docling",
     "duckdb": "duckdb",
+    "docx": "python-docx",
 }
 RUNTIME = Path("_ai_system") / "runtime"
 RUNTIME_ASSETS = {
@@ -94,7 +95,7 @@ def main() -> int:
         "privacy_boundary": {
             "default_mode": "local_only",
             "external_upload": "disabled_by_default",
-            "note": "Docling converts local reference files, DuckDB indexes local project metadata, ECharts renders charts locally, and Pretendard is served from the local runtime folder. Do not enable external OCR/VLM/cloud upload without explicit user approval.",
+            "note": "Docling converts local reference files, DuckDB indexes local project metadata, python-docx writes local DOCX export packages, ECharts renders charts locally, and Pretendard is served from the local runtime folder. Do not enable external OCR/VLM/cloud upload without explicit user approval.",
         },
     }
     ok = (

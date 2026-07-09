@@ -38,9 +38,9 @@ Python이 없거나 3.11보다 낮으면 설치 AI는 Python 3.11 이상 설치�
 python _ai_system/tools/install_runtime_dependencies.py
 ```
 
-이 단계는 `pypdf`, `docling`, `duckdb`를 설치/검증하고, Apache ECharts와 Pretendard를 `_ai_system/runtime/` 아래 로컬 asset으로 내려받아 검증합니다.
+이 단계는 `pypdf`, `docling`, `duckdb`, `python-docx`를 설치/검증하고, Apache ECharts와 Pretendard를 `_ai_system/runtime/` 아래 로컬 asset으로 내려받아 검증합니다.
 
-주의: Docling은 OCR/문서구조 인식 관련 의존성을 함께 설치하므로 첫 설치 때 시간이 걸리고 디스크 용량을 더 사용할 수 있습니다. ECharts와 Pretendard는 최초 설치 때 인터넷 다운로드가 필요할 수 있습니다. 설치 후에는 상시 실행되는 프로그램이 아니라 참고자료 인테이크, 색인, 보고서 렌더링 때 로컬에서 쓰는 도구입니다.
+주의: Docling은 OCR/문서구조 인식 관련 의존성을 함께 설치하므로 첫 설치 때 시간이 걸리고 디스크 용량을 더 사용할 수 있습니다. ECharts와 Pretendard는 최초 설치 때 인터넷 다운로드가 필요할 수 있습니다. 설치 후에는 상시 실행되는 프로그램이 아니라 참고자료 인테이크, 색인, DOCX export, 보고서 렌더링 때 로컬에서 쓰는 도구입니다.
 
 ## 3. 사용자 작업공간 만들기
 
@@ -100,6 +100,7 @@ python _ai_system/tools/validate_workspace_setup.py --include-user-flow
 | pypdf | PDF 텍스트/메타데이터 처리 | BSD-style |
 | Docling | 로컬 문서 변환과 구조 추출 | MIT |
 | DuckDB | 로컬 프로젝트 색인 | MIT |
+| python-docx | native DOCX export 패키지 생성 | MIT |
 | Apache ECharts | 로컬 차트 렌더링 | Apache License 2.0 |
 | Pretendard | 한글 UI/보고서 폰트 | SIL Open Font License 1.1 |
 

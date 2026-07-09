@@ -64,7 +64,7 @@ def validate(root: Path, warn_only: bool) -> dict[str, object]:
         "errors": errors,
         "warnings": warnings,
         "core_dirty_entries": dirty,
-        "note": "Project report work should not modify system-core files. Promote intentional core changes through the system-core repository instead.",
+        "note": "Project report work should not modify system-core files. Promote intentional core changes through the system-core release workflow instead.",
     }
 
 

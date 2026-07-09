@@ -1,6 +1,7 @@
 pypdf
 docling
 duckdb
+python-docx
 
 # JavaScript/font runtime assets are downloaded by
 # _ai_system/tools/install_runtime_dependencies.py into _ai_system/runtime/.

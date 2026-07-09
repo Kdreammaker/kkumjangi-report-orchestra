@@ -1,6 +1,6 @@
 {
-  "version": "1.0.5",
+  "version": "1.0.6",
   "release_date": "2026-07-09",
   "channel": "public",
-  "summary": "Public document adaptation, modular preset, native DOCX list, and DOCX/HWPX-compatible authoring guidance update."
+  "summary": "Public runtime dependency, notice, and validation patch for native DOCX export."
 }

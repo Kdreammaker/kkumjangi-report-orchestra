@@ -136,6 +136,7 @@ def check_local_runtime() -> dict[str, object]:
         "pypdf": runtime_package_status("pypdf"),
         "docling": runtime_package_status("docling"),
         "duckdb": runtime_package_status("duckdb"),
+        "python_docx": runtime_package_status("docx"),
     }
     duckdb_smoke: dict[str, object] = {"ok": False, "error": "duckdb not installed"}
     if packages["duckdb"]["available"]:
@@ -598,6 +599,7 @@ def main() -> int:
     results["pypdf_available"] = bool(results["local_runtime"]["packages"]["pypdf"]["available"])
     results["docling_available"] = bool(results["local_runtime"]["packages"]["docling"]["available"])
     results["duckdb_available"] = bool(results["local_runtime"]["packages"]["duckdb"]["available"])
+    results["python_docx_available"] = bool(results["local_runtime"]["packages"]["python_docx"]["available"])
     results["echarts_available"] = bool(results["local_runtime"].get("runtime_assets", {}).get("assets", {}).get("echarts", {}).get("available"))
     results["pretendard_available"] = bool(results["local_runtime"].get("runtime_assets", {}).get("assets", {}).get("pretendard_css", {}).get("available"))
     config = load_config(root)
@@ -646,6 +648,7 @@ def main() -> int:
     has_failure = has_failure or not results["pypdf_available"]
     has_failure = has_failure or not results["docling_available"]
     has_failure = has_failure or not results["duckdb_available"]
+    has_failure = has_failure or not results["python_docx_available"]
     has_failure = has_failure or not results["echarts_available"]
     has_failure = has_failure or not results["pretendard_available"]
     has_failure = has_failure or not bool(results["local_runtime"]["python_ok"])
