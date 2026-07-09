@@ -5,6 +5,12 @@
 - `report_id`:
 - `report_title`:
 - `document_type_preset`: general_report / business_strategy / regulatory_review / academic_research / technical_design / service_planning / product_prd / extension preset id
+- `authoring_structure_profile`: decision_first / proposal / review_opinion / meeting_minutes / education / manual / public_release / custom / undecided
+- `authoring_structure_basis`: selected document type default / user request / source document structure / target reader / target file type / custom rationale
+- `default_paragraph_mode`: bullet_first / prose_first / mixed / undecided
+- `prose_preferred_slots`: background / rationale / legal-regulatory context / learning explanation / press lead / quotation / narrative summary / custom
+- `list_style_preset`: formal_outline / guide_outline / procedure_steps / administrative_outline / symbol_bullets / undecided / not_applicable
+- `list_style_preset_basis`: selected document preset default / user request / source document style / export target / not_applicable
 - `artifact_workflow_mode`: brief / standard / substantial / specialized
 - `artifact_workflow_mode_basis`: preset default / user request / evidence depth / distribution risk / selected preset stage_overlays.md
 - `content_depth`: concise / standard / expanded
@@ -33,6 +39,8 @@
 - `style_pass_tpo_checks`: reader level, artifact genre, delivery scene, protected spans, over-formality, translationese, report-like leakage into non-report artifacts, and human-review holds
 - `document_classification`: 내부 검토용 / 상부 보고용 / 파트너사 공유용 / 외부 공유용
 - `confidentiality_status`: 대외비 / 대외비 아님
+- `target_document_format`: HTML / DOCX / HWPX-compatible HTML / PDF / mixed / undecided
+- `target_format_basis`: reader/use case, target app, expected verification method, and known limitations
 - `recipient_or_distribution`:
 - `external_sharing_allowed`: yes / no / needs_approval
 - `status`:
@@ -50,6 +58,24 @@
 - `skipped_or_compressed_stages`: none / list with reason
 - `specialized_preset_guidance`: selected preset files that must be read
 - `selected_preset_workflow_guidance`: path to selected preset stage_overlays.md when it changes stage depth or section structure
+
+## List Style Preset
+
+- `formal_outline`: formal hierarchy using `I -> A -> 1 -> a`
+- `guide_outline`: guide hierarchy using `A -> A) -> a) -> (a)`
+- `procedure_steps`: procedure hierarchy using `1 -> 1) -> a) -> (a)`
+- `administrative_outline`: decision-first administrative/review hierarchy using `1. -> 1) -> A. -> a)` with HWPX marker overrides recorded separately
+- `symbol_bullets`: symbol-only hierarchy using `• -> ◦ -> ▪ -> -`
+- `list_style_exception`: record any user-requested marker set that differs from the preset default
+- `export_note`: HTML and DOCX should preserve list intent, HWPX-compatible HTML should record Hancom marker/font overrides, and Word/Google Docs/Hancom import still requires verification
+
+## Authoring Structure
+
+- Use document-type structure instead of institution persona imitation.
+- Decision/review outputs usually open with conclusion, recommendation, requested decision, basis, risk, and next action.
+- Proposal outputs usually open with recipient need, proposed value, scope, terms, risk/assumption, and next decision.
+- Meeting minutes separate metadata, decisions, discussion points, action owners, deadlines, and unresolved issues.
+- Education, manual, and press-release outputs keep their own slot structure; do not force report-style bullets into prose-led press releases or explanation-led learner materials.
 
 ## Content Depth And Control Mode
 

@@ -11,7 +11,7 @@
 - Language guidance does not translate, humanize, rewrite, verify source truth, create jurisdiction-specific legal/securities disclaimers, or replace approval review.
 - For substantial reports, create or update the report PRD before creating a detailed TOC or drafting.
 - Before a final delivery format is explicitly chosen, draft reports as `.html`.
-- Report HTML must be written with future `.docx` and `.pdf` conversion in mind.
+- Report HTML must be written with future `.docx`, `.pdf`, and HWPX-compatible import/open paths in mind when those targets are relevant.
 - Add difficult legal, financial, technical, or foreign terms to the relevant report appendix glossary.
 - Follow `_ai_system/governance/06_report_prd_rules.md` for report PRD creation, reader-facing metadata boundaries, update triggers, and revision logs.
 - Follow `_ai_system/governance/10_research_quality_gate_rules.md` before converting scaffold text, source summaries, or claim-register rows into report conclusions.
@@ -19,7 +19,7 @@
 - Follow `_ai_system/governance/12_report_quality_scoring_rules.md` after drafting or reviewing a report so the AI reports hard blockers, improvement opportunities, and optional level/score status when useful.
 - Follow `_ai_system/governance/13_report_factory_rules.md` when running a substantial report from PRD through closeout. The primary goal is high-quality report production; validators are supporting controls.
 - Follow `_ai_system/governance/14_chapter_workpack_rules.md` before writing chapter fragments.
-- Follow `_ai_system/governance/15_export_conversion_rules.md` before creating or claiming DOCX/PDF readiness.
+- Follow `_ai_system/governance/15_export_conversion_rules.md` before creating or claiming DOCX/PDF/HWPX readiness.
 - Follow `_ai_system/DESIGN_DOCUMENT.md` for report design, document hierarchy, color, table, chart, data-file, and writing-style rules.
 
 ## Document Preset And Style Profile Standard
@@ -28,6 +28,9 @@
 - Use `_ai_system/document_presets/CODEMAP.md` only when the compact index is not enough to choose the selected preset files. After selecting a preset, read only the selected module's current-stage files.
 - Use the selected preset's `default_artifact_workflow_mode` and `read_for_workflow` entries in `_ai_system/document_presets/INDEX.json` before deciding whether to run full report stages or a compressed/specialized artifact sequence.
 - Read the selected preset's `stage_overlays.md` when setting `artifact_workflow_mode`, planning stage compression, or reviewing whether the artifact drifted into the wrong document genre. Do not ask the user to paste document-specific OJT prompts for this.
+- Read `_ai_system/DESIGN_DOCUMENT.md` and the selected preset overlay when setting `authoring_structure_profile`, `default_paragraph_mode`, and prose-preferred slots. This is document-type structure, not institution persona imitation.
+- Read `_ai_system/document_presets/LIST_STYLE_PRESETS.md` when nested numbered or bulleted hierarchy matters. Record `list_style_preset` in the PRD/design file and use the selected preset default unless the user asks for a different marker set.
+- Record `target_document_format` when DOCX, HWPX-compatible HTML, PDF, or mixed delivery affects fonts, list markers, layout, or verification.
 - When `output_language` is `en` or `mixed`, read the selected preset's `language_guidance.md` when it exists. This is a guidance layer over the same preset, not a separate English preset or an automatic translation step.
 - Confirm the document type preset during the interview or PRD stage before detailed TOC, source planning, or drafting. A preset changes emphasis for PRD questions, TOC review, visuals, layout, and quality review; it does not bypass source integrity, review, approval, or versioning boundaries.
 - Use `_ai_system/style_profiles/INDEX.json` when the user asks for a specific reader tone, when the document purpose implies a tone choice, or when the PRD needs a `style_profile`.
@@ -38,7 +41,7 @@
 - Style profile guidance never replaces source verification, claim-readiness gates, citation checks, legal review, chart/data support, or closeout validation.
 - Treat style profile and register overlay as separate decisions. The style profile sets the reader/purpose-based writing standard; a register overlay sets the Korean delivery mode layered on top of that profile, such as written report, oral briefing, public written copy, educational explanation, or adult user instruction.
 - Register, honorific, and user-instructional overlays are guidance-only assets for AI review during style pass. They do not translate, humanize, rewrite automatically, change workflow stage, validate evidence, or override protected spans.
-- During decision interview or PRD work, confirm or safely infer `output_language`, target reader, `document_type_preset`, `artifact_workflow_mode`, `style_profile`, `register_overlay` need, `honorific_policy` need, and `user_instructional_overlay` need before substantive drafting.
+- During decision interview or PRD work, confirm or safely infer `output_language`, target reader, `document_type_preset`, `authoring_structure_profile`, `list_style_preset` when hierarchy matters, `target_document_format` when relevant, `artifact_workflow_mode`, `style_profile`, `register_overlay` need, `honorific_policy` need, and `user_instructional_overlay` need before substantive drafting.
 - Use `_ai_system/style_profiles/register_overlays/README.md` only when a Korean register/honorific/user-instructional layer may be needed. Read `korean_register_overlay.md`, `honorific_policy.md`, or `user_instructional_overlay.md` only for the selected or plausible overlay. Do not open every overlay file by default.
 - 압존법 is not a default Korean style rule. Consider it only for special Korean spoken or dialogue-like situations where the speaker, listener, and referenced person are in a known same-organization hierarchy and the text is not public, legal, approval-sensitive, quote-sensitive, or partner/customer-facing. If hierarchy or approval impact is unclear, hold the span for human review.
 - When Korean tone/style review is requested, read `_ai_system/style_profiles/korean_tone_workflow_design_v1.md` plus the selected profile files. Use the style-pass sequence: style-risk findings, protected-span map, limited rewrite diff only when allowed, fidelity review, naturalness review, then rollback or human review if needed.
@@ -71,6 +74,8 @@ Examples of specialized handling:
 - `press_release`: prioritize dateline, release status, approved quotes, boilerplate, media contact, embargo/approval boundary, and public wording discipline. Do not force Chapter 0 or long report workpacks.
 - `education_curriculum`: prioritize learner level, learning objectives, time blocks, activities, handout structure, exercises, and evaluation/assignment notes. Use a lesson/section plan rather than a report chapter plan when appropriate.
 - `product_manual`: prioritize target user, prerequisites, environment, step-by-step procedures, warnings, troubleshooting, FAQ, and version/platform scope.
+- `guide_document`: prioritize source preservation, authority/scope, guide hierarchy, examples, locked/internal or producer-only notes, glossary, appendices, and selected list preset.
+- `book_manuscript`: prioritize manuscript type, front/body/back matter, chapter/part hierarchy, voice/prose preservation, editorial-depth boundary, references/notes, and publishing-readiness caveats.
 - `business_proposal`: prioritize buyer problem, scope, assumptions, exclusions, implementation plan, responsibilities, commercial boundary, and proposal/quote/SOW/contract separation.
 - `investor_brief` and `equity_research`: prioritize approved metrics, basis date, source/citation discipline, forward-looking statement boundary, not-offer/not-investment-advice boundary, and no unauthorized rating/target-price generation.
 

@@ -12,6 +12,14 @@
 
 - Organize by session, lesson, module, or competency rather than only by topic.
 - Include learning objectives, key concepts, instructor flow, learner activities, materials, assignments, and assessment.
+- Lead each unit with learning objective, expected outcome, and evidence of completion before the explanation body.
+
+## Authoring Structure
+
+- Default paragraph mode: mixed, with prose for explanations/examples and bullets/steps for activities, checks, materials, assignments, and rubrics.
+- Keep instructor-facing instructions separate from learner-facing text.
+- Use `procedure_steps` for activity sequences and `symbol_bullets` for examples/options unless the PRD chooses another preset.
+- For DOCX targets, default to Malgun Gothic. For HWPX-compatible handouts, record Hancom font fallback and verify learner-facing tables/lists in Hancom.
 
 ## Workpack
 
@@ -29,4 +37,4 @@
 - Keep session plans, rubrics, and assessment matrices within Word page width; split oversized rubrics by competency or lesson.
 - Use static diagrams/images with captions and alternative descriptions; avoid interactive HTML, viewport-dependent layouts, and complex absolute positioning.
 - Make long activity prompts, material links, and rubric descriptors wrap cleanly.
-- DOCX/PDF conversion requires separate export validation; this preset does not guarantee conversion success.
+- DOCX/PDF/HWPX-compatible conversion requires separate export validation; this preset does not guarantee conversion success.

@@ -1,0 +1,24 @@
+{
+  "preset_id": "guide_document",
+  "label_ko": "가이드 문서",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "General guide, playbook, rulebook, producer bible, style guide, or operating guide that organizes existing material into a durable reference.",
+  "quality_emphasis": [
+    "source-preserving format adaptation",
+    "clear audience, scope, and authority boundaries",
+    "consistent guide hierarchy and reusable list styles",
+    "locked/internal note visibility without content loss"
+  ],
+  "recommended_cover_preset": "team_review",
+  "default_list_presets": ["guide_outline", "symbol_bullets"],
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

@@ -2,7 +2,7 @@
 
 Use this folder when creating substantial HTML reports.
 
-The goal is to make the visual format reproducible across projects and compatible with later DOCX/PDF or Google Docs/Word import checks.
+The goal is to make the visual format reproducible across projects and compatible with later DOCX/PDF, Google Docs/Word import, or HWPX/Hancom-oriented import checks.
 
 ## Files
 
@@ -25,8 +25,10 @@ The goal is to make the visual format reproducible across projects and compatibl
 - Do not treat a final CSS-inlining post-process as the main solution. The chapter fragment, cover renderer, report skeleton, and design file should be authored as inline-first from the beginning.
 - CSS files remain useful for browser preview, print-only behavior, page-break rules, fallback defaults, long-token handling, and optional local font loading. These CSS helpers do not replace export verification.
 - Avoid CSS-variable-only design decisions in report-ready HTML. If a value matters visually, put the actual color/font/border/spacing value inline on the relevant element where practical.
-- Prefer conversion-stable structures for DOCX/Google Docs import: semantic headings, regular tables, inline-styled captions, static images/SVGs, and simple callout blocks. Avoid relying on grid/flex, `nth-child`, `@font-face`, background-heavy effects, viewport units, CSS-only visuals, or JavaScript/canvas charts for material content.
+- Prefer conversion-stable structures for DOCX/Google Docs/Hancom import: semantic headings, regular tables, inline-styled captions, static PNG/JPG images, and simple callout blocks. Avoid relying on grid/flex, `nth-child`, `@font-face`, background-heavy effects, viewport units, CSS-only visuals, inline-SVG-only charts, or JavaScript/canvas charts for material content.
+- Keep report-ready document/page backgrounds white. Do not put browser-preview grey or decorative backgrounds on `body`; word-processor imports can turn them into whole-document page shading.
 - Keep report structure semantic: `header`, `section`, `h1`-`h3`, `p`, `table`, `figure`, `figcaption`, `ol`, `ul`, `aside`.
+- For nested lists, select a list style preset from `_ai_system/document_presets/LIST_STYLE_PRESETS.md` and mark the root list with `data-list-preset`. Keep list spacing, indentation, and basic `list-style-type` intent inline where practical. The default formal order is `I -> A -> 1 -> a`; guide documents usually use `guide_outline`; procedure/manual documents usually use `procedure_steps`; administrative/review documents may use `administrative_outline`; symbol-only lists use `symbol_bullets`.
 - Use numbered footnotes/endnotes for body citations.
 - Use `자료:` and `근거 데이터:` in every material table/figure caption.
 - Use `Source:`, `Underlying data:`, `Data basis:`, and `Accessed YYYY-MM-DD` only when the report is explicitly marked as English or mixed-language output, such as `<html lang="en">` or an output-language marker.
@@ -37,7 +39,7 @@ The goal is to make the visual format reproducible across projects and compatibl
 - Put report-specific styles inline on the relevant report elements where practical. Small scoped `<style>` overrides are allowed for preview/print fallback, but large one-off style blocks reduce reproducibility score.
 - Do not use global `word-break: break-all` or page-wide `overflow-wrap: anywhere`. Korean body prose should keep normal word flow; apply long-token wrapping only to scoped elements such as URLs, local path labels, code snippets, and dense table cells.
 - For long URLs, file paths, identifiers, and code-like strings, use scoped classes such as `.url`, `.path`, `.code`, `.long-token`, or `.long-text`, or rely on `a[href]`, `code`, `pre`, `th`, and `td` defaults in `report.css`.
-- DOCX/PDF/Google Docs readiness must not mean plain or low-design output. Keep the HTML polished, but use inline-styled semantic headings, tables, figures, captions, and static/conversion-friendly visuals.
+- DOCX/PDF/Google Docs/HWPX readiness must not mean plain or low-design output. Keep the HTML polished, but use inline-styled semantic headings, tables, figures, captions, and static/conversion-friendly visuals.
 - Keep callouts, tables, figures, and captions semantic: callouts should use `aside`, tables should use `table` with `caption`/`thead`/`tbody` where useful, and visual material should use `figure` plus `figcaption` instead of generic layout boxes.
 - Final reports should include Chapter 0 / 제0장 요약, written last.
 - Each material table and each material graph/figure/chart needs a corresponding CSV/XLSX under the project `data_sources/` folder unless it is a qualitative process diagram backed by a source record.
@@ -47,4 +49,5 @@ The goal is to make the visual format reproducible across projects and compatibl
 - Use `reports/cover.data.json` to populate the cover component instead of asking an AI to recreate cover markup from scratch.
 - If a visual is planned in `data_sources/visual_plan.csv`, the final report should implement that visual with a matching caption and data/source reference.
 - Treat chapter completeness and decision usefulness as the depth signal. Do not add volume only to satisfy a numeric length target.
+- If DOCX is requested and layout fidelity matters, prefer the native DOCX path after HTML assembly: `python _ai_system/tools/export_report_docx.py --project <project> --render-preview`. This reads the report factory sources and writes Word-native styles, tables, images, headers/footers, and render evidence instead of depending on Word/Google Docs HTML import behavior.
 - If DOCX/PDF is requested, store verification notes or render evidence under `reports/export_checks/` before calling the export delivery-ready.

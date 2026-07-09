@@ -10,6 +10,7 @@ The system objective is better AI-written reports. Rules, skills, PRDs, TOCs, ch
 - source file intake, URL/link status recording, and quote checks,
 - local reference normalization and rebuildable context indexing,
 - exact file assembly without rewriting chapter prose,
+- native DOCX export from stable report factory sources,
 - snapshot/hash comparison,
 - export/outbox packaging,
 - structural validation and smoke tests for system releases.
@@ -35,6 +36,7 @@ If the same validator fails twice with the same blocker and no underlying produc
 Default operational tools are the tools an AI may normally use during setup, report production, or closeout:
 
 - `assemble_report.py`
+- `export_report_docx.py`
 - `bootstrap_workspace.py`
 - `build_delivery_outbox.py`
 - `build_project_context_db.py`

@@ -1,10 +1,9 @@
 # Changelog
 
-## 1.0.4 - 2026-06-28
+## 1.0.5 - 2026-07-09
 
-- Changed report design guidance, report HTML templates, chapter fragments, and reusable cover rendering to an inline-first authoring policy for DOCX/Google Docs compatibility-minded import tests.
-- Added shared inline style helpers for generated cover metadata, approval blocks, reference appendices, and data appendices so core typography, color, border, and spacing are not class-only.
-- Kept CSS as browser preview, print, and fallback support for page rules, print behavior, font fallback, and long-token handling rather than treating CSS as the only source of report styling.
-- Tightened export/report-factory guidance around class-only/CSS-variable-only styling, grid/flex-only cover metadata, `nth-child`, `@font-face`-only typography, and background-heavy effects.
-- Fixed non-confidential cover/report validation handling so `대외비 아님` is not treated as a confidential signal.
-- Compatibility remains export-verification-first; this release does not claim full DOCX or Google Docs rendering parity.
+- Added document adaptation intake for existing-file refinement and target-format preparation, with source preservation, adaptation plans, manifests, and protected-span boundaries.
+- Added guide/book document presets, list style presets, and native DOCX multi-level list export support for report-factory sources.
+- Added document-type authoring structure defaults so proposals, regulatory reviews, meeting minutes, education materials, manuals, press releases, and guides use the right conclusion/bullet/prose slots.
+- Clarified DOCX/HWPX-compatible authoring boundaries: inline-first HTML can be authored for Word/Google Docs/Hancom import testing, while native HWPX export, HWP-to-HWPX conversion, arbitrary HTML-to-HWPX conversion, and automated HWPX visual diffing remain PoC-only until separately implemented and verified.
+- Improved public onboarding, START_HERE guidance, modular preset assets, language guidance boundaries, and review-first report workflow while preserving the local-first, no-cloud-upload-by-default guidance and public issue privacy warnings.

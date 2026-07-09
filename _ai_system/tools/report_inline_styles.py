@@ -258,14 +258,18 @@ def cover_styles(preset: Mapping[str, object] | None = None) -> dict[str, str]:
                 "color": muted,
                 "display": "block",
                 "font-size": "12px",
-                "margin-bottom": "10px",
+                "line-height": "1.35",
+                "margin": "0 0 10px",
             }
         ),
         "approval_name": css(
             {
                 "color": dark,
+                "display": "block",
                 "font-size": "15px",
                 "font-weight": "700",
+                "line-height": "1.45",
+                "margin": "0",
             }
         ),
         "cover_purpose": css(

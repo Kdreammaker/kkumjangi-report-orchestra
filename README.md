@@ -6,8 +6,8 @@ AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목�
 
 ## 📌 버전
 
-- 공개 버전: `1.0.4`
-- 배포일: `2026-06-28`
+- 공개 버전: `1.0.5`
+- 배포일: `2026-07-09`
 - 채널: `public`
 - 전체 변경 이력: `CHANGELOG.md`
 
@@ -49,8 +49,8 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 - 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
 - 품질 루프: 첫 초안을 최종본으로 보지 않고, 검수/교차검증 결과를 바탕으로 승인된 고도화를 진행합니다.
 - 프리셋/문체 경계: 문서 유형 프리셋은 구조·근거·시각자료 기준을, style profile은 독자 적합 문체와 보호 span 검토를 안내합니다. 자동 번역, 자동 rewrite, 자동 humanizer, 자동 naturalness scoring은 켜져 있지 않습니다.
-- 내보내기 준비: 기본 보고서 HTML은 DOCX/Google Docs import 검증을 염두에 두고 핵심 표지·본문·표·캡션·콜아웃 스타일을 inline-first로 작성합니다.
-- 보류 항목: 실제 DOCX/Google Docs 변환 결과 검증, Word heading style mapping, PAGE/NUMPAGES, SEQ 캡션, landscape section 변환은 별도 후속 과제입니다.
+- 내보내기 준비: 기본 문서는 DOCX/HWPX-compatible import를 염두에 두고 inline-first 구조, 안정적인 표/목록, 정적 이미지, target-format font fallback을 기록하도록 안내합니다.
+- 보류 항목: native HWPX export, HWP-to-HWPX conversion, arbitrary HTML-to-HWPX conversion, automated HWPX visual diffing, Word field code, SEQ 캡션, landscape section 변환은 별도 후속 과제입니다.
 
 자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
 

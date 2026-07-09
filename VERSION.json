@@ -1,6 +1,6 @@
 {
-  "version": "1.0.4",
-  "release_date": "2026-06-28",
+  "version": "1.0.5",
+  "release_date": "2026-07-09",
   "channel": "public",
-  "summary": "Changed report HTML authoring guidance and templates to inline-first output for DOCX/Google Docs compatibility-minded import tests, with CSS kept as preview, print, and fallback support."
+  "summary": "Public document adaptation, modular preset, native DOCX list, and DOCX/HWPX-compatible authoring guidance update."
 }

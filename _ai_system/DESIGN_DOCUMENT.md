@@ -76,6 +76,18 @@ Use these as document-generation defaults. If the final output format requires a
 | Table body | Pretendard, Malgun Gothic fallback | 9.5pt | Regular | 1.30 | `#172033` |
 | Table header | Pretendard, Malgun Gothic fallback | 9.5pt | Bold | 1.25 | white or `#172033` |
 
+Target-format typography is selected in `reports/report_design.md`, not by a
+separate persona file.
+
+- Browser/HTML preview default: Pretendard with Malgun Gothic fallback.
+- DOCX/Word target: prefer Malgun Gothic / 맑은 고딕 for body, headings,
+  tables, and list markers unless a project design system overrides it.
+- HWPX/Hancom target-compatible HTML: prefer Hancom/Hamchorom family fonts
+  where available, such as 한컴바탕 or 함초롬바탕 for body text and 한컴돋움 or
+  함초롬돋움 for dense lists/tables, with 바탕/돋움 and Malgun Gothic fallbacks.
+- Record the chosen target and fallback in the report design file before
+  claiming DOCX or HWPX compatibility.
+
 ## Color Palette
 
 Use a restrained, report-neutral palette unless a project-specific design system overrides it.
@@ -104,6 +116,35 @@ Use a restrained, report-neutral palette unless a project-specific design system
 - Use cautious modal expressions such as `가능성이 있다`, `검토할 필요가 있다`, and `추가 확인이 필요하다` when evidence is incomplete.
 - Do not soften confirmed risks. If a risk is material, state it directly and then explain mitigation options.
 - Avoid ambiguous subjects. Make clear whether the actor is a company, regulator, investor, customer, partner, platform, or internal team.
+
+## Authoring Structure Defaults
+
+Use document-type writing structure rather than institution-specific persona
+imitation. The goal is to make the source document compatible with the target
+artifact and export path from the beginning.
+
+- Decision and review documents should usually lead with the conclusion,
+  recommendation, or requested decision, then show basis, constraints, risks,
+  and next action.
+- Bullets are the default for findings, options, scope, conditions, risks,
+  roles, schedules, and action items because they preserve scanability in DOCX
+  and HWPX-oriented outputs.
+- Prose is reserved for slots that need continuity or nuance: background,
+  rationale, legal/regulatory context, learning explanation, press lead,
+  narrative summary, and final interpretation.
+- Proposals should open with recipient need, proposed value, scope, terms,
+  risk/assumption, and next decision.
+- Review opinions should open with opinion/conclusion, then separate facts,
+  interpretation, effect, option, and residual uncertainty.
+- Meeting minutes should separate meeting metadata, decisions, discussion
+  points, action owners, deadlines, and unresolved issues.
+- Education materials should lead each unit with learning objective and outcome,
+  then use prose for explanation and bullets/steps for activities, examples,
+  checks, and assignments.
+- Manuals and procedures should use task-first headings, numbered procedures,
+  warnings, expected results, and troubleshooting branches.
+- Press releases should keep a prose lead and approved quotation slots, while
+  using bullets only for fact boxes, specs, or event details.
 
 ## Style Profile Guidance
 

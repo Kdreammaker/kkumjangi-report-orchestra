@@ -18,6 +18,8 @@ MODULE_ONLY_IDS = {
     "equity_research",
     "business_proposal",
     "product_manual",
+    "guide_document",
+    "book_manuscript",
     "education_curriculum",
     "academic_paper",
     "press_release",
@@ -25,12 +27,24 @@ MODULE_ONLY_IDS = {
 DESIGN_QUERY_CASES = {
     "IR 설명자료": "_ai_system/document_presets/investor_brief/design_patterns.md",
     "보도자료": "_ai_system/document_presets/press_release/design_patterns.md",
+    "프로듀서 바이블": "_ai_system/document_presets/guide_document/design_patterns.md",
+    "출판 원고": "_ai_system/document_presets/book_manuscript/design_patterns.md",
 }
 DESCRIPTIVE_QUERY_CASES = {
     "일반 사용자가 따라할 수 있는 설치 가이드": "product_manual",
+    "세계관 프로듀서 바이블을 Word import용 가이드 문서로 정리": "guide_document",
+    "소설 원고를 출판용 장 구조로 정리": "book_manuscript",
     "팀 내부 개발자와 PM에게 나눠줄 학습자 핸드아웃": "education_curriculum",
     "외부 언론에 배포할 공식 발표문": "press_release",
 }
+LIST_STYLE_REQUIRED_IDS = {
+    "formal_outline",
+    "guide_outline",
+    "procedure_steps",
+    "administrative_outline",
+    "symbol_bullets",
+}
+LIST_STYLE_ALLOWED_PARENTHESES = {")", "()"}
 LANGUAGE_GUIDANCE_IDS = {"business_proposal", "investor_brief", "equity_research", "press_release"}
 LANGUAGE_GUIDANCE_TERMS = ["English", "Korean", "Protected Spans", "disclaimer", "Source:", "Accessed"]
 PRESET_LANGUAGE_GUIDANCE_TERMS = {
@@ -147,6 +161,44 @@ DESIGN_EXPORT_REQUIRED_TERMS = {
             "compatibility",
         ],
     },
+    "guide_document": {
+        "design_patterns.md": [
+            "Design Application Priorities",
+            "AI Judgment Needed",
+            "Deferred Export-Native Features",
+            "producer",
+            "locked",
+            "guide_outline",
+            "symbol_bullets",
+        ],
+        "validation_checklist.md": [
+            "Design And Export-Safe Checkpoints",
+            "AI judgment",
+            "Deferred export-native features",
+            "producer-only",
+            "locked",
+            "list preset",
+        ],
+    },
+    "book_manuscript": {
+        "design_patterns.md": [
+            "Design Application Priorities",
+            "AI Judgment Needed",
+            "Deferred Export-Native Features",
+            "novels",
+            "nonfiction",
+            "formal_outline",
+            "symbol_bullets",
+        ],
+        "validation_checklist.md": [
+            "Design And Export-Safe Checkpoints",
+            "AI judgment",
+            "Deferred export-native features",
+            "manuscript",
+            "publishing",
+            "list preset",
+        ],
+    },
     "education_curriculum": {
         "design_patterns.md": [
             "Design Application Priorities",
@@ -220,9 +272,98 @@ def list_values(value: Any) -> list[str]:
     return []
 
 
+def validate_list_style_presets(root: Path) -> dict[str, Any]:
+    errors: list[str] = []
+    warnings: list[str] = []
+    path = root / "list_style_presets.json"
+    doc_path = root / "LIST_STYLE_PRESETS.md"
+    if not path.exists():
+        return {
+            "status": "fail",
+            "preset_count": 0,
+            "errors": [f"missing list style preset contract: {rel(path)}"],
+            "warnings": warnings,
+        }
+    if not doc_path.exists():
+        errors.append(f"missing list style preset documentation: {rel(doc_path)}")
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return {
+            "status": "fail",
+            "preset_count": 0,
+            "errors": [f"invalid list_style_presets.json: {exc}"],
+            "warnings": warnings,
+        }
+    presets = payload.get("presets", [])
+    if not isinstance(presets, list):
+        errors.append("list_style_presets.json presets must be a list")
+        presets = []
+    constraints = payload.get("constraints", {})
+    parenthesis_forms = set()
+    if isinstance(constraints, dict):
+        forms = constraints.get("parenthesis_forms", [])
+        if isinstance(forms, list):
+            parenthesis_forms = {str(item) for item in forms}
+    if parenthesis_forms != LIST_STYLE_ALLOWED_PARENTHESES:
+        errors.append("list style parenthesis_forms must be exactly ')' and '()'")
+
+    seen_ids: set[str] = set()
+    for preset in presets:
+        if not isinstance(preset, dict):
+            errors.append("list_style_presets.json contains a non-object preset")
+            continue
+        preset_id = str(preset.get("preset_id", "")).strip()
+        if not preset_id:
+            errors.append("list style preset missing preset_id")
+            continue
+        if preset_id in seen_ids:
+            errors.append(f"duplicate list style preset_id: {preset_id}")
+        seen_ids.add(preset_id)
+        levels = preset.get("levels", [])
+        if not isinstance(levels, list) or len(levels) != 4:
+            errors.append(f"{preset_id}: list style preset must define exactly 4 levels")
+            continue
+        expected_level = 1
+        for level in levels:
+            if not isinstance(level, dict):
+                errors.append(f"{preset_id}: level entry must be an object")
+                continue
+            try:
+                actual_level = int(level.get("level", 0))
+            except (TypeError, ValueError):
+                actual_level = 0
+            if actual_level != expected_level:
+                errors.append(f"{preset_id}: expected level {expected_level}, got {level.get('level')}")
+            for key in ["marker_sample", "html_list_style_type", "docx_numFmt", "docx_level_text"]:
+                if not str(level.get(key, "")).strip():
+                    errors.append(f"{preset_id}: level {expected_level} missing {key}")
+            marker = str(level.get("marker_sample", ""))
+            if any("가" <= ch <= "힣" for ch in marker):
+                errors.append(f"{preset_id}: marker_sample must not use Korean alphabetic markers: {marker}")
+            expected_level += 1
+
+    missing = sorted(LIST_STYLE_REQUIRED_IDS - seen_ids)
+    if missing:
+        errors.append("missing required list style presets: " + ", ".join(missing))
+    extra = sorted(seen_ids - LIST_STYLE_REQUIRED_IDS)
+    if extra:
+        warnings.append("additional list style presets present: " + ", ".join(extra))
+    return {
+        "status": "pass" if not errors else "fail",
+        "preset_count": len(seen_ids),
+        "required_preset_ids": sorted(LIST_STYLE_REQUIRED_IDS),
+        "errors": errors,
+        "warnings": warnings,
+    }
+
+
 def validate(root: Path = PRESET_ROOT) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
+    list_style_result = validate_list_style_presets(root)
+    errors.extend([f"list_style_presets: {error}" for error in list_style_result.get("errors", [])])
+    warnings.extend([f"list_style_presets: {warning}" for warning in list_style_result.get("warnings", [])])
     index = load_index(root)
     presets = index.get("presets", [])
     hold_candidates = index.get("hold_candidates", [])
@@ -429,6 +570,7 @@ def validate(root: Path = PRESET_ROOT) -> dict[str, Any]:
         "module_only_count": module_only_count,
         "validated_presets": validated_presets,
         "hold_candidate_count": len(hold_candidates),
+        "list_style_presets": list_style_result,
         "errors": errors,
         "warnings": warnings,
     }

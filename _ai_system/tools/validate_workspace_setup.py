@@ -35,7 +35,7 @@ ROOT_REQUIRED_PATHS = {
     "docs/SECURITY.md",
     "docs/CONTRIBUTING.md",
 }
-ROOT_OPTIONAL = {".git", ".gitignore", ".github", ".local_state", "_internal"}
+ROOT_OPTIONAL = {".git", ".gitignore", ".github", ".agents", ".codex", ".local_state", "_internal"}
 ROOT_ALLOWED = ROOT_REQUIRED | ROOT_OPTIONAL
 PROJECT_ROOT = Path("00_사용자_작업공간")
 RUNTIME_ROOT = Path("_ai_system") / "runtime"

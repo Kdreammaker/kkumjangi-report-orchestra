@@ -1,0 +1,24 @@
+{
+  "preset_id": "book_manuscript",
+  "label_ko": "책 원고 / 출판 원고",
+  "status": "supported",
+  "base_flow": "substantial_report",
+  "integration_status": "module_only",
+  "description": "Book-like manuscript preset for novels, nonfiction, professional books, textbooks, workbooks, and other publication-oriented long-form manuscripts.",
+  "quality_emphasis": [
+    "book structure and front/body/back matter",
+    "genre-aware preservation of prose and voice",
+    "chapter/part hierarchy consistency",
+    "export-friendly manuscript layout without claiming publishing-ready typesetting"
+  ],
+  "recommended_cover_preset": "team_review",
+  "default_list_presets": ["formal_outline", "symbol_bullets"],
+  "read_first": ["preset.json", "prd_questions.md"],
+  "stage_overlays": {
+    "prd": ["prd_questions.md"],
+    "toc": ["stage_overlays.md"],
+    "workpack": ["stage_overlays.md"],
+    "visual_data": ["stage_overlays.md"],
+    "review": ["validation_checklist.md"]
+  }
+}

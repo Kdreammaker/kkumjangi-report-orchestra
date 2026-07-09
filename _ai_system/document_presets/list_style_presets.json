@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-09",
+  "source": "_ai_system/document_presets/list_style_presets.json",
+  "max_depth": 4,
+  "constraints": {
+    "letter_markers": "English alphabet only",
+    "parenthesis_forms": [")", "()"],
+    "symbol_priority": "Use Word/Google Docs friendly symbols before decorative bullets.",
+    "export_note": "HTML and DOCX output should preserve intent first; exact marker rendering still needs export verification.",
+    "hwpx_note": "Hancom/HWPX target markers may differ from DOCX/Google Docs defaults. Record HWPX marker overrides and verify in Hancom before delivery claims."
+  },
+  "presets": [
+    {
+      "preset_id": "formal_outline",
+      "label_ko": "정식 개요형",
+      "purpose": "Formal outline hierarchy for policy, academic, professional, and book-like documents.",
+      "levels": [
+        {
+          "level": 1,
+          "family": "roman_upper",
+          "marker_sample": "I",
+          "html_list_style_type": "upper-roman",
+          "docx_numFmt": "upperRoman",
+          "docx_level_text": "%1"
+        },
+        {
+          "level": 2,
+          "family": "letter_upper",
+          "marker_sample": "A",
+          "html_list_style_type": "upper-alpha",
+          "docx_numFmt": "upperLetter",
+          "docx_level_text": "%2"
+        },
+        {
+          "level": 3,
+          "family": "arabic",
+          "marker_sample": "1",
+          "html_list_style_type": "decimal",
+          "docx_numFmt": "decimal",
+          "docx_level_text": "%3"
+        },
+        {
+          "level": 4,
+          "family": "letter_lower",
+          "marker_sample": "a",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "%4"
+        }
+      ]
+    },
+    {
+      "preset_id": "guide_outline",
+      "label_ko": "가이드 계층형",
+      "purpose": "Readable guide hierarchy for rules, examples, producer notes, and nested guidance.",
+      "levels": [
+        {
+          "level": 1,
+          "family": "letter_upper",
+          "marker_sample": "A",
+          "html_list_style_type": "upper-alpha",
+          "docx_numFmt": "upperLetter",
+          "docx_level_text": "%1"
+        },
+        {
+          "level": 2,
+          "family": "letter_upper_suffix",
+          "marker_sample": "A)",
+          "html_list_style_type": "upper-alpha",
+          "docx_numFmt": "upperLetter",
+          "docx_level_text": "%2)"
+        },
+        {
+          "level": 3,
+          "family": "letter_lower_suffix",
+          "marker_sample": "a)",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "%3)"
+        },
+        {
+          "level": 4,
+          "family": "letter_lower_parenthesized",
+          "marker_sample": "(a)",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "(%4)"
+        }
+      ]
+    },
+    {
+      "preset_id": "procedure_steps",
+      "label_ko": "절차 단계형",
+      "purpose": "Step-by-step manuals, instructions, checklists, and troubleshooting procedures.",
+      "levels": [
+        {
+          "level": 1,
+          "family": "arabic",
+          "marker_sample": "1",
+          "html_list_style_type": "decimal",
+          "docx_numFmt": "decimal",
+          "docx_level_text": "%1"
+        },
+        {
+          "level": 2,
+          "family": "arabic_suffix",
+          "marker_sample": "1)",
+          "html_list_style_type": "decimal",
+          "docx_numFmt": "decimal",
+          "docx_level_text": "%2)"
+        },
+        {
+          "level": 3,
+          "family": "letter_lower_suffix",
+          "marker_sample": "a)",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "%3)"
+        },
+        {
+          "level": 4,
+          "family": "letter_lower_parenthesized",
+          "marker_sample": "(a)",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "(%4)"
+        }
+      ]
+    },
+    {
+      "preset_id": "administrative_outline",
+      "label_ko": "행정 검토형",
+      "purpose": "Decision-first Korean administrative, regulatory, proposal, opinion, and meeting-note documents that need numbered hierarchy while preserving DOCX/HWPX compatibility boundaries.",
+      "levels": [
+        {
+          "level": 1,
+          "family": "arabic_dot",
+          "marker_sample": "1.",
+          "html_list_style_type": "decimal",
+          "docx_numFmt": "decimal",
+          "docx_level_text": "%1.",
+          "hwpx_marker_sample": "1."
+        },
+        {
+          "level": 2,
+          "family": "arabic_suffix",
+          "marker_sample": "1)",
+          "html_list_style_type": "decimal",
+          "docx_numFmt": "decimal",
+          "docx_level_text": "%2)",
+          "hwpx_marker_sample": "1)"
+        },
+        {
+          "level": 3,
+          "family": "letter_upper_dot",
+          "marker_sample": "A.",
+          "html_list_style_type": "upper-alpha",
+          "docx_numFmt": "upperLetter",
+          "docx_level_text": "%3.",
+          "hwpx_marker_sample": "가."
+        },
+        {
+          "level": 4,
+          "family": "letter_lower_suffix",
+          "marker_sample": "a)",
+          "html_list_style_type": "lower-alpha",
+          "docx_numFmt": "lowerLetter",
+          "docx_level_text": "%4)",
+          "hwpx_marker_sample": "가)"
+        }
+      ]
+    },
+    {
+      "preset_id": "symbol_bullets",
+      "label_ko": "기호 글머리형",
+      "purpose": "Symbol-only bullet hierarchy for notes, examples, options, and compact scans.",
+      "levels": [
+        {
+          "level": 1,
+          "family": "bullet_disc",
+          "marker_sample": "•",
+          "html_list_style_type": "disc",
+          "docx_numFmt": "bullet",
+          "docx_level_text": "•"
+        },
+        {
+          "level": 2,
+          "family": "bullet_circle",
+          "marker_sample": "◦",
+          "html_list_style_type": "circle",
+          "docx_numFmt": "bullet",
+          "docx_level_text": "◦"
+        },
+        {
+          "level": 3,
+          "family": "bullet_square",
+          "marker_sample": "▪",
+          "html_list_style_type": "square",
+          "docx_numFmt": "bullet",
+          "docx_level_text": "▪"
+        },
+        {
+          "level": 4,
+          "family": "bullet_hyphen",
+          "marker_sample": "-",
+          "html_list_style_type": "disc",
+          "docx_numFmt": "bullet",
+          "docx_level_text": "-"
+        }
+      ]
+    }
+  ]
+}

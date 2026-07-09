@@ -27,6 +27,10 @@ STANDARD_DIRS = [
     "evidence/web_captures",
     "notes",
     "reports",
+    "documents/intake",
+    "documents/adaptation_plans",
+    "documents/adapted",
+    "documents/versions",
     "report_prd",
     "source_index",
     "legal_matrix",
@@ -543,9 +547,10 @@ This file is the per-project working instruction map for AI assistants. It is a 
 - The PRD or this task file should set `execution_control_mode`: `checkpointed` or `delegated`. `checkpointed` stops at approval gates; `delegated` proceeds to the requested target point when safe, then briefs assumptions, unresolved questions, failed checks, and user-confirmation needs. Delegated mode does not bypass language, source, confidentiality, external sharing, or legal/regulatory boundaries.
 - OJT prompts stay generic. Specialized handling comes from `document_type_preset`, selected preset module files, `artifact_workflow_mode`, and stage-specific rules.
 - If this project derives from another artifact, record `source_project_id`, `source_artifact_path`, `source_artifact_version`, `reuse_scope`, and `new_verification_scope` in the PRD and worklog before drafting. The source may be a report, handout, proposal, manual, brief, or any other artifact; do not hard-code report-to-handout assumptions.
+- If the user asks to refine an existing document into a target format, file type, style, template, or derived artifact, use `_ai_system/governance/17_document_adaptation_rules.md` and `_ai_system/report_skills/document_adapter/SKILL.md`. Preserve the original under `documents/intake/`, create an adaptation plan/manifest under `documents/adaptation_plans/`, and write new outputs under `documents/adapted/` unless the plan routes to `reports/`.
 - After assembly or approved enhancement, preserve a versioned copy under `reports/versions/`, update `reports/current/version_pointer.json`, `reports/version_history.md`, `reports/report_registry.csv`, and the dashboard change log. Do not call an unapproved draft `final`.
 - Ordinary project work should not create ad-hoc Python helpers in the workspace root or system-core folders. Prefer existing tools; if a temporary helper is unavoidable, record the reason and cleanup in the worklog.
-- Ordinary project work must not modify system-core files such as `_ai_system/`, `_internal/`, `AGENTS.md`, `README.md`, `INSTALL.md`, `CHANGELOG.md`, or `VERSION.json`. If these change, stop ordinary closeout and report that a private core update is required.
+- Ordinary project work must not modify system-core files such as `_ai_system/`, `_internal/`, `AGENTS.md`, `README.md`, `INSTALL.md`, `CHANGELOG.md`, or `VERSION.json`. If these change, stop ordinary closeout and report that a system-core update is required.
 
 ## Stage Checklist
 

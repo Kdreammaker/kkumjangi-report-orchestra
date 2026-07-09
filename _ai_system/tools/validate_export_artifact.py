@@ -32,6 +32,8 @@ def check_docx(path: Path) -> dict[str, object]:
             result["has_numbering"] = "word/numbering.xml" in names
             result["has_footnotes_or_endnotes"] = "word/footnotes.xml" in names or "word/endnotes.xml" in names
             result["has_media"] = any(name.startswith("word/media/") for name in names)
+    except PermissionError:
+        result["error"] = "permission_denied_or_file_locked"
     except zipfile.BadZipFile:
         result["error"] = "not_a_valid_zip_package"
     return result
@@ -68,6 +70,9 @@ def validate_export(project: Path, required: bool, strict: bool) -> dict[str, ob
         detail["path"] = rel.as_posix()
         details.append(detail)
         if path.suffix.lower() == ".docx":
+            if detail.get("error") == "permission_denied_or_file_locked":
+                warnings.append(f"DOCX could not be opened for validation, possibly because it is open in Word: {rel.as_posix()}")
+                continue
             if not detail.get("valid_package") or not detail.get("has_document"):
                 errors.append(f"DOCX is not structurally valid: {rel.as_posix()}")
             if strict and not detail.get("has_styles"):

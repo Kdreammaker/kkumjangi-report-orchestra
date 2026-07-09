@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "adaptation_id": "",
+  "created_at_kst": "",
+  "source": {
+    "original_path": "",
+    "preserved_copy_path": "",
+    "sha256": "",
+    "file_size_bytes": 0,
+    "file_type": "",
+    "support_tier": ""
+  },
+  "request": {
+    "goal": "",
+    "adaptation_mode": "",
+    "target_file_type": "",
+    "target_format_or_template": "",
+    "target_reader": "",
+    "output_language": "",
+    "content_depth": "",
+    "execution_control_mode": ""
+  },
+  "outputs": [],
+  "verification": {
+    "original_preserved": false,
+    "output_opens": "not_run",
+    "target_format_followed": "not_run",
+    "protected_spans_checked": "not_run",
+    "meaning_changes_reviewed": "not_run",
+    "render_or_import_checked": "not_run",
+    "known_limits": []
+  }
+}

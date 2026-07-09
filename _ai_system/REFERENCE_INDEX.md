@@ -23,6 +23,7 @@ This file is the detailed map for governance documents, report skills, templates
 | `_ai_system/governance/14_chapter_workpack_rules.md` | Chapter workpack standard and chapter-level writing structure. | Drafting or revising substantial chapter fragments. |
 | `_ai_system/governance/15_export_conversion_rules.md` | DOCX/PDF conversion statuses and verification evidence. | Exporting or claiming conversion readiness. |
 | `_ai_system/governance/16_system_core_packaging_rules.md` | GitHub/ZIP/new-PC package boundaries and release hygiene. | Packaging, publishing, or pushing system-core changes. |
+| `_ai_system/governance/17_document_adaptation_rules.md` | Existing document refinement, format adaptation, file-type conversion, and derived-artifact intake. | Polishing or adapting an existing file into a target format, template, reader style, file type, or new artifact. |
 
 ## Report Skills
 
@@ -37,6 +38,7 @@ This file is the detailed map for governance documents, report skills, templates
 | Report Assembler | `_ai_system/report_skills/report_assembler/SKILL.md` | Assembly and Chapter 0 integration without rewriting source fragments. |
 | Report Reviewer | `_ai_system/report_skills/report_reviewer/SKILL.md` | Independent report/chapter quality review and revision guidance. |
 | Export Operator | `_ai_system/report_skills/export_operator/SKILL.md` | DOCX/PDF export workflows and verification. |
+| Document Adapter | `_ai_system/report_skills/document_adapter/SKILL.md` | Preserve and adapt an existing document into a requested format, file type, reader fit, or derived artifact before routing to reports/export when needed. |
 | Cloud Platform Bridge | `_ai_system/report_skills/cloud_platform_bridge/SKILL.md` | Local outbox and approval-gated cloud handoff planning. |
 
 ## Core Templates And Design
@@ -49,6 +51,8 @@ This file is the detailed map for governance documents, report skills, templates
 | Claim register template | `_ai_system/templates/report_claim_register_template.md` | Claim fields, citation type, and support status. |
 | Visual plan template | `_ai_system/templates/visual_plan_template.csv` | Visual rows and data artifact planning. |
 | Visual review checklist | `_ai_system/templates/report_visual_review.md` | Human/AI visual pass checklist after body chapters. |
+| Document adaptation plan | `_ai_system/templates/document_adaptation_plan_template.md` | Plan template for existing-document adaptation, protected spans, target output, and verification. |
+| Document adaptation manifest | `_ai_system/templates/document_adaptation_manifest_template.json` | Machine-readable manifest shape for source preservation, requested mode, outputs, and verification status. |
 | Report HTML templates | `_ai_system/templates/report_html/` | Reusable cover/body/page shell and report styling. |
 | Cover component guide | `_ai_system/templates/report_html/cover/README.md` | Cover presets and cover-data validation. |
 
@@ -58,9 +62,10 @@ This file is the detailed map for governance documents, report skills, templates
 |---|---|---|
 | Preset index | `_ai_system/document_presets/INDEX.json` | Compact routing index for base, extension, and hold document preset candidates. |
 | Preset codemap | `_ai_system/document_presets/CODEMAP.md` | Human-readable map for choosing which preset files to read without opening every module. |
+| List style presets | `_ai_system/document_presets/LIST_STYLE_PRESETS.md` and `_ai_system/document_presets/list_style_presets.json` | Multi-level list marker contract for formal outlines, guide outlines, procedure steps, and symbol-only bullets across HTML and DOCX export paths. |
 | Preset modules | `_ai_system/document_presets/<preset_id>/` | Per-preset PRD questions, stage overlays, `design_patterns.md`, optional `language_guidance.md`, validation checklists, layout standards, and DOCX export-readiness guidance; extension modules may be guidance-only before workflow/tool automation is added. |
 
-Read `_ai_system/document_presets/INDEX.json` first when the user names a document type, asks for a new kind of output, or the interview/PRD stage must choose `document_type_preset`. Use its `default_artifact_workflow_mode` and `read_for_workflow` fields to decide whether the selected artifact should use full report stages or a compressed/specialized sequence. Read `CODEMAP.md` only when the compact index is not enough, then read only the selected preset's current-stage files and `stage_overlays.md` when workflow depth is being decided. When `output_language` is `en` or `mixed`, include the selected preset's `language_guidance.md` if present; do not create a `*_en` preset or enable translation.
+Read `_ai_system/document_presets/INDEX.json` first when the user names a document type, asks for a new kind of output, or the interview/PRD stage must choose `document_type_preset`. Use its `default_artifact_workflow_mode` and `read_for_workflow` fields to decide whether the selected artifact should use full report stages or a compressed/specialized sequence. Read `CODEMAP.md` only when the compact index is not enough, then read only the selected preset's current-stage files and `stage_overlays.md` when workflow depth is being decided. Read `LIST_STYLE_PRESETS.md` when nested numbered/bulleted hierarchy matters. When `output_language` is `en` or `mixed`, include the selected preset's `language_guidance.md` if present; do not create a `*_en` preset or enable translation.
 
 ## Style Profile Modules
 
@@ -92,7 +97,7 @@ Use `_ai_system/tools/validate_style_profiles.py` to verify aliases, `read_first
 | Current task validator | `_ai_system/tools/validate_current_task.py` | Validate `tasks/current_task.md` and refresh `task_status.html`. |
 | Stage context composer | `_ai_system/tools/compose_report_context.py` | Produce stage-specific read lists and `context_packets/*.compact.md`; `--output-language en|mixed` adds selected language guidance without translation/rewrite automation. |
 | Document preset query | `_ai_system/tools/query_document_preset.py` | Resolve a document-type query to preset read guidance, design assets, language guidance, or unsupported hold candidates without enabling workflow automation. |
-| Document preset validator | `_ai_system/tools/validate_document_presets.py` | Validate preset module files, design-stage read guidance, language guidance paths, module-only boundaries, and hold-candidate routing. |
+| Document preset validator | `_ai_system/tools/validate_document_presets.py` | Validate preset module files, list style preset contracts, design-stage read guidance, language guidance paths, module-only boundaries, and hold-candidate routing. |
 | Style profile query | `_ai_system/tools/query_style_profile.py` | Resolve a reader-tone/style query to guidance-only profile files and optional language guidance while explicitly keeping rewrite automation disabled. |
 | Style profile validator | `_ai_system/tools/validate_style_profiles.py` | Validate style profile aliases, `read_first` paths, language guidance paths, module files, profile id alignment, guidance-only status, query routing, and protected span policy coverage. |
 | Workflow navigator | `_ai_system/tools/report_workflow_next.py` | Suggest next production action, blockers, and status panel. |
@@ -117,7 +122,9 @@ Use `_ai_system/tools/validate_style_profiles.py` to verify aliases, `read_first
 | Report factory validator | `_ai_system/tools/validate_report_factory.py` | Check PRD, TOC, skeleton, workpacks, chapter fragments, cover, visuals, and assembly readiness. |
 | Report artifact validator | `_ai_system/tools/validate_report_artifact.py` | Check rendered HTML structure, citations, captions, internal leakage, and tone risk. |
 | Quality score | `_ai_system/tools/report_quality_score.py` | Advisory score/status panel with hard-blocker caps. |
+| Native DOCX exporter | `_ai_system/tools/export_report_docx.py` | Create a Word-native DOCX from report factory sources and optionally write render evidence. |
 | Export artifact validator | `_ai_system/tools/validate_export_artifact.py` | Verify DOCX/PDF export evidence. |
+| Document adaptation initializer | `_ai_system/tools/init_document_adaptation.py` | Preserve an existing source file and write a document adaptation plan/manifest before editing or converting. |
 | Closeout validator | `_ai_system/tools/validate_closeout.py` | Check declared deliverables, snapshots, and active report folders. |
 | Delivery outbox builder | `_ai_system/tools/build_delivery_outbox.py` | Build local handoff package without cloud upload. |
 | Cloud handoff planner | `_ai_system/tools/prepare_cloud_handoff.py` | Create approval-gated cloud upload plan; does not upload by itself. |
@@ -136,6 +143,7 @@ Smoke scripts under `_ai_system/tools/smoke_*.py` are developer release tests, n
 - `_ai_system/tools/smoke_project_dashboard_app.py`
 - `_ai_system/tools/smoke_cover_render.py`
 - `_ai_system/tools/smoke_delivery_outbox.py`
+- `_ai_system/tools/smoke_document_adaptation.py`
 
 ## Notes On Legacy Mentions
 

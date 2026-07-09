@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-06-04",
+  "updated_at": "2026-07-05",
   "source": "_ai_system/document_presets",
   "presets": [
     {
@@ -130,6 +130,30 @@
       "read_first": ["product_manual/preset.json", "product_manual/prd_questions.md"],
       "read_for_workflow": ["product_manual/stage_overlays.md"],
       "read_for_design": ["product_manual/design_patterns.md"]
+    },
+    {
+      "preset_id": "guide_document",
+      "label_ko": "가이드 문서",
+      "status": "supported",
+      "aliases": ["가이드", "가이드 문서", "운영 가이드", "제작 가이드", "업무 가이드", "내부 가이드", "규격 가이드", "스타일 가이드", "룰북", "플레이북", "세계관 가이드", "프로듀서 바이블", "프로듀서 가이드", "설정집", "바이블"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "standard",
+      "module_path": "_ai_system/document_presets/guide_document",
+      "read_first": ["guide_document/preset.json", "guide_document/prd_questions.md"],
+      "read_for_workflow": ["guide_document/stage_overlays.md"],
+      "read_for_design": ["guide_document/design_patterns.md"]
+    },
+    {
+      "preset_id": "book_manuscript",
+      "label_ko": "책 원고 / 출판 원고",
+      "status": "supported",
+      "aliases": ["책", "도서", "책 원고", "출판 원고", "원고", "원고 정리", "소설", "소설 원고", "문학 원고", "논픽션", "전문서적", "실용서", "교재", "워크북", "에세이"],
+      "base_flow": "substantial_report",
+      "default_artifact_workflow_mode": "substantial",
+      "module_path": "_ai_system/document_presets/book_manuscript",
+      "read_first": ["book_manuscript/preset.json", "book_manuscript/prd_questions.md"],
+      "read_for_workflow": ["book_manuscript/stage_overlays.md"],
+      "read_for_design": ["book_manuscript/design_patterns.md"]
     },
     {
       "preset_id": "education_curriculum",

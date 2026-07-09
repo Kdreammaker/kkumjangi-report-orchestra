@@ -197,8 +197,8 @@ def render_approval(data: dict[str, object], preset: dict[str, object]) -> str:
         if label and value:
             cards.append(
                 f"<td{style_attr(styles['approval_card'])}>"
-                f"<span{style_attr(styles['approval_label'])}>{html.escape(label)}</span>"
-                f"<strong{style_attr(styles['approval_name'])}>{html.escape(value, quote=False)}</strong>"
+                f"<p{style_attr(styles['approval_label'])}>{html.escape(label)}</p>"
+                f"<p{style_attr(styles['approval_name'])}>{html.escape(value, quote=False)}</p>"
                 "</td>"
             )
     if not cards:

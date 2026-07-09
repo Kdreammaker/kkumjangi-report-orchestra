@@ -13,6 +13,8 @@ guidance assets without changing workflow or tool behavior yet.
 
 - `INDEX.json`: compact routing index for AI and tools.
 - `CODEMAP.md`: human-readable map of preset modules and read boundaries.
+- `LIST_STYLE_PRESETS.md`: human-readable multi-level list marker guidance.
+- `list_style_presets.json`: machine-readable list marker contract for HTML/DOCX/HWPX-compatible export paths.
 - `<preset_id>/preset.json`: preset metadata and stage overlay paths.
 - `<preset_id>/prd_questions.md`: questions to ask before PRD drafting.
 - `<preset_id>/stage_overlays.md`: TOC, workpack, visual/data, and review notes.
@@ -24,3 +26,12 @@ guidance assets without changing workflow or tool behavior yet.
 AI should read `INDEX.json` first, then only the selected preset's
 `preset.json` and the stage-specific files listed there. Do not read every
 preset folder by default.
+
+When a document relies on nested numbered or bulleted lists, read
+`LIST_STYLE_PRESETS.md` and select a declared list preset during PRD/design.
+The default formal hierarchy is `I -> A -> 1 -> a`; guide documents usually
+start from `guide_outline`, procedure/manual documents from `procedure_steps`,
+administrative/review documents may use `administrative_outline`, and compact
+symbol-only notes from `symbol_bullets`. HWPX/Hancom-specific Korean markers
+are recorded as target overrides and verified separately rather than treated as
+cross-target defaults.

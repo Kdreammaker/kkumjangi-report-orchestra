@@ -12,6 +12,14 @@
 
 - Lead with recipient need, proposed value, scope, execution plan, responsibilities, terms, risks, and next decision.
 - Keep proposal commitments separate from assumptions, options, and negotiation items.
+- Use conclusion-first section leads. Put the proposal ask, expected value, and requested next action before detailed background.
+
+## Authoring Structure
+
+- Default paragraph mode: mixed, with bullet-first scope/role/schedule/terms sections.
+- Use prose for recipient context, value rationale, and relationship-sensitive transitions.
+- Use bullets or narrow tables for deliverables, responsibilities, milestones, assumptions, exclusions, risks, and decision requests.
+- For DOCX targets, default to Malgun Gothic and stable numbered hierarchy. For HWPX-compatible HTML, record Hancom font fallback and any marker overrides in `reports/report_design.md`.
 
 ## Workpack
 
@@ -29,4 +37,4 @@
 - Keep scope, responsibility, schedule, and condition tables narrow enough for Word page width; split large matrices into smaller tables when needed.
 - Use static diagrams or charts with captions and alternative descriptions; avoid interactive HTML, viewport-dependent layouts, and complex absolute positioning.
 - Make long deliverable names, terms, exceptions, and URLs wrap cleanly.
-- DOCX/PDF conversion requires separate export validation; this preset does not guarantee conversion success.
+- DOCX/PDF/HWPX-compatible conversion requires separate export validation; this preset does not guarantee conversion success.

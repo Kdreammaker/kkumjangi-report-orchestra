@@ -16,6 +16,8 @@ folder. The compact machine-readable source is `INDEX.json`.
 | `equity_research` | Sector or company analysis centered on performance, valuation assumptions, catalysts, risks, and non-advisory limits. | `substantial` | `equity_research/preset.json`; `equity_research/prd_questions.md` |
 | `business_proposal` | Partner-facing or customer-facing business proposal with scope, value, execution plan, terms, and next decision. | `standard` | `business_proposal/preset.json`; `business_proposal/prd_questions.md` |
 | `product_manual` | Product manual or user guide covering procedures, installation, configuration, FAQ, troubleshooting, and version notes. | `standard` | `product_manual/preset.json`; `product_manual/prd_questions.md` |
+| `guide_document` | General guide, playbook, rulebook, producer bible, style guide, or operating guide that preserves source material while making reference structure clear. | `standard` | `guide_document/preset.json`; `guide_document/prd_questions.md` |
+| `book_manuscript` | Book-like manuscript for novels, nonfiction, professional books, textbooks, workbooks, and other publication-oriented long-form material. | `substantial` | `book_manuscript/preset.json`; `book_manuscript/prd_questions.md` |
 | `education_curriculum` | Curriculum, lesson material, instructor notes, learner handouts, activities, assignments, and assessment design. | `standard` | `education_curriculum/preset.json`; `education_curriculum/prd_questions.md` |
 | `academic_paper` | Paper-style academic document with abstract, research questions, methodology, literature review, limitations, and references. | `substantial` | `academic_paper/preset.json`; `academic_paper/prd_questions.md` |
 | `press_release` | Short-form external public release flow: brief PRD, fact/approval check, draft writing, and public-risk review; not a substantial report. | `brief` | `press_release/preset.json`; `press_release/prd_questions.md` |
@@ -40,10 +42,12 @@ After selecting a preset, read only the current stage overlay:
 - Workflow mode, TOC, workpack, visual/data, or stage compression work: `stage_overlays.md`
 - Layout/design pattern work for extension presets: `design_patterns.md`
 - Closeout or quality review: `validation_checklist.md`
+- Nested-list or marker-style decisions: `LIST_STYLE_PRESETS.md` and `list_style_presets.json`
 
 These modules are source-of-truth guidance. `stage_overlays.md` can change
 the shape of the workflow, such as replacing report chapters with lesson
-sections, task blocks, proposal sections, factbook sections, or public-release
-blocks. It does not automate writing quality, source truth, legal review,
-approval, or delivery readiness. Future tooling may generate a separate
-derived index, but the generated index must not replace these files.
+sections, task blocks, proposal sections, factbook sections, guide sections,
+book chapters, or public-release blocks. It does not automate writing quality,
+source truth, legal review, approval, or delivery readiness. Future tooling may
+generate a separate derived index, but the generated index must not replace
+these files.

@@ -168,16 +168,22 @@
   padding: 12px;
 }
 
-.cover-approval span {
+.cover-approval span,
+.cover-approval p:first-child {
   color: var(--cover-muted);
   display: block;
   font-size: 12px;
+  line-height: 1.35;
   margin-bottom: 10px;
 }
 
-.cover-approval strong {
+.cover-approval strong,
+.cover-approval p:last-child {
   color: var(--cover-dark);
+  display: block;
   font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
 }
 
 .cover-purpose {

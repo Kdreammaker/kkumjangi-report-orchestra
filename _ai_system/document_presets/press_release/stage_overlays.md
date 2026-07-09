@@ -13,6 +13,14 @@
 - Treat the output as an external public statement, not a shortened report.
 - Follow a short flow: brief PRD, fact/approval check, draft writing, and public-risk review.
 - Include headline, subheadline, dateline, lead, body, approved quotes, company boilerplate, media contact, embargo or approval status, and notes when needed.
+- Keep the lead prose-first. Do not convert the release body into report bullets unless the slot is a fact box or event/spec detail.
+
+## Authoring Structure
+
+- Default paragraph mode: prose-first.
+- Use prose for headline support, lead, body, approved quotes, and boilerplate.
+- Use bullets only for approved fact boxes, event details, product specs, or media-kit references.
+- For DOCX targets, default to Malgun Gothic. For HWPX-compatible releases, record Hancom font fallback and verify headline, dateline, quote, and contact wrapping in Hancom.
 
 ## Workpack
 
@@ -30,4 +38,4 @@
 - Keep any fact box or data table narrow enough for Word page width; avoid report-style appendix tables.
 - Use static approved images or media-kit references with captions and alternative descriptions; avoid interactive HTML, viewport-dependent layouts, and complex absolute positioning.
 - Make long company names, product names, contact details, and URLs wrap cleanly.
-- DOCX/PDF conversion requires separate export validation; this preset does not guarantee conversion success.
+- DOCX/PDF/HWPX-compatible conversion requires separate export validation; this preset does not guarantee conversion success.

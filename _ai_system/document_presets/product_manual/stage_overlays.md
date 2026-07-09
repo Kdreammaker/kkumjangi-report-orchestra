@@ -12,6 +12,14 @@
 
 - Organize by user task, setup path, configuration area, operation workflow, troubleshooting case, FAQ, and version notes.
 - Put prerequisites and caution notes before steps that depend on them.
+- Lead each task with purpose, prerequisites, expected result, and then the procedure.
+
+## Authoring Structure
+
+- Default paragraph mode: bullet-first and step-first.
+- Use prose only for short context, caution rationale, recovery explanation, or concept clarification that prevents user error.
+- Use `procedure_steps` for procedures, setup paths, and troubleshooting branches; use `symbol_bullets` for notes, examples, and quick checks.
+- For DOCX targets, default to Malgun Gothic. For HWPX-compatible manuals, record Hancom font fallback and verify warnings, command/path wrapping, and nested steps in Hancom.
 
 ## Workpack
 
@@ -29,4 +37,4 @@
 - Keep procedure tables, error-code tables, and configuration tables within Word page width; split long workflows into smaller task blocks.
 - Use static screenshots/images with captions and alternative descriptions; avoid interactive HTML, viewport-dependent layouts, and complex absolute positioning.
 - Make long commands, file paths, URLs, and error messages wrap without breaking the page.
-- DOCX/PDF conversion requires separate export validation; this preset does not guarantee conversion success.
+- DOCX/PDF/HWPX-compatible conversion requires separate export validation; this preset does not guarantee conversion success.

@@ -12,7 +12,7 @@ Create or update a report PRD before:
 
 - starting any substantial internal review report,
 - revising the report's audience, purpose, scope, or classification,
-- changing output format, such as HTML to DOCX/PDF,
+- changing output format, such as HTML to DOCX/PDF/HWPX-compatible HTML,
 - adding or removing major sections,
 - changing evidence standards, citation style, chart standards, or appendix policy,
 - changing the report from internal review to external proposal or government submission,
@@ -45,6 +45,12 @@ Each report PRD should include:
 - `report_id`: stable report identifier.
 - `report_title`: working Korean report title.
 - `document_type_preset`: selected document preset id, or `undecided` until the interview/PRD resolves it.
+- `authoring_structure_profile`: `decision_first`, `proposal`, `review_opinion`, `meeting_minutes`, `education`, `manual`, `public_release`, `custom`, or `undecided`.
+- `authoring_structure_basis`: selected document type default, user request, source document structure, target reader, target file type, or custom rationale.
+- `default_paragraph_mode`: `bullet_first`, `prose_first`, `mixed`, or `undecided`.
+- `prose_preferred_slots`: slots where prose is intentionally kept, such as background, rationale, legal/regulatory context, learning explanation, press lead, quotation, or narrative summary.
+- `list_style_preset`: `formal_outline`, `guide_outline`, `procedure_steps`, `administrative_outline`, `symbol_bullets`, `not_applicable`, or `undecided` when nested numbered or bulleted hierarchy matters.
+- `list_style_preset_basis`: selected preset default, user request, source document style, target file type, or not applicable.
 - `artifact_workflow_mode`: `brief`, `standard`, `substantial`, or `specialized`. Start from the selected preset's `default_artifact_workflow_mode` and `stage_overlays.md`; this decides whether the full report-factory sequence is required or whether some stages are skipped/compressed with a recorded rationale.
 - `content_depth`: `concise`, `standard`, or `expanded`. Default to `standard` unless the user asks otherwise or the artifact purpose clearly implies a shorter or deeper treatment.
 - `content_depth_basis`: why the chosen depth fits the reader, artifact purpose, evidence depth, and time/use context. `concise` should target roughly 30-60% of standard; `expanded` should target roughly 180-250% of standard when useful evidence supports it.
@@ -85,6 +91,8 @@ Each report PRD should include:
 - `reader_visible_metadata`: what metadata may appear in the rendered report.
 - `hidden_or_managed_metadata`: what belongs in PRD, worklog, source index, claim register, data files, or HTML comments.
 - `output_format`: working format and future conversion requirements.
+- `target_document_format`: `HTML`, `DOCX`, `HWPX-compatible HTML`, `PDF`, `mixed`, or `undecided`.
+- `target_format_basis`: why the target format matters and what verification method is expected.
 - `design_document`: path to the report-specific design file, normally `reports/report_design.md`.
 - `cover_module_plan`: which cover modules are needed for this artifact: classification badge, report type, title/subtitle, metadata table, approval cells, purpose note, confidentiality tag/notice, contact/release status, version marker, or light title header.
 - `style_pass_required`: `yes`, `no`, or `conditional`. Use `yes` for substantial reports, external-facing documents, investor/partner/public documents, or any report where tone/reader-fit is material.
@@ -103,6 +111,10 @@ Each report PRD should include:
 Style profile and overlay responsibilities must stay separate in the PRD. The style profile is the reader/purpose-based writing standard. Register, honorific, and user-instructional overlays are guidance-only delivery-mode layers used by the AI during the pre-assembly style pass. They do not perform automatic rewrite, do not verify source truth, and do not override protected spans or English `language_guidance.md`.
 
 `document_type_preset` is an internal routing id, not a reader-facing artifact label. It must match a supported `preset_id` in `_ai_system/document_presets/INDEX.json` or remain `undecided` until resolved. Do not invent ids such as `research_note` because the user used a natural-language phrase. If the user asks for a "research note", "debate brief", "seminar memo", or similar label, map it to the closest supported preset such as `general_report`, `academic_research`, `academic_paper`, or another indexed preset, and keep the natural-language label in `report_title`, `report_type`, or a reader-facing metadata field.
+
+`authoring_structure_profile` is a document-type writing contract, not an institution persona. Use it to decide whether the artifact should be conclusion-first, bullet-first, prose-led, procedure-led, or slot-specific. Proposals usually lead with recipient need/value/scope/terms/next decision. Review opinions usually lead with opinion/conclusion and then separate facts, interpretation, effect, options, and uncertainty. Meeting minutes separate metadata, decisions, discussion, action owners, deadlines, and unresolved issues. Education, manual, and press-release artifacts each keep their own structure rather than copying a government-agency voice.
+
+`list_style_preset` is a hierarchy/format contract, not permission to rewrite content. Use `_ai_system/document_presets/LIST_STYLE_PRESETS.md` when the document uses nested lists. The default formal outline is `I -> A -> 1 -> a`; guide documents usually use `guide_outline`, manuals/procedures use `procedure_steps`, administrative/review-opinion documents may use `administrative_outline`, and symbol-only support lists use `symbol_bullets`. Preserve original wording and order unless the PRD explicitly allows restructuring.
 
 The expression correction system is an AI review workflow, not a Python rewrite feature. The PRD should tell the AI which TPO matters: executive scanability, learner explanation, partner professionalism, public-release discipline, procedural clarity, academic formality, or another reader context. Style-pass artifacts should show whether the selected profile and overlays were actually considered.
 

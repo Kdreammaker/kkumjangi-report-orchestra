@@ -480,6 +480,9 @@ def validate_report(project: Path, report: Path, strict_delivery: bool = False) 
                 detail["has_footnotes_or_endnotes"] = "word/footnotes.xml" in names or "word/endnotes.xml" in names
                 detail["has_numbering"] = "word/numbering.xml" in names
                 detail["has_media"] = any(name.startswith("word/media/") for name in names)
+        except PermissionError:
+            detail["error"] = "permission_denied_or_file_locked"
+            warnings.append(f"DOCX could not be opened for validation, possibly because it is open in Word: {docx_path.name}")
         except zipfile.BadZipFile:
             errors.append(f"DOCX is not a valid zip package: {docx_path.name}")
         if strict_delivery and detail["valid_zip"] and not detail["has_styles"]:
