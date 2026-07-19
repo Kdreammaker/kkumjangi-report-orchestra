@@ -41,7 +41,7 @@ Use this file as `reports/report_design.md` for substantial reports.
 - Visual assets: for DOCX/Google Docs/Hancom import tests, prefer static PNG/JPG images referenced by `<img>` or simple table-based visuals. Inline SVG is acceptable as a browser/PDF aid only when export verification confirms it survives the target import path.
 - Tables and approval blocks: prefer semantic tables with inline cell borders/backgrounds for conversion stability. Avoid relying on zebra striping or CSS-only header styling to carry meaning.
 - Print/page rules: keep `@page`, page-break helpers, print color adjustment, and global fallback styles in CSS because they cannot be fully expressed inline. Treat these as compatibility aids, not proof of DOCX/Google Docs/HWPX fidelity.
-- HWPX/Hancom rule: HWPX-compatible HTML means Hancom-import-oriented HTML. It is not the same as a verified native `.hwpx` file unless a native HWPX export/open check is recorded.
+- HWPX/Hancom rule: record whether the source is Hancom-import-oriented HTML or the owned `hwpx-authoring-html.v1` contract. Only the controlled contract can use the configured owned HTML-to-HWPX bridge, and it is not a delivery-ready native `.hwpx` claim until an export/open check is recorded.
 - Claim language: describe the output as "DOCX/Google Docs/HWPX compatibility-first" or "export-friendly pending verification"; do not claim full Word/Google Docs/Hancom compatibility until actual export/render/open checks are recorded.
 
 ## Typography

@@ -1,9 +1,7 @@
 # Changelog
 
-## 1.0.7 - 2026-07-19
+## 1.0.8 - 2026-07-19
 
-- Added `_ai_system/tools/convert_hwp_to_hwpx.py` as a thin local caller for the separately distributed project-owned Python/rule engine; conversion rules are not copied into Report Orchestra.
-- Added a release smoke for engine discovery, bounded invocation, public-safe failures, and HWPX output creation.
-- Updated export and adaptation rules so configured HWP-to-HWPX conversion is supported while arbitrary HTML-to-native-HWPX remains out of scope.
-- Preserved target-specific DOCX-compatible and HWPX-compatible HTML authoring rules instead of treating them as one interchangeable profile.
-- Preserved local-first, no-cloud-upload-by-default guidance and public issue privacy warnings.
+- Added `_ai_system/tools/convert_html_hwpx.py` as a thin bidirectional caller for the shared owned engine's `hwpx-authoring-html.v1` contract; conversion rules remain outside Report Orchestra.
+- Added a release smoke for engine discovery, bounded invocation, local outputs, public-safe failures, both conversion directions, and false-by-default visual claims.
+- Updated export, adaptation, install, and runtime guidance: controlled authoring HTML can create native HWPX when the companion engine is configured, while ordinary/arbitrary HTML remains unsupported and Chromium preview parity remains unverified.

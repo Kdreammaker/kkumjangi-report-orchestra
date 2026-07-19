@@ -77,7 +77,7 @@ After intake:
 - For a new artifact type, choose a document preset from `_ai_system/document_presets/INDEX.json` and record source lineage before drafting.
 - For report-style output, route into report factory only after the adaptation plan says the target is a report factory artifact.
 - For DOCX delivery from report factory sources, use `_ai_system/tools/export_report_docx.py`; do not assume arbitrary source files can directly use that exporter.
-- For HWPX/HWP delivery, first decide whether the target is HWPX-compatible HTML for Hancom import, native report-HTML-to-HWPX, or HWP-to-HWPX conversion. HWP-to-HWPX uses the configured owned engine; native report-HTML-to-HWPX remains a separate exporter task. Both require recorded open/render evidence before delivery claims.
+- For HWPX/HWP delivery, first decide whether the target is HWPX-compatible HTML for Hancom import, the controlled `hwpx-authoring-html.v1` contract, ordinary report-HTML adaptation, or HWP-to-HWPX conversion. HWP-to-HWPX and controlled HTML/HWPX conversion use separate thin callers to the configured owned engine. Ordinary report HTML must be explicitly adapted to the controlled contract before native HWPX creation. All native delivery claims require recorded open/render evidence.
 - For cloud handoff, build a local outbox first and ask for explicit approval before uploading or sharing.
 
 ## Protected Spans
@@ -102,7 +102,7 @@ The target output can be one or more of:
 - HTML,
 - inline-first HTML for Word/Google Docs import testing,
 - HWPX-compatible HTML for Hancom import/open testing,
-- native HWPX only when a verified converter/exporter path exists,
+- native HWPX when the configured owned converter accepts the controlled authoring contract and open/render evidence is recorded,
 - report factory chapter fragments,
 - PDF-ready source,
 - a preset-shaped document such as proposal, manual, curriculum, press release, investor brief, research note, or report,

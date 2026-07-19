@@ -27,6 +27,14 @@ HWP-to-HWPX 변환이 필요한 경우 별도 배포되는 project-owned 엔진�
 python _ai_system/tools/convert_hwp_to_hwpx.py --probe
 ```
 
+HWPX와 제어된 HWPX authoring HTML을 양방향 변환하려면 공용 엔진의
+`convert_owned_html_hwpx.py` 경로를 `OWNED_HTML_HWPX_CLI`에 설정합니다.
+이 경로는 임의 HTML이나 DOCX용 HTML을 받지 않습니다.
+
+```powershell
+python _ai_system/tools/convert_html_hwpx.py --probe
+```
+
 ## 3. 사용자 작업공간 만들기
 
 ```powershell

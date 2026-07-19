@@ -1,6 +1,6 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.8",
   "release_date": "2026-07-19",
   "channel": "public",
-  "summary": "Added a thin local bridge to the shared project-owned HWP-to-HWPX engine without copying conversion rules."
+  "summary": "Added a thin bidirectional bridge for the controlled HWPX authoring HTML contract without copying conversion rules."
 }

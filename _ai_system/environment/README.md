@@ -55,7 +55,18 @@ Set `OWNED_HWP_HWPX_CLI` to `convert_owned_hwp_to_hwpx.py`, then verify it with:
 python _ai_system/tools/convert_hwp_to_hwpx.py --probe
 ```
 
-The engine is optional for ordinary report authoring and DOCX export. A requested HWP-to-HWPX conversion must stop with `owned_hwp_hwpx_engine_not_configured` when this companion runtime is unavailable.
+Controlled HWPX-compatible authoring HTML uses the same separately distributed
+engine through `convert_owned_html_hwpx.py`. Set `OWNED_HTML_HWPX_CLI` and probe
+the bridge with:
+
+```text
+python _ai_system/tools/convert_html_hwpx.py --probe
+```
+
+This path accepts only `hwpx-authoring-html.v1`; it is not an arbitrary HTML
+importer and is separate from DOCX-compatible report HTML.
+
+The engine is optional for ordinary report authoring and DOCX export. A requested HWP-to-HWPX or controlled HTML/HWPX conversion must stop with the matching `*_engine_not_configured` code when this companion runtime is unavailable.
 
 ## Local Processing Boundary
 
