@@ -3,8 +3,9 @@
 ## Purpose
 
 HTML is the working report format. DOCX and PDF are supported export
-artifacts. HWPX/Hancom paths are compatibility or PoC targets unless a task
-adds native HWPX tooling and open-check evidence.
+artifacts. HWP-to-HWPX conversion is available through the separately
+distributed owned engine when its CLI is configured. Native report-HTML to
+HWPX remains a separate compatibility or PoC target.
 
 Use this rule when the user asks for DOCX/PDF/HWPX/HWP, when a report is
 intended for delivery, or when a report claims conversion readiness.
@@ -57,9 +58,10 @@ For HWPX/Hancom-oriented output:
    Hancom-friendly fonts, simple semantic structure, static images, semantic
    tables, white document background, and list-marker overrides recorded in
    `reports/report_design.md`.
-3. If the target is native `.hwpx` or HWP-to-HWPX conversion, do not claim
-   support unless the task provides a converter path, fixture, and open-check
-   evidence.
+3. For HWP-to-HWPX conversion, verify the owned engine with
+   `python _ai_system/tools/convert_hwp_to_hwpx.py --probe`, preserve the source,
+   and create the new HWPX through the thin caller. Native report-HTML to HWPX
+   still requires a separate exporter path.
 4. Open-check representative pages in Hancom Viewer/Hancom Office when
    available and record the result under `reports/export_checks/`.
 
@@ -118,6 +120,7 @@ Currently supported export claims are limited to:
 - export evidence records under `reports/export_checks/`,
 - rendered or visually inspected sample pages when available.
 - HWPX-compatible HTML authoring guidance for Hancom-oriented import/open tests, when the target format, font fallback, list-marker fallback, and verification method are recorded.
+- HWP-to-HWPX file creation through `_ai_system/tools/convert_hwp_to_hwpx.py` when the canonical owned engine CLI is configured.
 
 These checks can support `structure_checked`, `render_verified`, `delivery_candidate`, `hwpx_compatible_html`, or `hwpx_open_checked` status only under the evidence rules above. The native DOCX exporter improves Word layout control, but it still requires render/visual review before delivery claims. HWPX-compatible HTML improves Hancom import intent, but it is not a native HWPX export claim.
 
@@ -130,7 +133,7 @@ Treat the following as unsupported unless a task adds a documented proof-of-conc
 - Word landscape sections or mixed-orientation section breaks,
 - native editable Word chart creation, round-trip editing, or chart data binding.
 - native `.hwpx` report export from report factory sources,
-- HWP to HWPX conversion without a documented local converter path,
+- HWP to HWPX conversion when the owned engine CLI is not configured,
 - arbitrary HTML to native HWPX conversion,
 - HWPX to HTML round-trip visual parity,
 - automated HWPX screenshot or visual diff gates without a renderer automation path.

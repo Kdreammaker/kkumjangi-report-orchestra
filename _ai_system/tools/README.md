@@ -11,6 +11,7 @@ The system objective is better AI-written reports. Rules, skills, PRDs, TOCs, ch
 - local reference normalization and rebuildable context indexing,
 - exact file assembly without rewriting chapter prose,
 - native DOCX export from stable report factory sources,
+- HWP-to-HWPX conversion through the separately distributed owned engine CLI,
 - snapshot/hash comparison,
 - export/outbox packaging,
 - structural validation and smoke tests for system releases.
@@ -44,6 +45,7 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `check_system_version.py`
 - `compose_report_context.py`
 - `configure_workspace.py`
+- `convert_hwp_to_hwpx.py`
 - `finalize_visual_pass.py`
 - `init_project_workspace.py`
 - `install_runtime_dependencies.py`
@@ -72,6 +74,8 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `workspace_config.py`
 
 `intake_reference_batch.py` may use Docling to create derived normalized files under `references/normalized/`. Those files are not originals. `build_project_context_db.py` may use DuckDB to build `project_state/context_index.duckdb`, a local cache that can be rebuilt from project files.
+
+`convert_hwp_to_hwpx.py` is a thin caller, not a second conversion engine. Set `OWNED_HWP_HWPX_CLI` to the canonical owned engine's `convert_owned_hwp_to_hwpx.py`, or pass `--engine-cli`. The report-orchestra repository does not copy HWP parsing or HWPX writing rules.
 
 Document preset and style profile routing should use compact indexes before opening module folders: `_ai_system/document_presets/INDEX.json`, `_ai_system/document_presets/CODEMAP.md`, `_ai_system/style_profiles/INDEX.json`, and `_ai_system/style_profiles/CODEMAP.md`. These indexes reduce read cost, but they do not replace the selected module's source files when a PRD, stage overlay, or style pass needs them. `query_document_preset.py` exposes `default_artifact_workflow_mode` and `workflow_assets` so AI can read the selected preset's `stage_overlays.md` before compressing or replacing stages; it does not automate writing quality or document approval.
 

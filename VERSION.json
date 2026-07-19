@@ -1,6 +1,6 @@
 {
-  "version": "1.0.6",
-  "release_date": "2026-07-09",
+  "version": "1.0.7",
+  "release_date": "2026-07-19",
   "channel": "public",
-  "summary": "Public runtime dependency, notice, and validation patch for native DOCX export."
+  "summary": "Added a thin local bridge to the shared project-owned HWP-to-HWPX engine without copying conversion rules."
 }

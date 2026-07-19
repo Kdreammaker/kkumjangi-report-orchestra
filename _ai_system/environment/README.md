@@ -45,6 +45,18 @@ python _ai_system/tools/validate_local_runtime.py
 
 Do not install undocumented packages as a hidden dependency.
 
+## Optional Owned HWP/HWPX Engine
+
+HWP-to-HWPX conversion uses the separately distributed project-owned Python/rule engine. Report Orchestra calls the canonical engine CLI and does not copy its parsing or writer rules.
+
+Set `OWNED_HWP_HWPX_CLI` to `convert_owned_hwp_to_hwpx.py`, then verify it with:
+
+```text
+python _ai_system/tools/convert_hwp_to_hwpx.py --probe
+```
+
+The engine is optional for ordinary report authoring and DOCX export. A requested HWP-to-HWPX conversion must stop with `owned_hwp_hwpx_engine_not_configured` when this companion runtime is unavailable.
+
 ## Local Processing Boundary
 
 Docling, DuckDB, python-docx, Apache ECharts, and Pretendard are used as local tools/assets. Reference originals stay in the project folder, Docling writes derived normalized files under `references/normalized/`, DuckDB writes a local index under `project_state/context_index.duckdb`, python-docx writes local DOCX packages during export, ECharts renders charts without a CDN call, and Pretendard is served from the local runtime folder.

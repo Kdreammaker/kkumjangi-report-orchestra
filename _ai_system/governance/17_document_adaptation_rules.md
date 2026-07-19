@@ -30,7 +30,7 @@ Tier 2 inputs are supported with explicit limitations:
 - Excel (`.xlsx`, `.xls`, `.csv`): table/data-to-document adaptation is supported, but formulas, sheet intent, and data meaning need review.
 - HWPX (`.hwpx`): treat as structured document intake with explicit extraction/render limitations. Do not claim visual parity unless opened/rendered and reviewed.
 
-Unsupported or risky file types require a short plan before editing. HWP (`.hwp`) requires a documented converter or manual preservation plan before editing; do not silently claim HWP-to-HWPX fidelity. Do not silently claim fidelity for formats that have not been inspected.
+Unsupported or risky file types require a short plan before editing. HWP (`.hwp`) requires the configured owned converter or a manual preservation plan before editing; do not silently claim HWP-to-HWPX fidelity. Do not silently claim fidelity for formats that have not been inspected.
 
 ## Adaptation Modes
 
@@ -77,7 +77,7 @@ After intake:
 - For a new artifact type, choose a document preset from `_ai_system/document_presets/INDEX.json` and record source lineage before drafting.
 - For report-style output, route into report factory only after the adaptation plan says the target is a report factory artifact.
 - For DOCX delivery from report factory sources, use `_ai_system/tools/export_report_docx.py`; do not assume arbitrary source files can directly use that exporter.
-- For HWPX/HWP delivery, first decide whether the target is HWPX-compatible HTML for Hancom import, native `.hwpx`, or HWP-to-HWPX conversion. Native HWPX and HWP-to-HWPX paths require a separate converter/open-check plan before delivery claims.
+- For HWPX/HWP delivery, first decide whether the target is HWPX-compatible HTML for Hancom import, native report-HTML-to-HWPX, or HWP-to-HWPX conversion. HWP-to-HWPX uses the configured owned engine; native report-HTML-to-HWPX remains a separate exporter task. Both require recorded open/render evidence before delivery claims.
 - For cloud handoff, build a local outbox first and ask for explicit approval before uploading or sharing.
 
 ## Protected Spans
