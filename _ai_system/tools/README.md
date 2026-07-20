@@ -11,8 +11,8 @@ The system objective is better AI-written reports. Rules, skills, PRDs, TOCs, ch
 - local reference normalization and rebuildable context indexing,
 - exact file assembly without rewriting chapter prose,
 - native DOCX export from stable report factory sources,
-- HWP-to-HWPX conversion through the separately distributed owned engine CLI,
-- controlled HWPX authoring HTML conversion through the separately distributed owned engine CLI,
+- HWP-to-HWPX conversion through the embedded owned engine,
+- controlled HWPX authoring HTML conversion through the embedded owned engine,
 - snapshot/hash comparison,
 - export/outbox packaging,
 - structural validation and smoke tests for system releases.
@@ -39,6 +39,9 @@ Default operational tools are the tools an AI may normally use during setup, rep
 
 - `assemble_report.py`
 - `export_report_docx.py`
+- `export_report_hwpx.py`
+- `report_export_ir.py`
+- `smoke_report_hwpx_export.py`
 - `bootstrap_workspace.py`
 - `build_delivery_outbox.py`
 - `build_project_context_db.py`
@@ -46,6 +49,8 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `check_system_version.py`
 - `compose_report_context.py`
 - `configure_workspace.py`
+- `convert_hwp_to_hwpx.py`
+- `convert_html_hwpx.py`
 - `finalize_visual_pass.py`
 - `init_project_workspace.py`
 - `install_runtime_dependencies.py`
@@ -75,7 +80,13 @@ Default operational tools are the tools an AI may normally use during setup, rep
 
 `intake_reference_batch.py` may use Docling to create derived normalized files under `references/normalized/`. Those files are not originals. `build_project_context_db.py` may use DuckDB to build `project_state/context_index.duckdb`, a local cache that can be rebuilt from project files.
 
-The private owned HWP/HWPX engine and native HWPX tools are not distributed in the public seed.
+`convert_hwp_to_hwpx.py` calls the embedded owned engine under `_ai_system/engines/owned_hwp_hwpx/`. It needs no external CLI environment variable. The imported engine snapshot is maintained independently in Report Orchestra after import; the source repository is not a runtime dependency.
+
+`convert_html_hwpx.py` is the matching embedded entrypoint for `hwpx-to-html` or `html-to-hwpx`. Only the controlled
+`hwpx-authoring-html.v1` contract is supported; ordinary report HTML and
+DOCX-compatible HTML are not silently accepted.
+
+`report_export_ir.py` normalizes Report Factory cover and chapter sources into `report_export_ir.v1`. `export_report_hwpx.py` renders that bounded model into the owned Document IR/HWPX path and checks native package structure plus text, section, resource, table, image, and list round-trip parity. It does not claim Hancom visual identity without a separate native open/render review.
 
 Document preset and style profile routing should use compact indexes before opening module folders: `_ai_system/document_presets/INDEX.json`, `_ai_system/document_presets/CODEMAP.md`, `_ai_system/style_profiles/INDEX.json`, and `_ai_system/style_profiles/CODEMAP.md`. These indexes reduce read cost, but they do not replace the selected module's source files when a PRD, stage overlay, or style pass needs them. `query_document_preset.py` exposes `default_artifact_workflow_mode` and `workflow_assets` so AI can read the selected preset's `stage_overlays.md` before compressing or replacing stages; it does not automate writing quality or document approval.
 

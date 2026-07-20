@@ -51,11 +51,28 @@ For DOCX/PDF export:
 7. Render or visually inspect representative pages.
 8. Record the result under `reports/export_checks/`.
 
-For HWPX/Hancom-oriented output in the public channel:
+For HWPX/Hancom-oriented output:
 
-1. Treat HWPX-compatible HTML as a Hancom import/open target only.
-2. Use inline-first semantic HTML, static images, simple tables, Hancom-friendly font fallbacks, and recorded list-marker overrides.
-3. Record open/import evidence when available. The public package does not provide or claim native HWP-to-HWPX, controlled HTML/HWPX conversion, or Report Factory native HWPX export.
+1. Record whether the target is native `.hwpx`, HWP-to-HWPX conversion, or
+   HWPX-compatible HTML for Hancom import.
+2. If the target is HWPX-compatible HTML, author the source inline-first with
+   Hancom-friendly fonts, simple semantic structure, static images, semantic
+   tables, white document background, and list-marker overrides recorded in
+   `reports/report_design.md`.
+3. For HWP-to-HWPX conversion, verify the owned engine with
+   `python _ai_system/tools/convert_hwp_to_hwpx.py --probe`, preserve the source,
+   and create the new HWPX through the embedded entrypoint.
+4. For controlled authoring HTML, verify
+   `python _ai_system/tools/convert_html_hwpx.py --probe`, require the
+   `hwpx-authoring-html.v1` contract, preserve the source, and create the new
+   HWPX through the embedded entrypoint. Do not pass ordinary report HTML or
+   DOCX-compatible HTML directly.
+5. For Report Factory sources, use `python _ai_system/tools/export_report_hwpx.py
+   --project <project_name>`. This normalizes cover/chapter sources through
+   `report_export_ir.v1` before the owned Document IR writer; do not relabel the
+   assembled report HTML as controlled authoring HTML.
+6. Open-check representative pages in Hancom Viewer/Hancom Office when
+   available and record the result under `reports/export_checks/`.
 
 ## DOCX/HWPX Readiness
 
@@ -112,6 +129,9 @@ Currently supported export claims are limited to:
 - export evidence records under `reports/export_checks/`,
 - rendered or visually inspected sample pages when available.
 - HWPX-compatible HTML authoring guidance for Hancom-oriented import/open tests, when the target format, font fallback, list-marker fallback, and verification method are recorded.
+- HWP-to-HWPX file creation through the embedded engine entrypoint `_ai_system/tools/convert_hwp_to_hwpx.py`.
+- native HWPX creation from the controlled `hwpx-authoring-html.v1` contract through the embedded entrypoint `_ai_system/tools/convert_html_hwpx.py`.
+- native HWPX creation from Report Factory cover/chapter sources through `_ai_system/tools/export_report_hwpx.py` and `report_export_ir.v1`, with package validation and semantic round-trip evidence.
 - HWPX-to-controlled-HTML semantic round-trip for adaptation workflows; browser preview visual parity is not implied.
 
 These checks can support `structure_checked`, `render_verified`, `delivery_candidate`, `hwpx_compatible_html`, or `hwpx_open_checked` status only under the evidence rules above. The native DOCX exporter improves Word layout control, but it still requires render/visual review before delivery claims. HWPX-compatible HTML improves Hancom import intent, but it is not a native HWPX export claim.
@@ -124,7 +144,8 @@ Treat the following as unsupported unless a task adds a documented proof-of-conc
 - automatic Word caption numbering with `SEQ Table` or `SEQ Figure` fields,
 - Word landscape sections or mixed-orientation section breaks,
 - native editable Word chart creation, round-trip editing, or chart data binding.
-- native HWP/HWPX conversion or Report Factory native HWPX export in the public channel,
+- direct native `.hwpx` export from arbitrary assembled report HTML that bypasses `report_export_ir.v1`,
+- HWP to HWPX conversion when the embedded owned engine is missing or fails its probe,
 - arbitrary HTML to native HWPX conversion,
 - HWPX to HTML browser-preview visual parity,
 - automated HWPX screenshot or visual diff gates without a renderer automation path.

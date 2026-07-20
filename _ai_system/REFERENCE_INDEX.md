@@ -55,6 +55,8 @@ This file is the detailed map for governance documents, report skills, templates
 | Document adaptation manifest | `_ai_system/templates/document_adaptation_manifest_template.json` | Machine-readable manifest shape for source preservation, requested mode, outputs, and verification status. |
 | Report HTML templates | `_ai_system/templates/report_html/` | Reusable cover/body/page shell and report styling. |
 | Cover component guide | `_ai_system/templates/report_html/cover/README.md` | Cover presets and cover-data validation. |
+| Embedded owned HWP/HWPX engine | `_ai_system/engines/owned_hwp_hwpx/` | Distributed system-core HWP-to-HWPX, controlled authoring HTML/HWPX, Document IR, writer, validation, and import provenance. |
+| Report Export IR and native HWPX exporter | `_ai_system/tools/report_export_ir.py`, `_ai_system/tools/export_report_hwpx.py` | Normalize Report Factory cover/chapter sources before native HWPX creation and semantic round-trip validation. |
 
 ## Document Preset Modules
 

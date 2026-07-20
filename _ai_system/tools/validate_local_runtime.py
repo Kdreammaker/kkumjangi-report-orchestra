@@ -77,12 +77,6 @@ def runtime_asset_status() -> dict[str, object]:
 
 
 def embedded_engine_status() -> dict[str, object]:
-    channel = "main"
-    try:
-        version_payload = json.loads(Path("VERSION.json").read_text(encoding="utf-8"))
-        channel = str(version_payload.get("channel") or "main")
-    except (OSError, json.JSONDecodeError):
-        pass
     package_root = ENGINE_ROOT / "owned_hwp_hwpx"
     metadata_path = ENGINE_ROOT / "ENGINE.json"
     provenance_path = ENGINE_ROOT / "IMPORT_PROVENANCE.json"
@@ -103,10 +97,9 @@ def embedded_engine_status() -> dict[str, object]:
         checks["importable"] = True
     except Exception:  # noqa: BLE001
         checks["importable"] = False
-    distributed = channel != "public"
     return {
-        "ok": (all(checks.values()) and engine_id == "owned_hwp_hwpx_python" and version == "0.2.0") if distributed else True,
-        "distribution_status": "embedded" if distributed else "not_distributed_in_public_channel",
+        "ok": all(checks.values()) and engine_id == "owned_hwp_hwpx_python" and version == "0.2.0",
+        "distribution_status": "embedded",
         "engine_id": engine_id,
         "engine_version": version,
         "runtime_dependency_mode": "embedded_system_core",
@@ -124,11 +117,7 @@ def main() -> int:
     }
     python_ok = sys.version_info >= (3, 11)
     engine_status = embedded_engine_status()
-    engine_privacy_note = (
-        "The embedded owned engine writes local HWPX packages."
-        if engine_status.get("distribution_status") == "embedded"
-        else "The public channel does not distribute the private owned HWP/HWPX engine."
-    )
+    engine_privacy_note = "The embedded owned engine writes local HWPX packages."
     payload: dict[str, object] = {
         "python_version": sys.version.split()[0],
         "python_minimum": "3.11",

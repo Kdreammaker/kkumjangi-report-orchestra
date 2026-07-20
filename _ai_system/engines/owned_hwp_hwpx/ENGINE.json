@@ -1,0 +1,16 @@
+{
+  "engine_id": "owned_hwp_hwpx_python",
+  "engine_version": "0.2.0",
+  "report_orchestra_integration_revision": 1,
+  "implementation": "python_standard_library",
+  "runtime_dependency_mode": "embedded_system_core",
+  "supported_operations": [
+    "hwp_to_hwpx",
+    "hwpx_to_authoring_html",
+    "authoring_html_to_hwpx"
+  ],
+  "authoring_html_contract": "hwpx-authoring-html.v1",
+  "document_ir_contract": "owned_document_ir.v2",
+  "external_engine_configuration_required": false,
+  "arbitrary_html_supported": false
+}
