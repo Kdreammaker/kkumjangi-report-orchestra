@@ -21,7 +21,23 @@ python _ai_system/tools/install_runtime_dependencies.py
 
 이 단계는 `pypdf`, `docling`, `duckdb`, `python-docx`, Apache ECharts, Pretendard를 준비합니다.
 
-Public seed에는 private owned HWP/HWPX 엔진과 native HWPX exporter가 포함되지 않습니다. 일반 보고서 작성과 native DOCX export에는 영향을 주지 않습니다.
+HWP/HWPX 대응 엔진은 모든 배포 채널의 시스템 코어에 내장됩니다. 별도 CLI 환경변수 없이 다음 명령으로 확인합니다.
+
+```powershell
+python _ai_system/tools/convert_hwp_to_hwpx.py --probe
+```
+
+HWPX와 제어된 HWPX authoring HTML의 양방향 변환도 같은 내장 엔진을 사용합니다. 이 경로는 임의 HTML이나 DOCX용 HTML을 받지 않습니다.
+
+```powershell
+python _ai_system/tools/convert_html_hwpx.py --probe
+```
+
+Report Factory native HWPX export는 보고서 HTML을 직접 엔진에 넣지 않고 Report Export IR로 정규화합니다.
+
+```powershell
+python _ai_system/tools/export_report_hwpx.py --project <project_name>
+```
 
 ## 3. 사용자 작업공간 만들기
 

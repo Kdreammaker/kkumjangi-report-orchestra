@@ -6,16 +6,16 @@ AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목�
 
 ## 📌 버전
 
-- 공개 버전: `1.1.0`
+- 공개 버전: `1.1.1`
 - 배포일: `2026-07-20`
 - 채널: `public`
 - 전체 변경 이력: `CHANGELOG.md`
 
 최근 개선:
 
-1. `1.1.0` - HWP/HWPX 대응 엔진 고도화
-2. `1.0.8` - HWPX 문서 변환 연동 시스템 업데이트
-3. `1.0.7` - HWP 문서 변환 연동 시스템 업데이트
+1. `1.1.1` - HWP/HWPX 대응 엔진 배포 시스템 고도화
+2. `1.1.0` - HWP/HWPX 대응 엔진 고도화
+3. `1.0.8` - HWPX 문서 변환 연동 시스템 업데이트
 
 ## 🚀 설치
 
@@ -55,7 +55,7 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 - 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
 - 품질 루프: 첫 초안을 최종본으로 보지 않고, 검수/교차검증 결과를 바탕으로 승인된 고도화를 진행합니다.
 - 프리셋/문체 경계: 문서 유형 프리셋은 구조·근거·시각자료 기준을, style profile은 독자 적합 문체와 보호 span 검토를 안내합니다. 자동 번역, 자동 rewrite, 자동 humanizer, 자동 naturalness scoring은 켜져 있지 않습니다.
-- 문서 export 시스템: 로컬 `python-docx` 기반의 native DOCX export를 지원합니다.
+- 문서 export 시스템: native DOCX export와 embedded HWP/HWPX 대응 엔진을 제공합니다. HWP 5.x 변환, 제어된 authoring HTML/HWPX 변환, Report Factory native HWPX export를 지원하며 임의 HTML 변환과 Hancom-native 시각 동일성은 별도 검증 대상입니다.
 
 자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
 

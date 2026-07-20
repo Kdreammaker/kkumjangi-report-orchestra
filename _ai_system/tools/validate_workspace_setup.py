@@ -168,11 +168,6 @@ def check_local_runtime() -> dict[str, object]:
         if isinstance(asset, dict)
     )
 
-    channel = "main"
-    try:
-        channel = str(json.loads(Path("VERSION.json").read_text(encoding="utf-8")).get("channel") or "main")
-    except (OSError, json.JSONDecodeError):
-        pass
     engine_root = Path("_ai_system") / "engines" / "owned_hwp_hwpx"
     engine_checks = {
         "package_present": (engine_root / "owned_hwp_hwpx" / "__init__.py").is_file(),
@@ -181,22 +176,19 @@ def check_local_runtime() -> dict[str, object]:
     }
     engine_id = ""
     engine_version = ""
-    if channel != "public":
-        try:
-            if str(engine_root.resolve()) not in sys.path:
-                sys.path.insert(0, str(engine_root.resolve()))
-            from owned_hwp_hwpx import ENGINE_ID, ENGINE_VERSION  # type: ignore[import-not-found]
+    try:
+        if str(engine_root.resolve()) not in sys.path:
+            sys.path.insert(0, str(engine_root.resolve()))
+        from owned_hwp_hwpx import ENGINE_ID, ENGINE_VERSION  # type: ignore[import-not-found]
 
-            engine_id = str(ENGINE_ID)
-            engine_version = str(ENGINE_VERSION)
-            engine_checks["importable"] = True
-        except Exception:  # noqa: BLE001
-            engine_checks["importable"] = False
+        engine_id = str(ENGINE_ID)
+        engine_version = str(ENGINE_VERSION)
+        engine_checks["importable"] = True
+    except Exception:  # noqa: BLE001
+        engine_checks["importable"] = False
     embedded_engine = {
-        "ok": True if channel == "public" else (
-            all(engine_checks.values()) and engine_id == "owned_hwp_hwpx_python" and engine_version == "0.2.0"
-        ),
-        "distribution_status": "not_distributed_in_public_channel" if channel == "public" else "embedded",
+        "ok": all(engine_checks.values()) and engine_id == "owned_hwp_hwpx_python" and engine_version == "0.2.0",
+        "distribution_status": "embedded",
         "engine_id": engine_id,
         "engine_version": engine_version,
         "checks": engine_checks,

@@ -18,7 +18,7 @@ A clean system-core package should include:
 - `_ai_system/style_profiles/`,
 - `_ai_system/templates/`,
 - `_ai_system/tools/`,
-- `_ai_system/engines/owned_hwp_hwpx/` in private main-channel packages,
+- `_ai_system/engines/owned_hwp_hwpx/` in every distributed channel package,
 - `_ai_system/validation_fixtures/` when needed,
 - generic system documentation only when it contains no project-specific, client-specific, or historical worklog material.
 
@@ -32,7 +32,6 @@ A clean system-core package should not include:
 - AI-service brain artifacts outside the workspace,
 - scratch inspection scripts,
 - private maintainer files in public release packages,
-- the private embedded owned HWP/HWPX engine in public seed packages unless a separate public-distribution decision has been approved,
 - decoded report dumps,
 - temporary logs,
 - `.bak`, `.tmp`, `.log`, `__pycache__`, or local runtime outputs.
@@ -84,7 +83,7 @@ Before saying a package is ready for a third party or GitHub:
 
 If a public release seed is built, verify that private maintainer folders are absent from the generated package and that public README/INSTALL do not link to private maintainer memos.
 
-Private package validation must require the embedded engine metadata, import provenance, and package entrypoint. Public package validation must require that the private engine directory is absent. The source `ppt-test` checkout is never a runtime or package dependency.
+All channel package validation must require the embedded engine metadata, import provenance, package entrypoint, conversion entrypoints, and Report Factory native HWPX exporter. The source `ppt-test` checkout is never a runtime or package dependency.
 
 ## Private/Public Install Source Guard
 

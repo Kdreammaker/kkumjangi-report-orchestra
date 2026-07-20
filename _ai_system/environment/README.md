@@ -45,9 +45,25 @@ python _ai_system/tools/validate_local_runtime.py
 
 Do not install undocumented packages as a hidden dependency.
 
-## Public HWP/HWPX Boundary
+## Embedded Owned HWP/HWPX Engine
 
-The public channel does not distribute the private owned HWP/HWPX engine, its native Report Factory HWPX exporter, or their runtime commands. HWPX-compatible HTML may still be designed as an import target, but the public package must not claim native HWP/HWPX conversion or export support.
+Every distributed channel embeds the validated project-owned Python/rule engine under `_ai_system/engines/owned_hwp_hwpx/`. It is a one-time imported, independently maintained system-core snapshot and does not require a runtime dependency on the source repository.
+
+Verify the embedded HWP-to-HWPX entrypoint with:
+
+```text
+python _ai_system/tools/convert_hwp_to_hwpx.py --probe
+```
+
+Controlled HWPX-compatible authoring HTML uses the same embedded engine:
+
+```text
+python _ai_system/tools/convert_html_hwpx.py --probe
+```
+
+This path accepts only `hwpx-authoring-html.v1`; it is not an arbitrary HTML importer and is separate from DOCX-compatible report HTML. Report Factory native HWPX uses `export_report_hwpx.py`, which normalizes report sources through `report_export_ir.v1` before entering that contract.
+
+The engine remains unnecessary for ordinary HTML authoring and DOCX export, but it is part of every distributed system-core installation and is checked by local runtime/workspace validation.
 
 ## Local Processing Boundary
 

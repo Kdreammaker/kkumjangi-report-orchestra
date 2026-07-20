@@ -1,0 +1,27 @@
+{
+  "schema_version": "report_orchestra_engine_import_provenance.v1",
+  "status": "imported_exact_snapshot",
+  "source_role": "one_time_validated_import_source",
+  "source_repository_name": "ppt-test",
+  "source_commit": "a2eaf55b256d8d8f661a257de7a229922ccc2c7f",
+  "source_engine_version": "0.2.0",
+  "source_relative_path": "tools/owned-hwp-hwpx/owned_hwp_hwpx",
+  "imported_python_file_count": 34,
+  "imported_tree_sha256": "82f590b9950de98ecd40eb841d3c6ad59f0a615be0974eab7b048f8683ba40fe",
+  "ownership_after_import": "report_orchestra_independent",
+  "automatic_source_repository_sync": false,
+  "excluded_source_areas": [
+    "local_bridge_javascript",
+    "workbench_runtime",
+    "source_repository_backlog_and_worklogs",
+    "private_full_corpus_fixtures",
+    "generated_outputs_and_native_captures"
+  ],
+  "verification_requirements": [
+    "file_hash_parity",
+    "functional_parity",
+    "deterministic_output_parity",
+    "performance_parity",
+    "system_core_package_boundary"
+  ]
+}
