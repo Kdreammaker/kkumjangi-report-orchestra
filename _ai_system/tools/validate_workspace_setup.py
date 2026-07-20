@@ -168,6 +168,40 @@ def check_local_runtime() -> dict[str, object]:
         if isinstance(asset, dict)
     )
 
+    channel = "main"
+    try:
+        channel = str(json.loads(Path("VERSION.json").read_text(encoding="utf-8")).get("channel") or "main")
+    except (OSError, json.JSONDecodeError):
+        pass
+    engine_root = Path("_ai_system") / "engines" / "owned_hwp_hwpx"
+    engine_checks = {
+        "package_present": (engine_root / "owned_hwp_hwpx" / "__init__.py").is_file(),
+        "metadata_present": (engine_root / "ENGINE.json").is_file(),
+        "provenance_present": (engine_root / "IMPORT_PROVENANCE.json").is_file(),
+    }
+    engine_id = ""
+    engine_version = ""
+    if channel != "public":
+        try:
+            if str(engine_root.resolve()) not in sys.path:
+                sys.path.insert(0, str(engine_root.resolve()))
+            from owned_hwp_hwpx import ENGINE_ID, ENGINE_VERSION  # type: ignore[import-not-found]
+
+            engine_id = str(ENGINE_ID)
+            engine_version = str(ENGINE_VERSION)
+            engine_checks["importable"] = True
+        except Exception:  # noqa: BLE001
+            engine_checks["importable"] = False
+    embedded_engine = {
+        "ok": True if channel == "public" else (
+            all(engine_checks.values()) and engine_id == "owned_hwp_hwpx_python" and engine_version == "0.2.0"
+        ),
+        "distribution_status": "not_distributed_in_public_channel" if channel == "public" else "embedded",
+        "engine_id": engine_id,
+        "engine_version": engine_version,
+        "checks": engine_checks,
+    }
+
     return {
         "python_version": sys.version.split()[0],
         "python_ok": sys.version_info >= (3, 11),
@@ -175,6 +209,7 @@ def check_local_runtime() -> dict[str, object]:
         "duckdb_smoke": duckdb_smoke,
         "docling_smoke": docling_smoke,
         "runtime_assets": runtime_assets,
+        "embedded_hwp_hwpx_engine": embedded_engine,
     }
 
 
@@ -602,6 +637,7 @@ def main() -> int:
     results["python_docx_available"] = bool(results["local_runtime"]["packages"]["python_docx"]["available"])
     results["echarts_available"] = bool(results["local_runtime"].get("runtime_assets", {}).get("assets", {}).get("echarts", {}).get("available"))
     results["pretendard_available"] = bool(results["local_runtime"].get("runtime_assets", {}).get("assets", {}).get("pretendard_css", {}).get("available"))
+    results["embedded_hwp_hwpx_engine_available"] = bool(results["local_runtime"].get("embedded_hwp_hwpx_engine", {}).get("ok"))
     config = load_config(root)
     results["workspace_config"] = {
         "active_domain": resolved_domain_profile(config).get("preset_domain"),
@@ -651,6 +687,7 @@ def main() -> int:
     has_failure = has_failure or not results["python_docx_available"]
     has_failure = has_failure or not results["echarts_available"]
     has_failure = has_failure or not results["pretendard_available"]
+    has_failure = has_failure or not results["embedded_hwp_hwpx_engine_available"]
     has_failure = has_failure or not bool(results["local_runtime"]["python_ok"])
     has_failure = has_failure or not bool(results["local_runtime"]["duckdb_smoke"]["ok"])
     has_failure = has_failure or not bool(results["local_runtime"]["docling_smoke"]["ok"])

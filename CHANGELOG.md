@@ -1,7 +1,7 @@
 # Changelog
 
-## 1.0.8 - 2026-07-19
+## 1.1.0 - 2026-07-20
 
-- Added `_ai_system/tools/convert_html_hwpx.py` as a thin bidirectional caller for the shared owned engine's `hwpx-authoring-html.v1` contract; conversion rules remain outside Report Orchestra.
-- Added a release smoke for engine discovery, bounded invocation, local outputs, public-safe failures, both conversion directions, and false-by-default visual claims.
-- Updated export, adaptation, install, and runtime guidance: controlled authoring HTML can create native HWPX when the companion engine is configured, while ordinary/arbitrary HTML remains unsupported and Chromium preview parity remains unverified.
+- Clarified that the private owned HWP/HWPX engine and native Report Factory HWPX exporter are not distributed in the public seed.
+- Removed public commands that would otherwise imply the private embedded engine is available; native DOCX and ordinary report workflows are unchanged.
+- Kept public package validation channel-aware so the intentional absence of the private engine is treated as a valid public boundary, not a broken installation.

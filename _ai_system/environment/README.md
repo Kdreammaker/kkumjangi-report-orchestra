@@ -45,28 +45,9 @@ python _ai_system/tools/validate_local_runtime.py
 
 Do not install undocumented packages as a hidden dependency.
 
-## Optional Owned HWP/HWPX Engine
+## Public HWP/HWPX Boundary
 
-HWP-to-HWPX conversion uses the separately distributed project-owned Python/rule engine. Report Orchestra calls the canonical engine CLI and does not copy its parsing or writer rules.
-
-Set `OWNED_HWP_HWPX_CLI` to `convert_owned_hwp_to_hwpx.py`, then verify it with:
-
-```text
-python _ai_system/tools/convert_hwp_to_hwpx.py --probe
-```
-
-Controlled HWPX-compatible authoring HTML uses the same separately distributed
-engine through `convert_owned_html_hwpx.py`. Set `OWNED_HTML_HWPX_CLI` and probe
-the bridge with:
-
-```text
-python _ai_system/tools/convert_html_hwpx.py --probe
-```
-
-This path accepts only `hwpx-authoring-html.v1`; it is not an arbitrary HTML
-importer and is separate from DOCX-compatible report HTML.
-
-The engine is optional for ordinary report authoring and DOCX export. A requested HWP-to-HWPX or controlled HTML/HWPX conversion must stop with the matching `*_engine_not_configured` code when this companion runtime is unavailable.
+The public channel does not distribute the private owned HWP/HWPX engine, its native Report Factory HWPX exporter, or their runtime commands. HWPX-compatible HTML may still be designed as an import target, but the public package must not claim native HWP/HWPX conversion or export support.
 
 ## Local Processing Boundary
 

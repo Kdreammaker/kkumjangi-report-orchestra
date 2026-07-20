@@ -42,11 +42,7 @@ python _ai_system/tools/install_runtime_dependencies.py
 
 주의: Docling은 OCR/문서구조 인식 관련 의존성을 함께 설치하므로 첫 설치 때 시간이 걸리고 디스크 용량을 더 사용할 수 있습니다. ECharts와 Pretendard는 최초 설치 때 인터넷 다운로드가 필요할 수 있습니다. 설치 후에는 상시 실행되는 프로그램이 아니라 참고자료 인테이크, 색인, DOCX export, 보고서 렌더링 때 로컬에서 쓰는 도구입니다.
 
-HWP-to-HWPX 변환이 필요한 경우 별도 배포되는 project-owned 엔진의 `convert_owned_hwp_to_hwpx.py` 경로를 `OWNED_HWP_HWPX_CLI`에 설정합니다. 일반 보고서 작성과 DOCX export에는 필수가 아닙니다.
-
-```powershell
-python _ai_system/tools/convert_hwp_to_hwpx.py --probe
-```
+Private owned HWP/HWPX 엔진과 native HWPX exporter는 public seed에 포함되지 않습니다. public 설치 검증은 이 비배포 상태를 정상 경계로 처리하며, DOCX export와 일반 보고서 작성에는 영향을 주지 않습니다.
 
 ## 3. 사용자 작업공간 만들기
 

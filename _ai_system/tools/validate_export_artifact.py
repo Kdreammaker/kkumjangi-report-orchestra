@@ -51,22 +51,58 @@ def check_pdf(path: Path) -> dict[str, object]:
     return result
 
 
+def check_hwpx(path: Path) -> dict[str, object]:
+    result: dict[str, object] = {
+        "path": path.as_posix(),
+        "type": "hwpx",
+        "valid_package": False,
+        "mimetype_exact": False,
+        "native_contract_status": "not_run",
+        "parts": 0,
+    }
+    try:
+        with zipfile.ZipFile(path) as zf:
+            names = set(zf.namelist())
+            result["valid_package"] = True
+            result["parts"] = len(names)
+            result["mimetype_exact"] = zf.read("mimetype") == b"application/hwp+zip"
+        engine_root = Path("_ai_system") / "engines" / "owned_hwp_hwpx"
+        if engine_root.is_dir():
+            if str(engine_root.resolve()) not in sys.path:
+                sys.path.insert(0, str(engine_root.resolve()))
+            from owned_hwp_hwpx import validate_hwpx_native_package_contract  # type: ignore[import-not-found]
+
+            contract = validate_hwpx_native_package_contract(path)
+            result["native_contract_status"] = str(contract.get("status", "fail"))
+            result["native_contract_checks"] = contract.get("checks", {})
+    except PermissionError:
+        result["error"] = "permission_denied_or_file_locked"
+    except (KeyError, zipfile.BadZipFile):
+        result["error"] = "not_a_valid_hwpx_package"
+    return result
+
+
 def validate_export(project: Path, required: bool, strict: bool) -> dict[str, object]:
     errors: list[str] = []
     warnings: list[str] = []
     reports = project / "reports"
     export_checks = reports / "export_checks"
-    files = sorted(reports.glob("*.docx")) + sorted(reports.glob("*.pdf"))
+    files = sorted(reports.glob("*.docx")) + sorted(reports.glob("*.pdf")) + sorted(reports.glob("*.hwpx"))
     details: list[dict[str, object]] = []
 
     if required and not files:
-        errors.append("export artifact required but no DOCX/PDF exists under reports/")
+        errors.append("export artifact required but no DOCX/PDF/HWPX exists under reports/")
     elif not files:
-        warnings.append("no DOCX/PDF export artifact found; HTML remains the working report format")
+        warnings.append("no DOCX/PDF/HWPX export artifact found; HTML remains the working report format")
 
     for path in files:
         rel = path.relative_to(project)
-        detail = check_docx(path) if path.suffix.lower() == ".docx" else check_pdf(path)
+        if path.suffix.lower() == ".docx":
+            detail = check_docx(path)
+        elif path.suffix.lower() == ".hwpx":
+            detail = check_hwpx(path)
+        else:
+            detail = check_pdf(path)
         detail["path"] = rel.as_posix()
         details.append(detail)
         if path.suffix.lower() == ".docx":
@@ -79,6 +115,11 @@ def validate_export(project: Path, required: bool, strict: bool) -> dict[str, ob
                 errors.append(f"DOCX lacks styles.xml: {rel.as_posix()}")
         if path.suffix.lower() == ".pdf" and not detail.get("valid_header"):
             errors.append(f"PDF lacks %PDF header: {rel.as_posix()}")
+        if path.suffix.lower() == ".hwpx":
+            if not detail.get("valid_package") or not detail.get("mimetype_exact"):
+                errors.append(f"HWPX is not structurally valid: {rel.as_posix()}")
+            if strict and detail.get("native_contract_status") != "pass":
+                errors.append(f"HWPX native package contract did not pass: {rel.as_posix()}")
 
     check_files = sorted(export_checks.glob("*")) if export_checks.exists() else []
     render_markers = [p for p in check_files if any(token in p.name.lower() for token in ["render", "screenshot", "page", "structure", "check"])]
@@ -105,9 +146,9 @@ def validate_export(project: Path, required: bool, strict: bool) -> dict[str, ob
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Validate DOCX/PDF export artifacts and verification evidence.")
+    parser = argparse.ArgumentParser(description="Validate DOCX/PDF/HWPX export artifacts and verification evidence.")
     parser.add_argument("--project", required=True, help="Project folder name under 00_사용자_작업공간")
-    parser.add_argument("--required", action="store_true", help="Fail when no DOCX/PDF export exists.")
+    parser.add_argument("--required", action="store_true", help="Fail when no DOCX/PDF/HWPX export exists.")
     parser.add_argument("--strict", action="store_true", help="Require export verification evidence.")
     args = parser.parse_args()
 

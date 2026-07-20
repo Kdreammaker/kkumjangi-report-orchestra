@@ -46,8 +46,6 @@ Default operational tools are the tools an AI may normally use during setup, rep
 - `check_system_version.py`
 - `compose_report_context.py`
 - `configure_workspace.py`
-- `convert_hwp_to_hwpx.py`
-- `convert_html_hwpx.py`
 - `finalize_visual_pass.py`
 - `init_project_workspace.py`
 - `install_runtime_dependencies.py`
@@ -77,13 +75,7 @@ Default operational tools are the tools an AI may normally use during setup, rep
 
 `intake_reference_batch.py` may use Docling to create derived normalized files under `references/normalized/`. Those files are not originals. `build_project_context_db.py` may use DuckDB to build `project_state/context_index.duckdb`, a local cache that can be rebuilt from project files.
 
-`convert_hwp_to_hwpx.py` is a thin caller, not a second conversion engine. Set `OWNED_HWP_HWPX_CLI` to the canonical owned engine's `convert_owned_hwp_to_hwpx.py`, or pass `--engine-cli`. The report-orchestra repository does not copy HWP parsing or HWPX writing rules.
-
-`convert_html_hwpx.py` is the matching thin caller for
-`convert_owned_html_hwpx.py`. Set `OWNED_HTML_HWPX_CLI`, then use
-`hwpx-to-html` or `html-to-hwpx`. Only the controlled
-`hwpx-authoring-html.v1` contract is supported; ordinary report HTML and
-DOCX-compatible HTML are not silently accepted.
+The private owned HWP/HWPX engine and native HWPX tools are not distributed in the public seed.
 
 Document preset and style profile routing should use compact indexes before opening module folders: `_ai_system/document_presets/INDEX.json`, `_ai_system/document_presets/CODEMAP.md`, `_ai_system/style_profiles/INDEX.json`, and `_ai_system/style_profiles/CODEMAP.md`. These indexes reduce read cost, but they do not replace the selected module's source files when a PRD, stage overlay, or style pass needs them. `query_document_preset.py` exposes `default_artifact_workflow_mode` and `workflow_assets` so AI can read the selected preset's `stage_overlays.md` before compressing or replacing stages; it does not automate writing quality or document approval.
 
