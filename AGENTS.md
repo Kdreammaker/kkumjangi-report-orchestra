@@ -112,7 +112,6 @@ Use these only when relevant; they are lookup aids, not a mandatory sequence.
 - Core worktree guard: `python _ai_system/tools/validate_core_worktree_clean.py`
 - Workspace validation: `python _ai_system/tools/validate_workspace_setup.py --include-user-flow`
 - Native DOCX export: `python _ai_system/tools/export_report_docx.py --project <project_name> --render-preview`
-- Controlled HWPX authoring HTML conversion: `python _ai_system/tools/convert_html_hwpx.py --probe`
 
 ## Active Projects
 

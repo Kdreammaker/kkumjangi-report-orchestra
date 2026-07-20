@@ -21,6 +21,7 @@ RUNTIME_ASSETS = {
     "pretendard_bold": RUNTIME / "fonts" / "pretendard" / "Pretendard-Bold.woff2",
     "pretendard_css": RUNTIME / "fonts" / "pretendard" / "pretendard.css",
 }
+ENGINE_ROOT = Path("_ai_system") / "engines" / "owned_hwp_hwpx"
 
 
 def package_status(import_name: str, distribution_name: str) -> dict[str, object]:
@@ -75,6 +76,44 @@ def runtime_asset_status() -> dict[str, object]:
     }
 
 
+def embedded_engine_status() -> dict[str, object]:
+    channel = "main"
+    try:
+        version_payload = json.loads(Path("VERSION.json").read_text(encoding="utf-8"))
+        channel = str(version_payload.get("channel") or "main")
+    except (OSError, json.JSONDecodeError):
+        pass
+    package_root = ENGINE_ROOT / "owned_hwp_hwpx"
+    metadata_path = ENGINE_ROOT / "ENGINE.json"
+    provenance_path = ENGINE_ROOT / "IMPORT_PROVENANCE.json"
+    checks = {
+        "package_present": (package_root / "__init__.py").is_file(),
+        "metadata_present": metadata_path.is_file(),
+        "provenance_present": provenance_path.is_file(),
+    }
+    version = ""
+    engine_id = ""
+    try:
+        if str(ENGINE_ROOT.resolve()) not in sys.path:
+            sys.path.insert(0, str(ENGINE_ROOT.resolve()))
+        from owned_hwp_hwpx import ENGINE_ID, ENGINE_VERSION  # type: ignore[import-not-found]
+
+        engine_id = str(ENGINE_ID)
+        version = str(ENGINE_VERSION)
+        checks["importable"] = True
+    except Exception:  # noqa: BLE001
+        checks["importable"] = False
+    distributed = channel != "public"
+    return {
+        "ok": (all(checks.values()) and engine_id == "owned_hwp_hwpx_python" and version == "0.2.0") if distributed else True,
+        "distribution_status": "embedded" if distributed else "not_distributed_in_public_channel",
+        "engine_id": engine_id,
+        "engine_version": version,
+        "runtime_dependency_mode": "embedded_system_core",
+        "checks": checks,
+    }
+
+
 def main() -> int:
     packages = {
         name: package_status(import_name, distribution_name)
@@ -84,6 +123,12 @@ def main() -> int:
         }.items()
     }
     python_ok = sys.version_info >= (3, 11)
+    engine_status = embedded_engine_status()
+    engine_privacy_note = (
+        "The embedded owned engine writes local HWPX packages."
+        if engine_status.get("distribution_status") == "embedded"
+        else "The public channel does not distribute the private owned HWP/HWPX engine."
+    )
     payload: dict[str, object] = {
         "python_version": sys.version.split()[0],
         "python_minimum": "3.11",
@@ -92,10 +137,11 @@ def main() -> int:
         "duckdb_smoke": duckdb_smoke() if packages["duckdb"]["available"] else {"ok": False, "error": "duckdb not installed"},
         "docling_smoke": docling_smoke() if packages["docling"]["available"] else {"ok": False, "error": "docling not installed"},
         "runtime_assets": runtime_asset_status(),
+        "embedded_hwp_hwpx_engine": engine_status,
         "privacy_boundary": {
             "default_mode": "local_only",
             "external_upload": "disabled_by_default",
-            "note": "Docling converts local reference files, DuckDB indexes local project metadata, python-docx writes local DOCX export packages, ECharts renders charts locally, and Pretendard is served from the local runtime folder. Do not enable external OCR/VLM/cloud upload without explicit user approval.",
+            "note": "Docling converts local reference files, DuckDB indexes local project metadata, python-docx writes local DOCX export packages, ECharts renders charts locally, and Pretendard is served from the local runtime folder. " + engine_privacy_note + " Do not enable external OCR/VLM/cloud upload without explicit user approval.",
         },
     }
     ok = (
@@ -104,6 +150,7 @@ def main() -> int:
         and bool(payload["duckdb_smoke"]["ok"])  # type: ignore[index]
         and bool(payload["docling_smoke"]["ok"])  # type: ignore[index]
         and bool(payload["runtime_assets"]["ok"])  # type: ignore[index]
+        and bool(payload["embedded_hwp_hwpx_engine"]["ok"])  # type: ignore[index]
     )
     payload["ok"] = ok
     print(json.dumps(payload, ensure_ascii=False, indent=2))

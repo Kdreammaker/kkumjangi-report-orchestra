@@ -1,6 +1,7 @@
 00_사용자_작업공간/
 .local_state/
 _ai_system/project_state/latest_ai_snapshot/
+_ai_system/project_state/latest_ai_snapshot_manifest.csv
 _ai_system/runtime/
 _ai_system/backups/
 _ai_system/workspace_config.local.json
