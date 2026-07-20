@@ -82,9 +82,7 @@ Default operational tools are the tools an AI may normally use during setup, rep
 
 `convert_hwp_to_hwpx.py` calls the embedded owned engine under `_ai_system/engines/owned_hwp_hwpx/`. It needs no external CLI environment variable. The imported engine snapshot is maintained independently in Report Orchestra after import; the source repository is not a runtime dependency.
 
-`convert_html_hwpx.py` is the matching embedded entrypoint for `hwpx-to-html` or `html-to-hwpx`. Only the controlled
-`hwpx-authoring-html.v1` contract is supported; ordinary report HTML and
-DOCX-compatible HTML are not silently accepted.
+`convert_html_hwpx.py` is the matching low-level embedded entrypoint for `hwpx-to-html` or `html-to-hwpx`. It accepts only the controlled `hwpx-authoring-html.v1` contract and intentionally rejects arbitrary external web HTML. This does not restrict normal system-created reports: `export_report_hwpx.py` automatically adapts Report Factory cover/chapter sources through `report_export_ir.v1` before calling the owned Document IR/HWPX path.
 
 `report_export_ir.py` normalizes Report Factory cover and chapter sources into `report_export_ir.v1`. `export_report_hwpx.py` renders that bounded model into the owned Document IR/HWPX path and checks native package structure plus text, section, resource, table, image, and list round-trip parity. It does not claim Hancom visual identity without a separate native open/render review.
 

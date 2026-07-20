@@ -61,7 +61,7 @@ Controlled HWPX-compatible authoring HTML uses the same embedded engine:
 python _ai_system/tools/convert_html_hwpx.py --probe
 ```
 
-This path accepts only `hwpx-authoring-html.v1`; it is not an arbitrary HTML importer and is separate from DOCX-compatible report HTML. Report Factory native HWPX uses `export_report_hwpx.py`, which normalizes report sources through `report_export_ir.v1` before entering that contract.
+The low-level `convert_html_hwpx.py` path accepts only `hwpx-authoring-html.v1`; it is not an arbitrary external web-HTML importer. Normal Report Factory users do not need to author that contract themselves: `export_report_hwpx.py` automatically normalizes system cover/chapter sources through `report_export_ir.v1` before entering the controlled contract.
 
 The engine remains unnecessary for ordinary HTML authoring and DOCX export, but it is part of every distributed system-core installation and is checked by local runtime/workspace validation.
 

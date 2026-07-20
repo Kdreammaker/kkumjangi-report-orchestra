@@ -49,6 +49,8 @@ python _ai_system/tools/convert_hwp_to_hwpx.py --probe
 python _ai_system/tools/convert_html_hwpx.py --probe
 ```
 
+`convert_html_hwpx.py`는 통제된 authoring HTML을 위한 저수준 명령입니다. 일반 사용자가 Report Factory에서 만든 문서는 `export_report_hwpx.py --project <project_name>`가 cover/chapter 소스를 Report Export IR로 자동 변환하므로 제어 스키마에 맞춰 다시 작성할 필요가 없습니다.
+
 ## 3. 사용자 작업공간 만들기
 
 ```powershell
