@@ -27,13 +27,13 @@ HWP/HWPX 대응 엔진은 모든 배포 채널의 시스템 코어에 내장됩�
 python _ai_system/tools/convert_hwp_to_hwpx.py --probe
 ```
 
-HWPX와 제어된 HWPX authoring HTML의 양방향 변환도 같은 내장 엔진을 사용합니다. 이 경로는 임의 HTML이나 DOCX용 HTML을 받지 않습니다.
+HWPX와 제어된 HWPX authoring HTML의 양방향 변환도 같은 내장 엔진을 사용합니다. 아래 저수준 명령은 임의의 외부 웹 HTML을 직접 받지 않습니다.
 
 ```powershell
 python _ai_system/tools/convert_html_hwpx.py --probe
 ```
 
-Report Factory native HWPX export는 보고서 HTML을 직접 엔진에 넣지 않고 Report Export IR로 정규화합니다.
+Report Factory native HWPX export는 시스템이 만든 cover/chapter 소스를 Report Export IR로 자동 정규화합니다. 사용자가 제어 스키마에 맞춰 보고서를 다시 작성할 필요는 없습니다.
 
 ```powershell
 python _ai_system/tools/export_report_hwpx.py --project <project_name>

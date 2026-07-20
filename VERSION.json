@@ -1,6 +1,6 @@
 {
-  "version": "1.1.1",
+  "version": "1.1.2",
   "release_date": "2026-07-20",
   "channel": "public",
-  "summary": "Distributed the embedded HWP/HWPX support engine and native report HWPX export."
+  "summary": "Corrected HWP/HWPX export guidance to document embedded-engine availability and automatic Report Export IR adaptation."
 }

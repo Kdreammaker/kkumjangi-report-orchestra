@@ -2,11 +2,14 @@
 
 ## Purpose
 
-HTML is the working report format. DOCX and PDF are supported export
-artifacts. HWP-to-HWPX conversion and controlled `hwpx-authoring-html.v1` to
-native HWPX conversion are available through the separately distributed owned
-engine when their CLIs are configured. Ordinary report HTML is not that
-contract and still needs an explicit adaptation step.
+HTML is the working report format. DOCX, PDF, and native HWPX are supported
+export artifacts. The owned HWP/HWPX engine is embedded in every distribution,
+so HWP-to-HWPX and native report HWPX export need no separate repository or
+external engine CLI configuration. When a Report Orchestra document is created
+from Report Factory cover/chapter sources, `export_report_hwpx.py` automatically
+adapts it through `report_export_ir.v1` before entering the controlled
+`hwpx-authoring-html.v1` contract. Only direct low-level conversion of arbitrary
+external HTML remains unsupported.
 
 Use this rule when the user asks for DOCX/PDF/HWPX/HWP, when a report is
 intended for delivery, or when a report claims conversion readiness.
@@ -62,15 +65,16 @@ For HWPX/Hancom-oriented output:
 3. For HWP-to-HWPX conversion, verify the owned engine with
    `python _ai_system/tools/convert_hwp_to_hwpx.py --probe`, preserve the source,
    and create the new HWPX through the embedded entrypoint.
-4. For controlled authoring HTML, verify
+4. For direct controlled-authoring-HTML conversion, verify
    `python _ai_system/tools/convert_html_hwpx.py --probe`, require the
    `hwpx-authoring-html.v1` contract, preserve the source, and create the new
-   HWPX through the embedded entrypoint. Do not pass ordinary report HTML or
-   DOCX-compatible HTML directly.
+   HWPX through the embedded entrypoint. This low-level command intentionally
+   rejects arbitrary external web HTML and DOCX-compatible HTML.
 5. For Report Factory sources, use `python _ai_system/tools/export_report_hwpx.py
    --project <project_name>`. This normalizes cover/chapter sources through
-   `report_export_ir.v1` before the owned Document IR writer; do not relabel the
-   assembled report HTML as controlled authoring HTML.
+   `report_export_ir.v1` before the owned Document IR writer. This adaptation is
+   automatic; users do not need to relabel or manually rewrite system-authored
+   report sources into controlled authoring HTML.
 6. Open-check representative pages in Hancom Viewer/Hancom Office when
    available and record the result under `reports/export_checks/`.
 
@@ -146,7 +150,7 @@ Treat the following as unsupported unless a task adds a documented proof-of-conc
 - native editable Word chart creation, round-trip editing, or chart data binding.
 - direct native `.hwpx` export from arbitrary assembled report HTML that bypasses `report_export_ir.v1`,
 - HWP to HWPX conversion when the embedded owned engine is missing or fails its probe,
-- arbitrary HTML to native HWPX conversion,
+- direct low-level conversion of arbitrary external web HTML to native HWPX,
 - HWPX to HTML browser-preview visual parity,
 - automated HWPX screenshot or visual diff gates without a renderer automation path.
 
