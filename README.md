@@ -13,9 +13,9 @@ AI가 큰 보고서를 한 번에 쓰지 않고, 방향 확인, PRD, 상세 목�
 
 최근 개선:
 
-1. `1.1.0` - private HWP/HWPX 엔진 비배포 경계와 public 설치 검증을 명확화
-2. `1.0.8` - 제어된 HWPX authoring HTML용 외부 브리지 경로 추가
-3. `1.0.7` - 외부 HWP-to-HWPX 브리지 경로 추가
+1. `1.1.0` - 공개 배포 패키징·설치 검증 시스템 업데이트
+2. `1.0.8` - HWPX 문서 변환 연동 시스템 업데이트
+3. `1.0.7` - HWP 문서 변환 연동 시스템 업데이트
 
 ## 🚀 설치
 
@@ -55,7 +55,7 @@ https://github.com/Kdreammaker/kkumjangi-report-orchestra 의 INSTALL.md를 보�
 - 검증 분리: 설치/환경 검증은 보고서 내용, 법률 해석, 출처 진위, 인용 정확성 검증을 의미하지 않습니다.
 - 품질 루프: 첫 초안을 최종본으로 보지 않고, 검수/교차검증 결과를 바탕으로 승인된 고도화를 진행합니다.
 - 프리셋/문체 경계: 문서 유형 프리셋은 구조·근거·시각자료 기준을, style profile은 독자 적합 문체와 보호 span 검토를 안내합니다. 자동 번역, 자동 rewrite, 자동 humanizer, 자동 naturalness scoring은 켜져 있지 않습니다.
-- export 경계: native DOCX exporter는 로컬 `python-docx` 기반으로 동작합니다. Private owned HWP/HWPX 엔진과 native HWPX exporter는 이 public seed에 포함되지 않습니다. 일반 보고서 HTML이나 임의 HTML을 native HWPX 입력으로 받는다고 주장하지 않습니다.
+- 문서 export 시스템: native DOCX export를 지원합니다. HWP/HWPX 변환·내보내기는 현재 공개 배포 기능이 아니며, 일반 HTML을 native HWPX 입력으로 지원하지 않습니다.
 
 자세한 작업 흐름과 사용 예시는 `START_HERE.html`, 설치 세부 절차는 `INSTALL.md`, AI용 상세 색인은 `_ai_system/REFERENCE_INDEX.md`에서 확인할 수 있습니다.
 
